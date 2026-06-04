@@ -515,7 +515,7 @@ export default function VoiceChat() {
                 </div>
                 {/* Minimize — only when call is not active */}
                 {callState === 'idle' && <button
-                  onClick={() => { if (callState === 'active') endCall(); setWidgetExpanded(false); }}
+                  onClick={() => { setWidgetExpanded(false); }}
                   title="Minimize"
                   style={{
                     width: 28, height: 28, borderRadius: 8, border: '1px solid #dfdcd7',
