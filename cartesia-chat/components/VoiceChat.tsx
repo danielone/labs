@@ -357,43 +357,52 @@ export default function VoiceChat() {
       {/* Wrapper keeps the toggle and card together for positioning */}
       <div className="relative z-10">
 
-        {/* Toggle — vertical, outside top-right of card */}
+        {/* Toggle — vertical, outside top-right of card, Cartesia tabs style */}
         <div
-          style={{ position: 'absolute', top: 8, right: -36, display: 'flex', flexDirection: 'column', gap: 6 }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: -43,
+            display: 'flex',
+            flexDirection: 'column',
+            border: '1px solid #dfdcd7',
+            background: '#f9f9f8',
+            opacity: toggleHovered ? 1 : 0.7,
+            transition: 'opacity 0.2s ease',
+          }}
           onMouseEnter={() => setToggleHovered(true)}
           onMouseLeave={() => setToggleHovered(false)}
         >
           {([
             { scene: false, title: 'Avatar view',
               icon: <><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></> },
-            { scene: true,  title: 'Scene view',
+            { scene: true, title: 'Scene view',
               icon: <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 15 5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="8.5" r="1.5"/></> },
-          ] as const).map(({ scene, title, icon }) => {
+          ] as const).map(({ scene, title, icon }, i, arr) => {
             const isActive = showScene === scene;
-            const stroke = toggleHovered
-              ? (isActive ? '#39342f' : '#b0aba5')
-              : '#b0aba5';
             return (
               <button
                 key={title}
                 onClick={() => setShowScene(scene)}
                 title={title}
                 style={{
-                  padding: 6,
-                  borderRadius: 8,
+                  padding: '9px 10px',
                   border: 'none',
-                  background: 'transparent',
+                  borderBottom: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
+                  background: isActive ? '#f1f0ec' : 'transparent',
                   cursor: 'pointer',
-                  opacity: toggleHovered ? (isActive ? 1 : 0.55) : 0.22,
-                  transition: 'opacity 0.2s ease, color 0.2s ease',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  transition: 'background 0.15s ease',
                 }}
+                onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = '#f1f0ec'; }}
+                onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
               >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke={stroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                  style={{ transition: 'stroke 0.2s ease' }}
+                <svg
+                  width="15" height="15" viewBox="0 0 24 24" fill="none"
+                  stroke={isActive ? '#39342f' : '#7c7770'}
+                  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                 >
                   {icon}
                 </svg>
