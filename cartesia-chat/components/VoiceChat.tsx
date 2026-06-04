@@ -30,7 +30,7 @@ export default function VoiceChat() {
   const [userLevel, setUserLevel] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [duration, setDuration] = useState(0);
-  const [showScene, setShowScene] = useState(false);
+  const [showScene, setShowScene] = useState(true);
   // State (not ref) so AudioBars re-renders when they become available
   const [agentAnalyser, setAgentAnalyser] = useState<AnalyserNode | null>(null);
   const [userAnalyser, setUserAnalyser] = useState<AnalyserNode | null>(null);
