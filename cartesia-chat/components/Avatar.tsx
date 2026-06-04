@@ -7,6 +7,7 @@ interface AvatarProps {
   isSpeaking: boolean;
   audioLevel: number;
   bare?: boolean;
+  bareSize?: number; // override default 220
 }
 
 // Facial landmark positions as fractions of the display size.
@@ -113,7 +114,7 @@ function useAvatarCanvas(
   }, [size]); // only re-run if size changes; state accessed via refs
 }
 
-export default function Avatar({ isSpeaking, audioLevel, bare = false }: AvatarProps) {
+export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize = 220 }: AvatarProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isSpeakingRef = useRef(isSpeaking);
   const audioLevelRef = useRef(audioLevel);
@@ -122,7 +123,7 @@ export default function Avatar({ isSpeaking, audioLevel, bare = false }: AvatarP
   isSpeakingRef.current = isSpeaking;
   audioLevelRef.current = audioLevel;
 
-  const size = bare ? 220 : 200;
+  const size = bare ? bareSize : 200;
   useAvatarCanvas(canvasRef, isSpeakingRef, audioLevelRef, size);
 
   const imageAndCanvas = (
