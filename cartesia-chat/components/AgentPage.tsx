@@ -4,7 +4,6 @@ import { useState } from 'react';
 import VoiceChat from './VoiceChat';
 
 type MainTab = 'configuration' | 'design' | 'metrics' | 'calls' | 'settings';
-type DesignSubView = 'widget' | 'design';
 
 // ── Sidebar icons (minimal SVG approximations) ─────────────────────────────
 const Icon = ({ children, size = 16 }: { children: React.ReactNode; size?: number }) => (
@@ -76,7 +75,6 @@ const TABS: { id: MainTab; label: string }[] = [
 
 export default function AgentPage() {
   const [activeTab, setActiveTab] = useState<MainTab>('design');
-  const [designView, setDesignView] = useState<DesignSubView>('widget');
   const [configPreview, setConfigPreview] = useState(false);
 
   return (
@@ -212,9 +210,7 @@ export default function AgentPage() {
 
         {/* Tab content */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '28px 24px' }}>
-          {activeTab === 'design' && (
-            <DesignTab designView={designView} setDesignView={setDesignView} />
-          )}
+          {activeTab === 'design' && <DesignTab />}
           {activeTab === 'configuration' && <ConfigurationTab onPreview={() => setConfigPreview(true)} previewActive={configPreview} />}
           {(activeTab === 'metrics' || activeTab === 'calls' || activeTab === 'settings') && (
             <EmptyTab label={TABS.find(t => t.id === activeTab)?.label || ''} />
@@ -229,75 +225,27 @@ export default function AgentPage() {
 }
 
 // ── Design tab ─────────────────────────────────────────────────────────────
-function DesignTab({ designView, setDesignView }: { designView: DesignSubView; setDesignView: (v: DesignSubView) => void }) {
+function DesignTab() {
   return (
-    <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-        <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: 0 }}>Design</h2>
-
-        {/* Widget / Design sub-toggle (Cartesia tabs style) */}
-        <div style={{ display: 'flex', border: '1px solid #dfdcd7', background: '#f9f9f8', overflow: 'hidden' }}>
-          {(['widget', 'design'] as DesignSubView[]).map((v, i, arr) => (
-            <button
-              key={v}
-              onClick={() => setDesignView(v)}
-              style={{
-                padding: '6px 16px',
-                fontSize: 13,
-                fontWeight: 500,
-                background: designView === v ? '#f1f0ec' : 'transparent',
-                border: 'none',
-                borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
-                cursor: 'pointer',
-                color: '#39342f',
-                transition: 'background 0.15s',
-                textTransform: 'capitalize',
-              }}
-              onMouseEnter={e => { if (designView !== v) (e.currentTarget as HTMLButtonElement).style.background = '#f1f0ec'; }}
-              onMouseLeave={e => { if (designView !== v) (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; }}
-            >
-              {v}
-            </button>
-          ))}
+    <div style={{ maxWidth: 560 }}>
+      <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: '0 0 20px' }}>Design</h2>
+      <p style={{ fontSize: 14, color: '#636260', lineHeight: 1.6, marginBottom: 20 }}>
+        Customize the appearance of your voice companion widget.
+      </p>
+      {[
+        { label: 'Widget label', value: 'Need help?' },
+        { label: 'Agent name', value: 'Skylar' },
+        { label: 'Subtitle', value: 'AI Voice Companion' },
+      ].map(field => (
+        <div key={field.label} style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 6 }}>{field.label}</label>
+          <input
+            defaultValue={field.value}
+            readOnly
+            style={{ width: '100%', padding: '8px 12px', fontSize: 13, color: '#39342f', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, outline: 'none', cursor: 'not-allowed', boxSizing: 'border-box' }}
+          />
         </div>
-      </div>
-
-      {designView === 'widget' && (
-        <div style={{ maxWidth: 560 }}>
-          <p style={{ fontSize: 14, color: '#636260', lineHeight: 1.6, marginBottom: 20 }}>
-            Your voice companion widget is live in the bottom-right corner of this page. Click <strong style={{ color: '#39342f' }}>Start Conversation</strong> to test it.
-          </p>
-          <div style={{ background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', flexShrink: 0 }} />
-            <div>
-              <p style={{ fontSize: 13, fontWeight: 500, color: '#39342f', margin: 0 }}>Widget deployed</p>
-              <p style={{ fontSize: 12, color: '#9b9895', margin: '2px 0 0' }}>Connected to <strong style={{ color: '#636260' }}>voice-companion</strong> · agent_kQE7BPvD2NN1NYeT68VjAN</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {designView === 'design' && (
-        <div style={{ maxWidth: 560 }}>
-          <p style={{ fontSize: 14, color: '#636260', lineHeight: 1.6, marginBottom: 20 }}>
-            Customize the appearance of your voice companion widget.
-          </p>
-          {[
-            { label: 'Widget label', value: 'Need help?' },
-            { label: 'Agent name', value: 'Skylar' },
-            { label: 'Subtitle', value: 'AI Voice Companion' },
-          ].map(field => (
-            <div key={field.label} style={{ marginBottom: 16 }}>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 6 }}>{field.label}</label>
-              <input
-                defaultValue={field.value}
-                readOnly
-                style={{ width: '100%', padding: '8px 12px', fontSize: 13, color: '#39342f', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, outline: 'none', cursor: 'not-allowed', boxSizing: 'border-box' }}
-              />
-            </div>
-          ))}
-        </div>
-      )}
+      ))}
     </div>
   );
 }
