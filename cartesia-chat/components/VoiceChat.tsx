@@ -31,6 +31,7 @@ export default function VoiceChat() {
   const [error, setError] = useState<string | null>(null);
   const [duration, setDuration] = useState(0);
   const [showScene, setShowScene] = useState(true);
+  const [toggleHovered, setToggleHovered] = useState(false);
   // State (not ref) so AudioBars re-renders when they become available
   const [agentAnalyser, setAgentAnalyser] = useState<AnalyserNode | null>(null);
   const [userAnalyser, setUserAnalyser] = useState<AnalyserNode | null>(null);
@@ -353,51 +354,70 @@ export default function VoiceChat() {
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <SFBackground />
 
-      <div
-        className="relative z-10 flex flex-col items-center gap-6 p-8 rounded-3xl"
-        style={{
-          background: '#fdfdfc',
-          border: '1px solid #dfdcd7',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.05)',
-          width: showScene ? `${Math.round(360 * 1.3)}px` : '360px',
-          maxWidth: '95vw',
-          transition: 'width 0.3s ease',
-        }}
-      >
-        {/* Header row with toggle */}
-        <div className="flex items-start justify-between w-full">
-          <div className="flex-1 text-center">
-            <h1 className="text-xl font-semibold tracking-wide" style={{ color: '#39342f' }}>Skylar</h1>
-            <p className="text-sm mt-0.5" style={{ color: '#7c7770' }}>AI Voice Companion</p>
-          </div>
-          {/* View toggle */}
-          <div
-            className="flex rounded-lg shrink-0"
-            style={{ border: '1px solid #dfdcd7', background: '#f1f0ec', padding: '3px', gap: '2px' }}
-          >
-            <button
-              onClick={() => setShowScene(false)}
-              title="Avatar view"
-              className="rounded p-1.5 transition-colors duration-150"
-              style={{ background: !showScene ? '#fdfdfc' : 'transparent', boxShadow: !showScene ? '0 1px 3px rgba(0,0,0,0.08)' : 'none' }}
-            >
-              {/* Person icon */}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={!showScene ? '#39342f' : '#b0aba5'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
-              </svg>
-            </button>
-            <button
-              onClick={() => setShowScene(true)}
-              title="Scene view"
-              className="rounded p-1.5 transition-colors duration-150"
-              style={{ background: showScene ? '#fdfdfc' : 'transparent', boxShadow: showScene ? '0 1px 3px rgba(0,0,0,0.08)' : 'none' }}
-            >
-              {/* Image/landscape icon */}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={showScene ? '#39342f' : '#b0aba5'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" /><path d="m3 15 5-5 4 4 3-3 6 6" /><circle cx="8.5" cy="8.5" r="1.5" />
-              </svg>
-            </button>
-          </div>
+      {/* Wrapper keeps the toggle and card together for positioning */}
+      <div className="relative z-10">
+
+        {/* Toggle — vertical, outside top-right of card */}
+        <div
+          style={{ position: 'absolute', top: 8, right: -36, display: 'flex', flexDirection: 'column', gap: 6 }}
+          onMouseEnter={() => setToggleHovered(true)}
+          onMouseLeave={() => setToggleHovered(false)}
+        >
+          {([
+            { scene: false, title: 'Avatar view',
+              icon: <><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></> },
+            { scene: true,  title: 'Scene view',
+              icon: <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 15 5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="8.5" r="1.5"/></> },
+          ] as const).map(({ scene, title, icon }) => {
+            const isActive = showScene === scene;
+            const stroke = toggleHovered
+              ? (isActive ? '#39342f' : '#b0aba5')
+              : '#b0aba5';
+            return (
+              <button
+                key={title}
+                onClick={() => setShowScene(scene)}
+                title={title}
+                style={{
+                  padding: 6,
+                  borderRadius: 8,
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  opacity: toggleHovered ? (isActive ? 1 : 0.55) : 0.22,
+                  transition: 'opacity 0.2s ease, color 0.2s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                  stroke={stroke} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                  style={{ transition: 'stroke 0.2s ease' }}
+                >
+                  {icon}
+                </svg>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Card */}
+        <div
+          className="flex flex-col items-center gap-6 p-8 rounded-3xl"
+          style={{
+            background: '#fdfdfc',
+            border: '1px solid #dfdcd7',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.05)',
+            width: showScene ? `${Math.round(360 * 1.3)}px` : '360px',
+            maxWidth: '95vw',
+            transition: 'width 0.3s ease',
+          }}
+        >
+        {/* Header */}
+        <div className="text-center">
+          <h1 className="text-xl font-semibold tracking-wide" style={{ color: '#39342f' }}>Skylar</h1>
+          <p className="text-sm mt-0.5" style={{ color: '#7c7770' }}>AI Voice Companion</p>
         </div>
 
         {/* Avatar area — plain or scene */}
@@ -554,7 +574,8 @@ export default function VoiceChat() {
             Preview animations
           </button>
         )}
-      </div>
+        </div> {/* end card */}
+      </div> {/* end wrapper */}
 
       <style jsx global>{`
         @keyframes blink {
