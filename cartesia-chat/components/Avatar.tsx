@@ -12,8 +12,9 @@ interface AvatarProps {
 // Facial landmark positions as fractions of the display size.
 // Tuned for this specific avatar image.
 const L = {
-  leftEye:  { cx: 0.395, cy: 0.395, rx: 0.072, ry: 0.038 },
-  rightEye: { cx: 0.605, cy: 0.395, rx: 0.072, ry: 0.038 },
+  // Iris/pupil area only — smaller than the full eye socket
+  leftEye:  { cx: 0.395, cy: 0.400, rx: 0.052, ry: 0.052 },
+  rightEye: { cx: 0.605, cy: 0.400, rx: 0.052, ry: 0.052 },
   mouth:    { cx: 0.500, cy: 0.655, rx: 0.145 },
   skinTone: '#f0a882',
   mouthDark:'#3a1010',
@@ -64,18 +65,20 @@ function useAvatarCanvas(
         }
       }
 
-      // ── Draw eyelids ───────────────────────────────────────────────
+      // ── Draw eyelids (opacity fade over fixed iris ellipse) ───────
       if (lidProgress > 0.02) {
+        ctx.globalAlpha = lidProgress;
         ctx.fillStyle = L.skinTone;
         for (const eye of [L.leftEye, L.rightEye]) {
           ctx.beginPath();
           ctx.ellipse(
             eye.cx * size, eye.cy * size,
-            eye.rx * size, eye.ry * size * lidProgress,
+            eye.rx * size, eye.ry * size,
             0, 0, Math.PI * 2,
           );
           ctx.fill();
         }
+        ctx.globalAlpha = 1;
       }
 
       // ── Lip / mouth animation ──────────────────────────────────────
@@ -83,8 +86,8 @@ function useAvatarCanvas(
         const lvl = audioLevelRef.current;
         // Map level → mouth gap (pixels).  Drive with a touch of randomness
         // so the motion looks more organic at steady tones.
-        const jitter = 0.7 + 0.3 * Math.sin(now / 80);
-        const gap = Math.min(lvl * 55 * jitter, 11); // max ~11 px
+        const jitter = 0.85 + 0.15 * Math.sin(now / 80);
+        const gap = Math.min(lvl * 22 * jitter, 4); // max ~4 px
 
         if (gap > 0.8) {
           const cx  = L.mouth.cx  * size;
