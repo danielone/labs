@@ -178,7 +178,7 @@ export default function AgentPage() {
           {/* Tab navigation */}
           <div style={{ display: 'flex', gap: 0 }}>
             {TABS.map(tab => {
-              const disabled = tab.id === 'calls' || tab.id === 'settings';
+              const disabled = tab.id === 'calls' || tab.id === 'settings' || tab.id === 'metrics';
               return (
                 <button
                   key={tab.id}
@@ -211,7 +211,7 @@ export default function AgentPage() {
         {/* Tab content */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '28px 24px' }}>
           {activeTab === 'design' && <DesignTab />}
-          {activeTab === 'configuration' && <ConfigurationTab onPreview={() => setConfigPreview(true)} previewActive={configPreview} />}
+          {activeTab === 'configuration' && <ConfigurationTab onPreview={() => setConfigPreview(p => !p)} previewActive={configPreview} />}
           {(activeTab === 'metrics' || activeTab === 'calls' || activeTab === 'settings') && (
             <EmptyTab label={TABS.find(t => t.id === activeTab)?.label || ''} />
           )}
