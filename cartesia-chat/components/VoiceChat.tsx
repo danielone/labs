@@ -513,8 +513,8 @@ export default function VoiceChat() {
                   <h1 className="text-base font-semibold tracking-wide" style={{ color: '#39342f' }}>Skylar</h1>
                   <p className="text-xs mt-0.5" style={{ color: '#7c7770' }}>AI Voice Companion</p>
                 </div>
-                {/* Minimize / collapse button */}
-                <button
+                {/* Minimize — only when call is not active */}
+                {callState === 'idle' && <button
                   onClick={() => { if (callState === 'active') endCall(); setWidgetExpanded(false); }}
                   title="Minimize"
                   style={{
@@ -530,7 +530,7 @@ export default function VoiceChat() {
                     strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="7 6 12 11 17 6"/><polyline points="7 13 12 18 17 13"/>
                   </svg>
-                </button>
+                </button>}
               </div>
 
               {/* Avatar area */}
