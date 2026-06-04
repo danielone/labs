@@ -49,8 +49,10 @@ export default function VoiceChat() {
   const userAnalyserRef = useRef<AnalyserNode | null>(null);
   // Track every scheduled source so we can stop them instantly on end
   const activeSourcesRef = useRef<Set<AudioBufferSourceNode>>(new Set());
-  // Oscillators used in test mode
+  // Oscillators used in test mode (kept for cleanup compat, no longer populated)
   const testOscsRef = useRef<OscillatorNode[]>([]);
+  // Cycling timeout for test mode
+  const testCycleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const pollLevels = useCallback(() => {
     if (agentAnalyserRef.current) {
@@ -122,9 +124,10 @@ export default function VoiceChat() {
     activeSourcesRef.current.forEach((s) => { try { s.stop(); } catch {} });
     activeSourcesRef.current.clear();
 
-    // Stop test-mode oscillators
+    // Stop test-mode oscillators (legacy, usually empty now)
     testOscsRef.current.forEach((o) => { try { o.stop(); } catch {} });
     testOscsRef.current = [];
+    if (testCycleTimerRef.current) { clearTimeout(testCycleTimerRef.current); testCycleTimerRef.current = null; }
 
     if (scriptNodeRef.current) {
       scriptNodeRef.current.onaudioprocess = null;
@@ -170,51 +173,53 @@ export default function VoiceChat() {
 
   const startTestMode = useCallback(() => {
     setError(null);
-    const ctx = new AudioContext();
-    audioCtxRef.current = ctx;
-
-    // Silent output — keeps the graph alive without making sound
-    const silence = ctx.createGain();
-    silence.gain.value = 0;
-    silence.connect(ctx.destination);
-
-    const makeAnalyser = (freqs: number[], amplitude: number) => {
-      const analyser = ctx.createAnalyser();
-      analyser.fftSize = 256;
-      analyser.smoothingTimeConstant = 0.75;
-      analyser.connect(silence);
-
-      freqs.forEach((freq) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-        gain.gain.value = amplitude / freqs.length;
-        osc.connect(gain);
-        gain.connect(analyser);
-        osc.start();
-        testOscsRef.current.push(osc);
-      });
-
-      return analyser;
-    };
-
-    // Rich harmonic stacks that look like real speech on the bars
-    const aAnalyser = makeAnalyser([130, 260, 390, 520, 780, 1560, 3120], 0.9);
-    const uAnalyser = makeAnalyser([200, 400, 600, 1200, 2400], 0.65);
-
-    agentAnalyserRef.current = aAnalyser;
-    userAnalyserRef.current = uAnalyser;
-    setAgentAnalyser(aAnalyser);
-    setUserAnalyser(uAnalyser);
-
     setCallState('active');
-    setAgentSpeaking(true);
-    setUserSpeaking(true);
     setDuration(0);
     timerRef.current = setInterval(() => setDuration((d) => d + 1), 1000);
-    levelRafRef.current = requestAnimationFrame(pollLevels);
-  }, [pollLevels]);
+
+    // Phase sequence: agent speaks → brief pause → user speaks → brief pause → repeat
+    const phases: Array<{ agentOn: boolean; userOn: boolean; ms: number }> = [
+      { agentOn: true,  userOn: false, ms: 3500 },
+      { agentOn: false, userOn: false, ms: 600  },
+      { agentOn: false, userOn: true,  ms: 2500 },
+      { agentOn: false, userOn: false, ms: 600  },
+    ];
+    let phaseIdx = 0;
+
+    // Local refs so the rAF closure always has current phase without re-creating
+    const agentOnRef = { current: false };
+    const userOnRef  = { current: false };
+
+    const schedulePhase = () => {
+      const p = phases[phaseIdx % phases.length];
+      agentOnRef.current = p.agentOn;
+      userOnRef.current  = p.userOn;
+      setAgentSpeaking(p.agentOn);
+      setUserSpeaking(p.userOn);
+      phaseIdx++;
+      testCycleTimerRef.current = setTimeout(schedulePhase, p.ms);
+    };
+    schedulePhase();
+
+    // rAF loop: generate synthetic audio levels so avatar lip / glow animations run
+    const frame = () => {
+      const t = performance.now() / 1000;
+      if (agentOnRef.current) {
+        const lvl = 0.35 + 0.3 * Math.abs(Math.sin(t * 7.3)) * Math.abs(Math.cos(t * 4.1));
+        setAgentLevel(lvl);
+      } else {
+        setAgentLevel(0);
+      }
+      if (userOnRef.current) {
+        const lvl = 0.3 + 0.28 * Math.abs(Math.sin(t * 6.1 + 0.8));
+        setUserLevel(lvl);
+      } else {
+        setUserLevel(0);
+      }
+      levelRafRef.current = requestAnimationFrame(frame);
+    };
+    levelRafRef.current = requestAnimationFrame(frame);
+  }, []);
 
   const startMicCapture = useCallback(
     (scriptNode: ScriptProcessorNode, ws: WebSocket, streamId: string) => {
