@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import Image from 'next/image';
 import Avatar from './Avatar';
 import AudioBars from './AudioBars';
 import SFBackground from './SFBackground';
@@ -29,6 +30,7 @@ export default function VoiceChat() {
   const [userLevel, setUserLevel] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [duration, setDuration] = useState(0);
+  const [showScene, setShowScene] = useState(false);
   // State (not ref) so AudioBars re-renders when they become available
   const [agentAnalyser, setAgentAnalyser] = useState<AnalyserNode | null>(null);
   const [userAnalyser, setUserAnalyser] = useState<AnalyserNode | null>(null);
@@ -357,39 +359,107 @@ export default function VoiceChat() {
           background: '#fdfdfc',
           border: '1px solid #dfdcd7',
           boxShadow: '0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.05)',
-          width: '360px',
+          width: showScene ? `${Math.round(360 * 1.3)}px` : '360px',
           maxWidth: '95vw',
+          transition: 'width 0.3s ease',
         }}
       >
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-xl font-semibold tracking-wide" style={{ color: '#39342f' }}>Skylar</h1>
-          <p className="text-sm mt-0.5" style={{ color: '#7c7770' }}>AI Voice Companion</p>
+        {/* Header row with toggle */}
+        <div className="flex items-start justify-between w-full">
+          <div className="flex-1 text-center">
+            <h1 className="text-xl font-semibold tracking-wide" style={{ color: '#39342f' }}>Skylar</h1>
+            <p className="text-sm mt-0.5" style={{ color: '#7c7770' }}>AI Voice Companion</p>
+          </div>
+          {/* View toggle */}
+          <div
+            className="flex rounded-lg shrink-0"
+            style={{ border: '1px solid #dfdcd7', background: '#f1f0ec', padding: '3px', gap: '2px' }}
+          >
+            <button
+              onClick={() => setShowScene(false)}
+              title="Avatar view"
+              className="rounded p-1.5 transition-colors duration-150"
+              style={{ background: !showScene ? '#fdfdfc' : 'transparent', boxShadow: !showScene ? '0 1px 3px rgba(0,0,0,0.08)' : 'none' }}
+            >
+              {/* Person icon */}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={!showScene ? '#39342f' : '#b0aba5'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+              </svg>
+            </button>
+            <button
+              onClick={() => setShowScene(true)}
+              title="Scene view"
+              className="rounded p-1.5 transition-colors duration-150"
+              style={{ background: showScene ? '#fdfdfc' : 'transparent', boxShadow: showScene ? '0 1px 3px rgba(0,0,0,0.08)' : 'none' }}
+            >
+              {/* Image/landscape icon */}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={showScene ? '#39342f' : '#b0aba5'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" /><path d="m3 15 5-5 4 4 3-3 6 6" /><circle cx="8.5" cy="8.5" r="1.5" />
+              </svg>
+            </button>
+          </div>
         </div>
 
-        {/* Avatar */}
-        <div className="relative">
-          <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} />
-          {isActive && (
-            <div
-              className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap"
-              style={{
-                background: '#f1f0ec',
-                border: '1px solid #dfdcd7',
-                color: agentSpeaking ? '#1a6b3c' : '#7c7770',
-              }}
-            >
-              <span
-                className="w-1.5 h-1.5 rounded-full"
-                style={{
-                  background: agentSpeaking ? '#22c55e' : '#c4c0bb',
-                  animation: agentSpeaking ? 'blink 0.8s ease-in-out infinite' : 'none',
-                }}
-              />
-              {agentSpeaking ? 'Speaking…' : 'Listening'}
+        {/* Avatar area — plain or scene */}
+        {showScene ? (
+          <div className="relative w-full overflow-hidden rounded-2xl" style={{ height: '280px' }}>
+            <Image
+              src="/coworking-bg.jpg"
+              alt="Office background"
+              fill
+              priority
+              style={{ objectFit: 'cover', objectPosition: 'center' }}
+            />
+            {/* Avatar pinned to bottom-center of image */}
+            <div className="absolute bottom-0 left-1/2" style={{ transform: 'translateX(-50%)' }}>
+              <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} />
             </div>
-          )}
-        </div>
+            {/* Status badge inside scene */}
+            {isActive && (
+              <div
+                className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap"
+                style={{
+                  background: 'rgba(253,253,252,0.88)',
+                  backdropFilter: 'blur(8px)',
+                  border: '1px solid #dfdcd7',
+                  color: agentSpeaking ? '#1a6b3c' : '#7c7770',
+                }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{
+                    background: agentSpeaking ? '#22c55e' : '#c4c0bb',
+                    animation: agentSpeaking ? 'blink 0.8s ease-in-out infinite' : 'none',
+                  }}
+                />
+                {agentSpeaking ? 'Speaking…' : 'Listening'}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="relative">
+            <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} />
+            {isActive && (
+              <div
+                className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap"
+                style={{
+                  background: '#f1f0ec',
+                  border: '1px solid #dfdcd7',
+                  color: agentSpeaking ? '#1a6b3c' : '#7c7770',
+                }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{
+                    background: agentSpeaking ? '#22c55e' : '#c4c0bb',
+                    animation: agentSpeaking ? 'blink 0.8s ease-in-out infinite' : 'none',
+                  }}
+                />
+                {agentSpeaking ? 'Speaking…' : 'Listening'}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Agent audio bars */}
         <div className="w-full space-y-1">
