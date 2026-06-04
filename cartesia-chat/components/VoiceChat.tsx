@@ -21,6 +21,34 @@ interface TokenResponse {
   version: string;
 }
 
+// Cartesia-style 4-bar wave indicator
+// speaking=true → #004e23 (Cartesia brand), speaking=false → #309d4b
+function WaveBars({ speaking }: { speaking: boolean }) {
+  const color = speaking ? '#004e23' : '#309d4b';
+  const bars = [
+    { anim: 'bar-pulse-a', delay: '0ms',   dur: '1.8s', init: '22%' },
+    { anim: 'bar-pulse-b', delay: '200ms', dur: '1.6s', init: '18%' },
+    { anim: 'bar-pulse-c', delay: '100ms', dur: '2.0s', init: '28%' },
+    { anim: 'bar-pulse-d', delay: '300ms', dur: '1.7s', init: '25%' },
+  ];
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px', height: '14px' }}>
+      {bars.map((b, i) => (
+        <div
+          key={i}
+          style={{
+            width: '2.5px',
+            height: b.init,
+            background: color,
+            borderRadius: '2px',
+            animation: `${b.anim} ${b.dur} cubic-bezier(.45,0,.55,1) ${b.delay} infinite`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function VoiceChat() {
   const [callState, setCallState] = useState<CallState>('idle');
   const [agentSpeaking, setAgentSpeaking] = useState(false);
@@ -455,17 +483,11 @@ export default function VoiceChat() {
                   background: 'rgba(253,253,252,0.88)',
                   backdropFilter: 'blur(8px)',
                   border: '1px solid #dfdcd7',
-                  color: agentSpeaking ? '#1a6b3c' : '#7c7770',
+                  color: '#1a6b3c',
                 }}
               >
-                <span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{
-                    background: agentSpeaking ? '#22c55e' : '#c4c0bb',
-                    animation: agentSpeaking ? 'glow-pulse 1.6s ease-out infinite' : 'none',
-                  }}
-                />
-                {agentSpeaking ? 'Speaking…' : 'Listening'}
+                <WaveBars speaking={agentSpeaking} />
+                {agentSpeaking ? 'Speaking…' : 'Listening…'}
               </div>
             )}
           </div>
@@ -478,17 +500,11 @@ export default function VoiceChat() {
                 style={{
                   background: '#f1f0ec',
                   border: '1px solid #dfdcd7',
-                  color: agentSpeaking ? '#1a6b3c' : '#7c7770',
+                  color: '#1a6b3c',
                 }}
               >
-                <span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{
-                    background: agentSpeaking ? '#22c55e' : '#c4c0bb',
-                    animation: agentSpeaking ? 'glow-pulse 1.6s ease-out infinite' : 'none',
-                  }}
-                />
-                {agentSpeaking ? 'Speaking…' : 'Listening'}
+                <WaveBars speaking={agentSpeaking} />
+                {agentSpeaking ? 'Speaking…' : 'Listening…'}
               </div>
             )}
           </div>
@@ -569,9 +585,12 @@ export default function VoiceChat() {
       </div> {/* end wrapper */}
 
       <style jsx global>{`
-        @keyframes glow-pulse {
-          0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.55); }
-          100% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+        @keyframes bar-pulse-a { 0%, 100% { height: 22% } 40%  { height: 85% } 65%  { height: 40% } }
+        @keyframes bar-pulse-b { 0%, 100% { height: 18% } 50%  { height: 100% } }
+        @keyframes bar-pulse-c { 0%, 100% { height: 28% } 25%  { height: 55% } 60%  { height: 92% } 82% { height: 35% } }
+        @keyframes bar-pulse-d { 0%, 100% { height: 25% } 35%  { height: 70% } 75%  { height: 50% } }
+        @media (prefers-reduced-motion: reduce) {
+          .wave-bar { animation: none !important; }
         }
       `}</style>
     </div>
