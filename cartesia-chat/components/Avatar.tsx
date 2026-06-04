@@ -84,8 +84,8 @@ function useAvatarCanvas(
       // ── Lip / mouth animation (speaking only) ─────────────────────
       if (isSpeakingRef.current) {
         const lvl = audioLevelRef.current;
-        const jitter = 0.85 + 0.15 * Math.sin(now / 80);
-        const gap = Math.min(lvl * 22 * jitter, 6);
+        const jitter = 0.8 + 0.2 * Math.sin(now / 80);
+        const gap = Math.min(lvl * 55 * jitter, 14);
 
         if (gap > 0.8) {
           const cx = L.mouth.cx * size;
