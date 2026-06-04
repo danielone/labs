@@ -85,6 +85,8 @@ export default function VoiceChat() {
         const analyser = ctx.createAnalyser();
         analyser.fftSize = 256;
         analyser.smoothingTimeConstant = 0.8;
+        // Connect once — additional connect() calls stack up parallel outputs
+        analyser.connect(ctx.destination);
         agentAnalyserRef.current = analyser;
         setAgentAnalyser(analyser);
       }
@@ -92,7 +94,6 @@ export default function VoiceChat() {
       const source = ctx.createBufferSource();
       source.buffer = audioBuf;
       source.connect(agentAnalyserRef.current);
-      agentAnalyserRef.current.connect(ctx.destination);
 
       const startAt = Math.max(ctx.currentTime, nextPlayTimeRef.current);
       source.start(startAt);
