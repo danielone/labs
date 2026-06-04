@@ -555,7 +555,7 @@ export default function VoiceChat() {
             style={{
               background: '#f9f9f8',
               border: '1px solid #dfdcd7',
-              color: '#39342f',
+              color: '#e7000b',
               cursor: 'pointer',
             }}
             onMouseEnter={e => { e.currentTarget.style.background = '#f1f0ec'; }}
