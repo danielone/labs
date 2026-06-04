@@ -47,6 +47,8 @@ export default function VoiceChat() {
   const userAnalyserRef = useRef<AnalyserNode | null>(null);
   // Track every scheduled source so we can stop them instantly on end
   const activeSourcesRef = useRef<Set<AudioBufferSourceNode>>(new Set());
+  // Oscillators used in test mode
+  const testOscsRef = useRef<OscillatorNode[]>([]);
 
   const pollLevels = useCallback(() => {
     if (agentAnalyserRef.current) {
@@ -118,6 +120,10 @@ export default function VoiceChat() {
     activeSourcesRef.current.forEach((s) => { try { s.stop(); } catch {} });
     activeSourcesRef.current.clear();
 
+    // Stop test-mode oscillators
+    testOscsRef.current.forEach((o) => { try { o.stop(); } catch {} });
+    testOscsRef.current = [];
+
     if (scriptNodeRef.current) {
       scriptNodeRef.current.onaudioprocess = null;
       try { scriptNodeRef.current.disconnect(); } catch {}
@@ -159,6 +165,54 @@ export default function VoiceChat() {
     setUserLevel(0);
     setTimeout(() => setCallState('idle'), 300);
   }, [cleanupResources]);
+
+  const startTestMode = useCallback(() => {
+    setError(null);
+    const ctx = new AudioContext();
+    audioCtxRef.current = ctx;
+
+    // Silent output — keeps the graph alive without making sound
+    const silence = ctx.createGain();
+    silence.gain.value = 0;
+    silence.connect(ctx.destination);
+
+    const makeAnalyser = (freqs: number[], amplitude: number) => {
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 256;
+      analyser.smoothingTimeConstant = 0.75;
+      analyser.connect(silence);
+
+      freqs.forEach((freq) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.value = amplitude / freqs.length;
+        osc.connect(gain);
+        gain.connect(analyser);
+        osc.start();
+        testOscsRef.current.push(osc);
+      });
+
+      return analyser;
+    };
+
+    // Rich harmonic stacks that look like real speech on the bars
+    const aAnalyser = makeAnalyser([130, 260, 390, 520, 780, 1560, 3120], 0.9);
+    const uAnalyser = makeAnalyser([200, 400, 600, 1200, 2400], 0.65);
+
+    agentAnalyserRef.current = aAnalyser;
+    userAnalyserRef.current = uAnalyser;
+    setAgentAnalyser(aAnalyser);
+    setUserAnalyser(uAnalyser);
+
+    setCallState('active');
+    setAgentSpeaking(true);
+    setUserSpeaking(true);
+    setDuration(0);
+    timerRef.current = setInterval(() => setDuration((d) => d + 1), 1000);
+    levelRafRef.current = requestAnimationFrame(pollLevels);
+  }, [pollLevels]);
 
   const startMicCapture = useCallback(
     (scriptNode: ScriptProcessorNode, ws: WebSocket, streamId: string) => {
@@ -417,6 +471,19 @@ export default function VoiceChat() {
         <p className="text-xs" style={{ color: '#b0aba5' }}>
           Powered by <span style={{ color: '#7c7770' }}>Cartesia</span>
         </p>
+
+        {/* Test mode — only shown when idle */}
+        {callState === 'idle' && (
+          <button
+            onClick={startTestMode}
+            className="text-xs underline underline-offset-2 transition-colors duration-150"
+            style={{ color: '#c4c0bb' }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#7c7770')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#c4c0bb')}
+          >
+            Preview animations
+          </button>
+        )}
       </div>
 
       <style jsx global>{`
