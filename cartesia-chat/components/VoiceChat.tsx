@@ -528,7 +528,7 @@ export default function VoiceChat() {
                 >
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c7770"
                     strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/>
+                    <polyline points="7 6 12 11 17 6"/><polyline points="7 13 12 18 17 13"/>
                   </svg>
                 </button>
               </div>
