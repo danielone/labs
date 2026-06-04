@@ -559,7 +559,10 @@ export default function VoiceChat() {
         )}
 
         <p className="text-xs" style={{ color: '#b0aba5' }}>
-          Powered by <span style={{ color: '#7c7770' }}>Cartesia</span>
+          Powered by{' '}
+          <a href="http://cartesia.ai/" target="_blank" rel="noopener noreferrer" style={{ color: '#7c7770' }}>
+            Cartesia
+          </a>
         </p>
 
         {/* Test mode — only shown when idle */}
