@@ -1,5 +1,5 @@
-import VoiceChat from '@/components/VoiceChat';
+import AgentPage from '@/components/AgentPage';
 
 export default function Home() {
-  return <VoiceChat />;
+  return <AgentPage />;
 }
