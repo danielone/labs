@@ -78,7 +78,7 @@ export default function VoiceChat() {
       if (int16.length === 0) return;
 
       const float32 = int16ToFloat32(int16);
-      const audioBuf = ctx.createBuffer(1, float32.length, SAMPLE_RATE);
+      const audioBuf = ctx.createBuffer(1, float32.length, ctx.sampleRate);
       audioBuf.copyToChannel(float32, 0);
 
       if (!agentAnalyserRef.current) {
@@ -145,13 +145,17 @@ export default function VoiceChat() {
   }, [cleanupResources]);
 
   const startMicCapture = useCallback(
-    (scriptNode: ScriptProcessorNode, ws: WebSocket) => {
+    (scriptNode: ScriptProcessorNode, ws: WebSocket, streamId: string) => {
       scriptNode.onaudioprocess = (event) => {
         if (ws.readyState !== WebSocket.OPEN) return;
         const float32 = event.inputBuffer.getChannelData(0);
         const int16 = float32ToInt16(float32);
-        const b64 = arrayBufferToBase64(int16.buffer as ArrayBuffer);
-        ws.send(JSON.stringify({ type: 'media_input', data: b64 }));
+        const payload = arrayBufferToBase64(int16.buffer as ArrayBuffer);
+        ws.send(JSON.stringify({
+          event: 'media_input',
+          stream_id: streamId,
+          media: { payload },
+        }));
       };
     },
     []
@@ -168,7 +172,6 @@ export default function VoiceChat() {
 
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
-          sampleRate: SAMPLE_RATE,
           channelCount: 1,
           echoCancellation: true,
           noiseSuppression: true,
@@ -176,7 +179,8 @@ export default function VoiceChat() {
       });
       micStreamRef.current = stream;
 
-      const ctx = new AudioContext({ sampleRate: SAMPLE_RATE });
+      // Use default sample rate (44100) matching pcm_44100 protocol
+      const ctx = new AudioContext();
       audioCtxRef.current = ctx;
       nextPlayTimeRef.current = ctx.currentTime;
 
@@ -203,33 +207,41 @@ export default function VoiceChat() {
       wsRef.current = ws;
       ws.binaryType = 'arraybuffer';
 
+      let streamId = '';
+
       ws.onopen = () => {
-        ws.send(JSON.stringify({ type: 'start', encoding: 'pcm_16000' }));
+        ws.send(JSON.stringify({
+          event: 'start',
+          stream_id: '',
+          config: { input_format: 'pcm_44100' },
+        }));
       };
 
       ws.onmessage = (event) => {
         if (typeof event.data === 'string') {
           try {
-            const msg = JSON.parse(event.data as string) as { type: string; data?: string };
-            if (msg.type === 'ack') {
+            const msg = JSON.parse(event.data as string) as {
+              event: string;
+              stream_id?: string;
+              media?: { payload: string };
+            };
+
+            if (msg.event === 'ack') {
+              streamId = msg.stream_id ?? '';
               setCallState('active');
-              startMicCapture(scriptNode, ws);
+              startMicCapture(scriptNode, ws, streamId);
               setDuration(0);
               timerRef.current = setInterval(() => setDuration((d) => d + 1), 1000);
               levelRafRef.current = requestAnimationFrame(pollLevels);
-            } else if (msg.type === 'media_output' && msg.data) {
-              playAgentAudio(msg.data);
-            } else if (msg.type === 'clear') {
+            } else if (msg.event === 'media_output' && msg.media?.payload) {
+              playAgentAudio(msg.media.payload);
+            } else if (msg.event === 'clear') {
               nextPlayTimeRef.current = ctx.currentTime;
               setAgentSpeaking(false);
             }
           } catch {
-            // non-JSON text, ignore
+            // non-JSON, ignore
           }
-        } else if (event.data instanceof ArrayBuffer) {
-          const int16 = new Int16Array(event.data);
-          const b64 = arrayBufferToBase64(int16.buffer as ArrayBuffer);
-          playAgentAudio(b64);
         }
       };
 

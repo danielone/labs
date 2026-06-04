@@ -1,4 +1,4 @@
-export const SAMPLE_RATE = 16000;
+export const SAMPLE_RATE = 44100;
 
 export function float32ToInt16(input: Float32Array): Int16Array<ArrayBuffer> {
   const buf = new ArrayBuffer(input.length * 2);
