@@ -45,6 +45,8 @@ export default function VoiceChat() {
   // Keep analyser refs in sync with state for use inside callbacks
   const agentAnalyserRef = useRef<AnalyserNode | null>(null);
   const userAnalyserRef = useRef<AnalyserNode | null>(null);
+  // Track every scheduled source so we can stop them instantly on end
+  const activeSourcesRef = useRef<Set<AudioBufferSourceNode>>(new Set());
 
   const pollLevels = useCallback(() => {
     if (agentAnalyserRef.current) {
@@ -95,6 +97,9 @@ export default function VoiceChat() {
       source.buffer = audioBuf;
       source.connect(agentAnalyserRef.current);
 
+      activeSourcesRef.current.add(source);
+      source.onended = () => activeSourcesRef.current.delete(source);
+
       const startAt = Math.max(ctx.currentTime, nextPlayTimeRef.current);
       source.start(startAt);
       nextPlayTimeRef.current = startAt + audioBuf.duration;
@@ -109,6 +114,10 @@ export default function VoiceChat() {
     if (agentSilenceTimerRef.current) clearTimeout(agentSilenceTimerRef.current);
     if (userSilenceTimerRef.current) clearTimeout(userSilenceTimerRef.current);
 
+    // Stop every scheduled audio buffer immediately
+    activeSourcesRef.current.forEach((s) => { try { s.stop(); } catch {} });
+    activeSourcesRef.current.clear();
+
     if (scriptNodeRef.current) {
       scriptNodeRef.current.onaudioprocess = null;
       try { scriptNodeRef.current.disconnect(); } catch {}
@@ -119,11 +128,17 @@ export default function VoiceChat() {
       micStreamRef.current = null;
     }
     if (wsRef.current) {
+      // Null ALL handlers so none fire after cleanup
+      wsRef.current.onopen = null;
+      wsRef.current.onmessage = null;
+      wsRef.current.onerror = null;
       wsRef.current.onclose = null;
       wsRef.current.close();
       wsRef.current = null;
     }
     if (audioCtxRef.current) {
+      // suspend() silences output immediately; close() frees resources
+      audioCtxRef.current.suspend().catch(() => {});
       audioCtxRef.current.close().catch(() => {});
       audioCtxRef.current = null;
     }
