@@ -494,26 +494,6 @@ export default function VoiceChat() {
           </div>
         )}
 
-        {/* User speaking badge — only shown during active call */}
-        {isActive && (
-          <div
-            className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap"
-            style={{
-              background: '#f1f0ec',
-              border: '1px solid #dfdcd7',
-              color: userSpeaking ? '#1a6b3c' : '#7c7770',
-            }}
-          >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{
-                background: userSpeaking ? '#22c55e' : '#c4c0bb',
-                animation: userSpeaking ? 'glow-pulse 1.6s ease-out infinite' : 'none',
-              }}
-            />
-            {userSpeaking ? 'Speaking…' : 'Listening…'}
-          </div>
-        )}
 
         {/* Timer */}
         {isActive && (
