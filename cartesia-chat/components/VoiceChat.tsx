@@ -367,17 +367,17 @@ export default function VoiceChat() {
             flexDirection: 'column',
             border: '1px solid #dfdcd7',
             background: '#f9f9f8',
-            opacity: toggleHovered ? 1 : 0.7,
+            opacity: toggleHovered ? 1 : 0.6,
             transition: 'opacity 0.2s ease',
           }}
           onMouseEnter={() => setToggleHovered(true)}
           onMouseLeave={() => setToggleHovered(false)}
         >
           {([
+            { scene: true,  title: 'Scene view',
+              icon: <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 15 5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="8.5" r="1.5"/></> },
             { scene: false, title: 'Avatar view',
               icon: <><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></> },
-            { scene: true, title: 'Scene view',
-              icon: <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 15 5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="8.5" r="1.5"/></> },
           ] as const).map(({ scene, title, icon }, i, arr) => {
             const isActive = showScene === scene;
             return (
@@ -401,7 +401,7 @@ export default function VoiceChat() {
               >
                 <svg
                   width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke={isActive ? '#39342f' : '#7c7770'}
+                  stroke="#3A342F"
                   strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                 >
                   {icon}
