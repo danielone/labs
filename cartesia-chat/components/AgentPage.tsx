@@ -178,30 +178,34 @@ export default function AgentPage() {
 
           {/* Tab navigation */}
           <div style={{ display: 'flex', gap: 0 }}>
-            {TABS.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                style={{
-                  position: 'relative',
-                  padding: '6px 20px',
-                  fontSize: 13.5,
-                  fontWeight: 500,
-                  background: 'none',
-                  border: 'none',
-                  borderBottom: activeTab === tab.id ? '2px solid #39342f' : '2px solid transparent',
-                  color: activeTab === tab.id ? '#39342f' : '#9b9895',
-                  cursor: 'pointer',
-                  marginBottom: -1,
-                  transition: 'color 0.15s, border-color 0.15s',
-                  whiteSpace: 'nowrap',
-                }}
-                onMouseEnter={e => { if (activeTab !== tab.id) (e.currentTarget as HTMLButtonElement).style.color = '#525150'; }}
-                onMouseLeave={e => { if (activeTab !== tab.id) (e.currentTarget as HTMLButtonElement).style.color = '#9b9895'; }}
-              >
-                {tab.label}
-              </button>
-            ))}
+            {TABS.map(tab => {
+              const disabled = tab.id === 'calls' || tab.id === 'settings';
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => !disabled && setActiveTab(tab.id)}
+                  style={{
+                    position: 'relative',
+                    padding: '6px 20px',
+                    fontSize: 13.5,
+                    fontWeight: 500,
+                    background: 'none',
+                    border: 'none',
+                    borderBottom: activeTab === tab.id ? '2px solid #39342f' : '2px solid transparent',
+                    color: activeTab === tab.id ? '#39342f' : '#9b9895',
+                    cursor: disabled ? 'not-allowed' : 'pointer',
+                    marginBottom: -1,
+                    transition: 'color 0.15s, border-color 0.15s',
+                    whiteSpace: 'nowrap',
+                    opacity: disabled ? 0.45 : 1,
+                  }}
+                  onMouseEnter={e => { if (!disabled && activeTab !== tab.id) (e.currentTarget as HTMLButtonElement).style.color = '#525150'; }}
+                  onMouseLeave={e => { if (!disabled && activeTab !== tab.id) (e.currentTarget as HTMLButtonElement).style.color = '#9b9895'; }}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
