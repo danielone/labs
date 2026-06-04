@@ -94,7 +94,7 @@ function useAvatarCanvas(
 
           ctx.fillStyle = L.mouthDark;
           ctx.beginPath();
-          ctx.ellipse(cx, cy + gap * 0.3, rx * 0.42, gap * 0.36, 0, 0, Math.PI * 2);
+          ctx.ellipse(cx, cy + gap * 0.3, rx * 0.825, gap * 0.36, 0, 0, Math.PI * 2);
           ctx.fill();
 
           ctx.fillStyle = L.lowerLip;
