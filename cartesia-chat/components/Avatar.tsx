@@ -17,7 +17,7 @@ const L = {
   rightEye: { cx: 0.605, cy: 0.440, rx: 0.052, ry: 0.052 },
   mouth:    { cx: 0.500, cy: 0.655, rx: 0.100 },
   skinTone: '#f0a882',
-  mouthDark:'#3a1010',
+  mouthDark:'#8b3520',
   lowerLip: '#bf6f60',
 };
 
@@ -94,7 +94,7 @@ function useAvatarCanvas(
 
           ctx.fillStyle = L.mouthDark;
           ctx.beginPath();
-          ctx.ellipse(cx, cy + gap * 0.3, rx * 0.85, gap * 0.72, 0, 0, Math.PI * 2);
+          ctx.ellipse(cx, cy + gap * 0.3, rx * 0.42, gap * 0.36, 0, 0, Math.PI * 2);
           ctx.fill();
 
           ctx.fillStyle = L.lowerLip;
