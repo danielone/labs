@@ -300,19 +300,17 @@ export default function VoiceChat() {
       <div
         className="relative z-10 flex flex-col items-center gap-6 p-8 rounded-3xl"
         style={{
-          background: 'rgba(10, 20, 50, 0.55)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          border: '1px solid rgba(100, 160, 255, 0.18)',
-          boxShadow: '0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)',
+          background: '#fdfdfc',
+          border: '1px solid #dfdcd7',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.05)',
           width: '360px',
           maxWidth: '95vw',
         }}
       >
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-white text-xl font-semibold tracking-wide">Skylar</h1>
-          <p className="text-blue-300 text-sm mt-0.5 opacity-80">AI Voice Companion</p>
+          <h1 className="text-xl font-semibold tracking-wide" style={{ color: '#39342f' }}>Skylar</h1>
+          <p className="text-sm mt-0.5" style={{ color: '#7c7770' }}>AI Voice Companion</p>
         </div>
 
         {/* Avatar */}
@@ -322,15 +320,15 @@ export default function VoiceChat() {
             <div
               className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap"
               style={{
-                background: 'rgba(10,20,50,0.85)',
-                border: '1px solid rgba(100,160,255,0.3)',
-                color: agentSpeaking ? '#7dd3fc' : '#94a3b8',
+                background: '#f1f0ec',
+                border: '1px solid #dfdcd7',
+                color: agentSpeaking ? '#1a6b3c' : '#7c7770',
               }}
             >
               <span
                 className="w-1.5 h-1.5 rounded-full"
                 style={{
-                  background: agentSpeaking ? '#38bdf8' : '#64748b',
+                  background: agentSpeaking ? '#22c55e' : '#c4c0bb',
                   animation: agentSpeaking ? 'blink 0.8s ease-in-out infinite' : 'none',
                 }}
               />
@@ -341,12 +339,12 @@ export default function VoiceChat() {
 
         {/* Agent audio bars */}
         <div className="w-full space-y-1">
-          <p className="text-xs text-blue-300 font-medium text-center opacity-70">Skylar</p>
+          <p className="text-xs font-medium text-center" style={{ color: '#7c7770' }}>Skylar</p>
           <div
             className="rounded-xl overflow-hidden px-2 py-2"
             style={{
-              background: 'rgba(14, 30, 70, 0.6)',
-              border: '1px solid rgba(56, 189, 248, 0.15)',
+              background: '#f1f0ec',
+              border: '1px solid #dfdcd7',
             }}
           >
             <AudioBars analyser={agentAnalyser} color="agent" isActive={agentSpeaking} barCount={28} height={52} />
@@ -355,9 +353,9 @@ export default function VoiceChat() {
 
         {/* Divider */}
         <div className="flex items-center w-full gap-3">
-          <div className="flex-1 h-px" style={{ background: 'rgba(100,130,180,0.2)' }} />
-          <span className="text-xs text-slate-500">You</span>
-          <div className="flex-1 h-px" style={{ background: 'rgba(100,130,180,0.2)' }} />
+          <div className="flex-1 h-px" style={{ background: '#dfdcd7' }} />
+          <span className="text-xs" style={{ color: '#b0aba5' }}>You</span>
+          <div className="flex-1 h-px" style={{ background: '#dfdcd7' }} />
         </div>
 
         {/* User audio bars */}
@@ -365,8 +363,8 @@ export default function VoiceChat() {
           <div
             className="rounded-xl overflow-hidden px-2 py-2 transition-all duration-200"
             style={{
-              background: 'rgba(40, 10, 70, 0.45)',
-              border: userSpeaking ? '1px solid rgba(192, 132, 252, 0.4)' : '1px solid rgba(192, 132, 252, 0.12)',
+              background: '#f1f0ec',
+              border: userSpeaking ? '1px solid #b0aba5' : '1px solid #dfdcd7',
             }}
           >
             <AudioBars analyser={userAnalyser} color="user" isActive={userSpeaking} barCount={28} height={40} />
@@ -375,30 +373,27 @@ export default function VoiceChat() {
 
         {/* Timer */}
         {isActive && (
-          <p className="text-slate-400 text-sm tabular-nums">{formatDuration(duration)}</p>
+          <p className="text-sm tabular-nums" style={{ color: '#7c7770' }}>{formatDuration(duration)}</p>
         )}
 
         {/* Error */}
-        {error && <p className="text-red-400 text-sm text-center px-2">{error}</p>}
+        {error && <p className="text-red-600 text-sm text-center px-2">{error}</p>}
 
         {/* CTA */}
         {callState === 'idle' || callState === 'ending' ? (
           <button
             onClick={startCall}
             disabled={callState === 'ending'}
-            className="w-full py-3.5 rounded-2xl text-white font-semibold text-sm transition-all duration-200 active:scale-95"
+            className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-all duration-200 active:scale-95"
             style={{
-              background:
-                callState === 'ending'
-                  ? 'rgba(30,60,120,0.4)'
-                  : 'linear-gradient(135deg, #1e6fa8 0%, #1d4ed8 100%)',
-              boxShadow: callState === 'ending' ? 'none' : '0 4px 24px rgba(30,111,168,0.5)',
+              background: callState === 'ending' ? '#c4c0bb' : '#39342f',
+              boxShadow: callState === 'ending' ? 'none' : '0 2px 8px rgba(57,52,47,0.25)',
             }}
           >
             {callState === 'ending' ? 'Ending…' : 'Start Conversation'}
           </button>
         ) : callState === 'connecting' ? (
-          <div className="flex items-center gap-2 text-blue-300 text-sm">
+          <div className="flex items-center gap-2 text-sm" style={{ color: '#7c7770' }}>
             <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -408,18 +403,19 @@ export default function VoiceChat() {
         ) : (
           <button
             onClick={endCall}
-            className="w-full py-3.5 rounded-2xl text-white font-semibold text-sm transition-all duration-200 active:scale-95"
+            className="w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95"
             style={{
-              background: 'linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%)',
-              boxShadow: '0 4px 24px rgba(127,29,29,0.4)',
+              background: '#f1f0ec',
+              border: '1px solid #dfdcd7',
+              color: '#c0392b',
             }}
           >
             End Call
           </button>
         )}
 
-        <p className="text-slate-600 text-xs">
-          Powered by <span className="text-slate-500 font-medium">Cartesia</span>
+        <p className="text-xs" style={{ color: '#b0aba5' }}>
+          Powered by <span style={{ color: '#7c7770' }}>Cartesia</span>
         </p>
       </div>
 

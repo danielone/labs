@@ -29,17 +29,17 @@ export default function AudioBars({
 
     const agentGradient = () => {
       const g = ctx.createLinearGradient(0, height, 0, 0);
-      g.addColorStop(0, '#1e6fa8');
-      g.addColorStop(0.5, '#38bdf8');
-      g.addColorStop(1, '#7dd3fc');
+      g.addColorStop(0, '#0369a1');
+      g.addColorStop(0.5, '#0ea5e9');
+      g.addColorStop(1, '#38bdf8');
       return g;
     };
 
     const userGradient = () => {
       const g = ctx.createLinearGradient(0, height, 0, 0);
-      g.addColorStop(0, '#9333ea');
-      g.addColorStop(0.5, '#c084fc');
-      g.addColorStop(1, '#f0abfc');
+      g.addColorStop(0, '#7c3aed');
+      g.addColorStop(0.5, '#a855f7');
+      g.addColorStop(1, '#c084fc');
       return g;
     };
 
