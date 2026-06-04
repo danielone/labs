@@ -412,7 +412,7 @@ export default function VoiceChat() {
             />
             {/* Avatar pinned to bottom-center of image */}
             <div className="absolute bottom-0 left-1/2" style={{ transform: 'translateX(-50%)' }}>
-              <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} />
+              <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} bare />
             </div>
             {/* Status badge inside scene */}
             {isActive && (

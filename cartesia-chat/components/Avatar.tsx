@@ -5,16 +5,45 @@ import Image from 'next/image';
 interface AvatarProps {
   isSpeaking: boolean;
   audioLevel: number; // 0–1
+  bare?: boolean;     // scene view: no frame, white bg blended out
 }
 
-export default function Avatar({ isSpeaking, audioLevel }: AvatarProps) {
+export default function Avatar({ isSpeaking, audioLevel, bare = false }: AvatarProps) {
   const pulseScale = isSpeaking ? 1 + audioLevel * 0.04 : 1;
+
+  if (bare) {
+    return (
+      <div
+        style={{
+          transform: `scale(${pulseScale})`,
+          transition: 'transform 0.08s ease-out',
+          width: 220,
+          height: 220,
+        }}
+      >
+        <Image
+          src="/avatar.png"
+          alt="Skylar"
+          width={220}
+          height={220}
+          priority
+          style={{
+            objectFit: 'contain',
+            width: '100%',
+            height: '100%',
+            // multiply blends white pixels away against the background
+            mixBlendMode: 'multiply',
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="relative flex items-center justify-center">
-      {/* Outer glow ring when speaking */}
+      {/* Glow ring when speaking */}
       <div
-        className="absolute rounded-full transition-all duration-150"
+        className="absolute rounded-full"
         style={{
           inset: '-8px',
           borderRadius: '50%',
@@ -24,7 +53,7 @@ export default function Avatar({ isSpeaking, audioLevel }: AvatarProps) {
         }}
       />
 
-      {/* Avatar image */}
+      {/* Framed avatar */}
       <div
         style={{
           width: 200,
