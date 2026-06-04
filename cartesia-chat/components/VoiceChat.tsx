@@ -528,11 +528,15 @@ export default function VoiceChat() {
           <button
             onClick={startCall}
             disabled={callState === 'ending'}
-            className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-all duration-200 active:scale-95"
+            className="w-full py-3 rounded-xl font-semibold text-sm transition-all duration-150 active:scale-95"
             style={{
-              background: callState === 'ending' ? '#c4c0bb' : '#39342f',
-              boxShadow: callState === 'ending' ? 'none' : '0 2px 8px rgba(57,52,47,0.25)',
+              background: callState === 'ending' ? '#c4c0bb' : '#004e23',
+              color: '#ffffff',
+              border: '1px solid transparent',
+              cursor: callState === 'ending' ? 'default' : 'pointer',
             }}
+            onMouseEnter={e => { if (callState !== 'ending') e.currentTarget.style.background = 'rgba(0,78,35,0.82)'; }}
+            onMouseLeave={e => { if (callState !== 'ending') e.currentTarget.style.background = '#004e23'; }}
           >
             {callState === 'ending' ? 'Ending…' : 'Start Conversation'}
           </button>
@@ -547,12 +551,15 @@ export default function VoiceChat() {
         ) : (
           <button
             onClick={endCall}
-            className="w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95"
+            className="w-full py-3 rounded-xl font-semibold text-sm transition-all duration-150 active:scale-95"
             style={{
-              background: '#f1f0ec',
+              background: '#f9f9f8',
               border: '1px solid #dfdcd7',
-              color: '#c0392b',
+              color: '#39342f',
+              cursor: 'pointer',
             }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#f1f0ec'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#f9f9f8'; }}
           >
             End Call
           </button>
