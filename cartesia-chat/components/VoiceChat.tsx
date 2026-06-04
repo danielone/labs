@@ -458,7 +458,7 @@ export default function VoiceChat() {
                   className="w-1.5 h-1.5 rounded-full"
                   style={{
                     background: agentSpeaking ? '#22c55e' : '#c4c0bb',
-                    animation: agentSpeaking ? 'glow-pulse 2s ease-in-out infinite' : 'none',
+                    animation: agentSpeaking ? 'glow-pulse 1.6s ease-out infinite' : 'none',
                   }}
                 />
                 {agentSpeaking ? 'Speaking…' : 'Listening'}
@@ -481,7 +481,7 @@ export default function VoiceChat() {
                   className="w-1.5 h-1.5 rounded-full"
                   style={{
                     background: agentSpeaking ? '#22c55e' : '#c4c0bb',
-                    animation: agentSpeaking ? 'glow-pulse 2s ease-in-out infinite' : 'none',
+                    animation: agentSpeaking ? 'glow-pulse 1.6s ease-out infinite' : 'none',
                   }}
                 />
                 {agentSpeaking ? 'Speaking…' : 'Listening'}
@@ -599,8 +599,8 @@ export default function VoiceChat() {
 
       <style jsx global>{`
         @keyframes glow-pulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.55); }
-          50%      { box-shadow: 0 0 0 5px rgba(34, 197, 94, 0); }
+          0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.55); }
+          100% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
         }
       `}</style>
     </div>
