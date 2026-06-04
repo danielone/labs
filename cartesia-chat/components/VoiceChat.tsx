@@ -416,7 +416,7 @@ export default function VoiceChat() {
                 <Image src="/avatar.png" alt="Skylar" width={43} height={43}
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
               </div>
-              <span style={{ fontSize: 13, fontWeight: 600, color: '#39342f' }}>Need help?</span>
+              <span style={{ fontSize: 13, fontWeight: 500, color: '#39342f' }}>Need help?</span>
             </div>
 
             {/* Start button */}
