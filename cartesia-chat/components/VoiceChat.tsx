@@ -392,31 +392,31 @@ export default function VoiceChat() {
       {/* Fixed bottom-right widget */}
       <div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 1000 }}>
 
-        {/* ── COLLAPSED WIDGET ── */}
+        {/* ── COLLAPSED WIDGET (75% of original) ── */}
         {!widgetExpanded && (
           <div
             style={{
-              width: 288,
+              width: 216,
               background: '#fdfdfc',
               border: '1px solid #dfdcd7',
-              borderRadius: 20,
+              borderRadius: 15,
               boxShadow: '0 8px 40px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.06)',
-              padding: 16,
+              padding: 12,
               display: 'flex',
               flexDirection: 'column',
-              gap: 12,
+              gap: 9,
             }}
           >
             {/* Avatar + label row */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
               <div style={{
-                width: 52, height: 52, borderRadius: '50%', overflow: 'hidden',
+                width: 39, height: 39, borderRadius: '50%', overflow: 'hidden',
                 border: '2px solid #dfdcd7', background: '#f1f0ec', flexShrink: 0,
               }}>
-                <Image src="/avatar.png" alt="Skylar" width={52} height={52}
+                <Image src="/avatar.png" alt="Skylar" width={39} height={39}
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
               </div>
-              <span style={{ fontSize: 16, fontWeight: 600, color: '#39342f' }}>Need help?</span>
+              <span style={{ fontSize: 12, fontWeight: 600, color: '#39342f' }}>Need help?</span>
             </div>
 
             {/* Start button */}
@@ -427,21 +427,21 @@ export default function VoiceChat() {
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: 999,
-                padding: '11px 18px',
-                fontSize: 14,
+                padding: '8px 14px',
+                fontSize: 11,
                 fontWeight: 600,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: 8,
+                gap: 6,
                 transition: 'background 0.15s ease',
               }}
               onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#2a2826'; }}
               onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#171715'; }}
             >
               {/* Phone icon */}
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
               </svg>
