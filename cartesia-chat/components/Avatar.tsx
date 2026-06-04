@@ -39,8 +39,6 @@ function useAvatarCanvas(
     let nextBlink = 2000 + Math.random() * 3500;
     let lastNow = performance.now();
     let raf = 0;
-    // Smooth mouth openness (px gap, 0 = closed)
-    let mouthOpenness = 0;
 
     const draw = (now: number) => {
       const dt = Math.min(now - lastNow, 50);
@@ -83,43 +81,17 @@ function useAvatarCanvas(
         ctx.globalAlpha = 1;
       }
 
-      // ── Lip / mouth animation ──────────────────────────────────────
-      {
+      // ── Lip / mouth animation (speaking only) ─────────────────────
+      if (isSpeakingRef.current) {
         const lvl = audioLevelRef.current;
         const jitter = 0.85 + 0.15 * Math.sin(now / 80);
-        // Target gap: only non-zero when speaking
-        const targetGap = isSpeakingRef.current
-          ? Math.min(lvl * 22 * jitter, 6)
-          : 0;
-        // Smooth toward target — open quickly, close gently
-        const smoothing = targetGap > mouthOpenness ? 0.28 : 0.10;
-        mouthOpenness = mouthOpenness * (1 - smoothing) + targetGap * smoothing;
+        const gap = Math.min(lvl * 22 * jitter, 6);
 
-        const cx = L.mouth.cx * size;
-        const cy = L.mouth.cy * size;
-        const rx = L.mouth.rx * size;
+        if (gap > 0.8) {
+          const cx = L.mouth.cx * size;
+          const cy = L.mouth.cy * size;
+          const rx = L.mouth.rx * size;
 
-        // Always paint a closed-mouth base to cover the PNG's natural open mouth.
-        // This shows fully when mouthOpenness ≈ 0 and fades as the mouth opens.
-        const closedAlpha = Math.max(0, 1 - mouthOpenness / 1.5);
-        if (closedAlpha > 0.02) {
-          ctx.globalAlpha = closedAlpha;
-          // Fill in the dark mouth cavity
-          ctx.fillStyle = L.skinTone;
-          ctx.beginPath();
-          ctx.ellipse(cx, cy + 2, rx, 6, 0, 0, Math.PI * 2);
-          ctx.fill();
-          // Closed lip line
-          ctx.fillStyle = L.lowerLip;
-          ctx.beginPath();
-          ctx.ellipse(cx, cy + 1, rx * 0.88, 2.5, 0, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.globalAlpha = 1;
-        }
-
-        // Draw open mouth when sufficiently open
-        if (mouthOpenness > 0.5) {
-          const gap = mouthOpenness;
           ctx.fillStyle = L.mouthDark;
           ctx.beginPath();
           ctx.ellipse(cx, cy + gap * 0.3, rx * 0.85, gap * 0.72, 0, 0, Math.PI * 2);
