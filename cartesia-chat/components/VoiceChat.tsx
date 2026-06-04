@@ -355,7 +355,7 @@ export default function VoiceChat() {
       <SFBackground />
 
       {/* Wrapper keeps the toggle and card together for positioning */}
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-col items-center">
 
         {/* Toggle — vertical, outside top-right of card, Cartesia tabs style */}
         <div
@@ -581,19 +581,20 @@ export default function VoiceChat() {
           </a>
         </p>
 
-        {/* Test mode — only shown when idle */}
+        </div> {/* end card */}
+
+        {/* Preview animations — below the card, outside it */}
         {callState === 'idle' && (
           <button
             onClick={startTestMode}
             className="text-xs underline underline-offset-2 transition-colors duration-150"
-            style={{ color: '#c4c0bb' }}
+            style={{ color: '#c4c0bb', marginTop: '12px', cursor: 'pointer' }}
             onMouseEnter={(e) => (e.currentTarget.style.color = '#7c7770')}
             onMouseLeave={(e) => (e.currentTarget.style.color = '#c4c0bb')}
           >
             Preview animations
           </button>
         )}
-        </div> {/* end card */}
       </div> {/* end wrapper */}
 
       <style jsx global>{`
