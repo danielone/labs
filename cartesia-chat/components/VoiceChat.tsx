@@ -24,7 +24,7 @@ interface TokenResponse {
 // Cartesia-style 4-bar wave indicator
 // speaking=true → #004e23 (Cartesia brand), speaking=false → #309d4b
 function WaveBars({ speaking }: { speaking: boolean }) {
-  const color = speaking ? '#004e23' : '#309d4b';
+  const color = speaking ? '#004e23' : '#abd49e';
   const bars = [
     { anim: 'bar-pulse-a', delay: '0ms',   dur: '1.8s', init: '22%' },
     { anim: 'bar-pulse-b', delay: '200ms', dur: '1.6s', init: '18%' },
@@ -483,7 +483,7 @@ export default function VoiceChat() {
                   background: 'rgba(253,253,252,0.88)',
                   backdropFilter: 'blur(8px)',
                   border: '1px solid #dfdcd7',
-                  color: '#1a6b3c',
+                  color: '#39342f',
                 }}
               >
                 <WaveBars speaking={agentSpeaking} />
@@ -500,7 +500,7 @@ export default function VoiceChat() {
                 style={{
                   background: '#f1f0ec',
                   border: '1px solid #dfdcd7',
-                  color: '#1a6b3c',
+                  color: '#39342f',
                 }}
               >
                 <WaveBars speaking={agentSpeaking} />
