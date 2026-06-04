@@ -3,7 +3,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import Avatar from './Avatar';
-import AudioBars from './AudioBars';
 import SFBackground from './SFBackground';
 import {
   SAMPLE_RATE,
@@ -490,39 +489,26 @@ export default function VoiceChat() {
           </div>
         )}
 
-        {/* Agent audio bars */}
-        <div className="w-full space-y-1">
-          <p className="text-xs font-medium text-center" style={{ color: '#7c7770' }}>Skylar</p>
+        {/* User speaking badge — only shown during active call */}
+        {isActive && (
           <div
-            className="rounded-xl overflow-hidden px-2 py-2"
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap"
             style={{
               background: '#f1f0ec',
               border: '1px solid #dfdcd7',
+              color: userSpeaking ? '#1a6b3c' : '#7c7770',
             }}
           >
-            <AudioBars analyser={agentAnalyser} color="agent" isActive={agentSpeaking} barCount={28} height={52} />
+            <span
+              className="w-1.5 h-1.5 rounded-full"
+              style={{
+                background: userSpeaking ? '#22c55e' : '#c4c0bb',
+                animation: userSpeaking ? 'glow-pulse 1.6s ease-out infinite' : 'none',
+              }}
+            />
+            {userSpeaking ? 'Speaking…' : 'Listening…'}
           </div>
-        </div>
-
-        {/* Divider */}
-        <div className="flex items-center w-full gap-3">
-          <div className="flex-1 h-px" style={{ background: '#dfdcd7' }} />
-          <span className="text-xs" style={{ color: '#b0aba5' }}>You</span>
-          <div className="flex-1 h-px" style={{ background: '#dfdcd7' }} />
-        </div>
-
-        {/* User audio bars */}
-        <div className="w-full">
-          <div
-            className="rounded-xl overflow-hidden px-2 py-2 transition-all duration-200"
-            style={{
-              background: '#f1f0ec',
-              border: userSpeaking ? '1px solid #b0aba5' : '1px solid #dfdcd7',
-            }}
-          >
-            <AudioBars analyser={userAnalyser} color="user" isActive={userSpeaking} barCount={28} height={40} />
-          </div>
-        </div>
+        )}
 
         {/* Timer */}
         {isActive && (
