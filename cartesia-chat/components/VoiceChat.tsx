@@ -361,7 +361,7 @@ export default function VoiceChat() {
         <div
           style={{
             position: 'absolute',
-            top: 0,
+            top: 30,
             right: -43,
             display: 'flex',
             flexDirection: 'column',
