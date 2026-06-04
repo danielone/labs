@@ -13,9 +13,9 @@ interface AvatarProps {
 // Tuned for this specific avatar image.
 const L = {
   // Iris/pupil area only — smaller than the full eye socket
-  leftEye:  { cx: 0.395, cy: 0.430, rx: 0.052, ry: 0.052 },
-  rightEye: { cx: 0.605, cy: 0.430, rx: 0.052, ry: 0.052 },
-  mouth:    { cx: 0.500, cy: 0.655, rx: 0.110 },
+  leftEye:  { cx: 0.395, cy: 0.440, rx: 0.052, ry: 0.052 },
+  rightEye: { cx: 0.605, cy: 0.440, rx: 0.052, ry: 0.052 },
+  mouth:    { cx: 0.500, cy: 0.655, rx: 0.100 },
   skinTone: '#f0a882',
   mouthDark:'#3a1010',
   lowerLip: '#bf6f60',
