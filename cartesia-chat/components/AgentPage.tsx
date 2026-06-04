@@ -77,6 +77,7 @@ const TABS: { id: MainTab; label: string }[] = [
 export default function AgentPage() {
   const [activeTab, setActiveTab] = useState<MainTab>('design');
   const [designView, setDesignView] = useState<DesignSubView>('widget');
+  const [configPreview, setConfigPreview] = useState(false);
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f9f9f8', fontFamily: 'var(--font-geist-sans), system-ui, sans-serif' }}>
@@ -183,7 +184,7 @@ export default function AgentPage() {
               return (
                 <button
                   key={tab.id}
-                  onClick={() => !disabled && setActiveTab(tab.id)}
+                  onClick={() => { if (!disabled) { setActiveTab(tab.id); setConfigPreview(false); } }}
                   style={{
                     position: 'relative',
                     padding: '6px 20px',
@@ -214,15 +215,15 @@ export default function AgentPage() {
           {activeTab === 'design' && (
             <DesignTab designView={designView} setDesignView={setDesignView} />
           )}
-          {activeTab === 'configuration' && <ConfigurationTab />}
+          {activeTab === 'configuration' && <ConfigurationTab onPreview={() => setConfigPreview(true)} previewActive={configPreview} />}
           {(activeTab === 'metrics' || activeTab === 'calls' || activeTab === 'settings') && (
             <EmptyTab label={TABS.find(t => t.id === activeTab)?.label || ''} />
           )}
         </div>
       </div>
 
-      {/* Widget always visible in bottom-right */}
-      <VoiceChat />
+      {/* Widget: hidden on Configuration tab unless Preview clicked */}
+      {(activeTab !== 'configuration' || configPreview) && <VoiceChat />}
     </div>
   );
 }
@@ -302,13 +303,18 @@ function DesignTab({ designView, setDesignView }: { designView: DesignSubView; s
 }
 
 // ── Configuration tab (read-only replica) ─────────────────────────────────
-function ConfigurationTab() {
+function ConfigurationTab({ onPreview, previewActive }: { onPreview: () => void; previewActive: boolean }) {
   return (
     <div style={{ maxWidth: 600 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: 0 }}>Configuration</h2>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button style={{ padding: '6px 14px', fontSize: 13, fontWeight: 500, color: '#39342f', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, cursor: 'not-allowed' }}>Preview</button>
+          <button
+            onClick={onPreview}
+            style={{ padding: '6px 14px', fontSize: 13, fontWeight: 500, color: previewActive ? '#004e23' : '#39342f', background: previewActive ? '#eff7f0' : '#fdfdfc', border: `1px solid ${previewActive ? '#a8d5b5' : '#dfdcd7'}`, borderRadius: 8, cursor: 'pointer', transition: 'all 0.15s' }}
+          >
+            {previewActive ? 'Previewing' : 'Preview'}
+          </button>
           <button style={{ padding: '6px 14px', fontSize: 13, fontWeight: 500, color: '#ffffff', background: '#004e23', border: '1px solid transparent', borderRadius: 8, cursor: 'not-allowed' }}>Publish</button>
         </div>
       </div>
