@@ -77,7 +77,7 @@ export default function AgentPage() {
   const [activeTab, setActiveTab] = useState<MainTab>('design');
   const [configPreview, setConfigPreview] = useState(false);
   const [widgetLabel, setWidgetLabel] = useState('Need help?');
-  const [agentName,   setAgentName]   = useState('Skylar');
+  const [agentName,   setAgentName]   = useState('Daniel II');
   const [subtitle,    setSubtitle]    = useState('AI Voice Companion');
 
   return (
@@ -245,7 +245,7 @@ interface DesignTabProps {
 function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle }: DesignTabProps) {
   const fields = [
     { label: 'Widget label', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
-    { label: 'Agent name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Skylar' },
+    { label: 'Agent name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
     { label: 'Subtitle',     value: subtitle,    set: setSubtitle,    placeholder: 'e.g. AI Voice Companion' },
   ];
 
