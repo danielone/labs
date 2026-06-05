@@ -159,13 +159,13 @@ export default function AgentPage() {
               agent_kQE7...VjAN
             </button>
 
-            <div style={{ flex: 1 }} />
-
-            {/* Connect button */}
+            {/* Connect button — next to agent ID */}
             <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px', fontSize: 13, fontWeight: 500, color: '#39342f', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, cursor: 'not-allowed' }}>
               <Icon size={13}>{icons.github}</Icon>
               Connect
             </button>
+
+            <div style={{ flex: 1 }} />
 
             {/* Get Phone Number */}
             <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px', fontSize: 13, fontWeight: 500, color: '#39342f', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, cursor: 'not-allowed' }}>
