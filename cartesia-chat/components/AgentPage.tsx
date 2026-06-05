@@ -250,25 +250,7 @@ function DesignTab() {
   );
 }
 
-// ── Configuration tab (read-only replica) ─────────────────────────────────
-function ConfigurationTab({ onPreview, previewActive }: { onPreview: () => void; previewActive: boolean }) {
-  return (
-    <div style={{ maxWidth: 600 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-        <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: 0 }}>Configuration</h2>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button
-            onClick={onPreview}
-            style={{ padding: '6px 14px', fontSize: 13, fontWeight: 500, color: previewActive ? '#004e23' : '#39342f', background: previewActive ? '#eff7f0' : '#fdfdfc', border: `1px solid ${previewActive ? '#a8d5b5' : '#dfdcd7'}`, borderRadius: 8, cursor: 'pointer', transition: 'all 0.15s' }}
-          >
-            {previewActive ? 'Previewing' : 'Preview'}
-          </button>
-          <button style={{ padding: '6px 14px', fontSize: 13, fontWeight: 500, color: '#ffffff', background: '#004e23', border: '1px solid transparent', borderRadius: 8, cursor: 'not-allowed' }}>Publish</button>
-        </div>
-      </div>
-
-      {[
-        { label: 'System Prompt', content: `You are a friendly voice assistant built with Cartesia, designed for natural, open-ended conversation.
+const SYSTEM_PROMPT = `You are a friendly voice assistant built with Cartesia, designed for natural, open-ended conversation.
 
 # Personality
 
@@ -319,22 +301,109 @@ Caller seems frustrated: Acknowledge it, try a different approach
 Off-topic or unusual request: Roll with it—you can chat about anything
 
 # Topics you can discuss
-Anything the caller wants: their day, current events, science, culture, philosophy, personal decisions, interesting ideas. Help think through problems by asking clarifying questions. Use light, natural humor when appropriate.`, multiline: true },
-        { label: 'Initial Message', content: `Hey! I'm a Daniel's Cartesia voice assistant. What would you like to talk about?`, multiline: true },
-      ].map(field => (
-        <div key={field.label} style={{ marginBottom: 20 }}>
-          <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: '#39342f', marginBottom: 8 }}>{field.label}</label>
-          <textarea
-            readOnly defaultValue={field.content} rows={field.label === 'System Prompt' ? 18 : 2}
-            style={{ width: '100%', padding: '10px 12px', fontSize: 13, color: '#636260', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, outline: 'none', resize: 'vertical', cursor: 'not-allowed', boxSizing: 'border-box', fontFamily: 'inherit', lineHeight: 1.6 }}
-          />
-        </div>
-      ))}
+Anything the caller wants: their day, current events, science, culture, philosophy, personal decisions, interesting ideas. Help think through problems by asking clarifying questions. Use light, natural humor when appropriate.`;
 
-      <div style={{ marginBottom: 20 }}>
-        <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: '#39342f', marginBottom: 8 }}>Voice &amp; Language</label>
-        <div style={{ padding: '10px 12px', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, fontSize: 13, color: '#636260', cursor: 'not-allowed' }}>
-          Skylar — Friendly Guide · English
+// Shared field styles
+const fieldLabel: React.CSSProperties = { display: 'block', fontSize: 13, fontWeight: 500, color: '#39342f', marginBottom: 8 };
+const readonlyInput: React.CSSProperties = { width: '100%', padding: '8px 12px', fontSize: 13, color: '#636260', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, outline: 'none', cursor: 'not-allowed', boxSizing: 'border-box', fontFamily: 'inherit' };
+const sectionHead: React.CSSProperties = { fontSize: 14, fontWeight: 600, color: '#39342f', margin: '0 0 14px' };
+
+// ── Configuration tab (read-only replica) ─────────────────────────────────
+function ConfigurationTab({ onPreview, previewActive }: { onPreview: () => void; previewActive: boolean }) {
+  return (
+    <div>
+      {/* Header row: title + action buttons */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+        <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: 0 }}>Configuration</h2>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button
+            onClick={onPreview}
+            style={{ padding: '5px 12px', fontSize: 14, fontWeight: 500, color: previewActive ? '#004e23' : '#39342f', background: previewActive ? '#eff7f0' : '#f9f9f8', border: `1px solid ${previewActive ? '#a8d5b5' : '#dfdcd7'}`, borderRadius: 7, cursor: 'pointer', transition: 'all 0.15s' }}
+          >
+            {previewActive ? 'Previewing' : 'Preview'}
+          </button>
+          {/* Publish — disabled at 50% opacity exactly like the real console */}
+          <button disabled style={{ padding: '5px 12px', fontSize: 14, fontWeight: 500, color: '#fefefe', background: '#004e23', border: '1px solid transparent', borderRadius: 7, cursor: 'default', opacity: 0.5 }}>
+            Publish
+          </button>
+        </div>
+      </div>
+
+      {/* Two-column grid: 2fr left + 1fr right */}
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 32 }}>
+
+        {/* Left column: System Prompt + Initial Message */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          <div>
+            <label style={fieldLabel}>System Prompt</label>
+            <textarea readOnly defaultValue={SYSTEM_PROMPT} rows={18}
+              style={{ ...readonlyInput, resize: 'vertical', lineHeight: 1.6 }} />
+          </div>
+          <div>
+            <label style={fieldLabel}>Initial Message</label>
+            <textarea readOnly defaultValue="Hey! I'm a Daniel's Cartesia voice assistant. What would you like to talk about?" rows={3}
+              style={{ ...readonlyInput, resize: 'none', lineHeight: 1.6 }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 10 }}>
+              <div style={{ width: 32, height: 18, borderRadius: 99, background: '#dfdcd7', position: 'relative', flexShrink: 0 }}>
+                <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#fff', position: 'absolute', top: 2, left: 2 }} />
+              </div>
+              <span style={{ fontSize: 13, color: '#636260' }}>Skip agent introduction</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right column: Voice & Language, ASR, Background Sound */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginTop: 2 }}>
+
+          {/* Voice & Language */}
+          <div>
+            <h3 style={sectionHead}>Voice &amp; Language</h3>
+            <div style={{ padding: '10px 12px', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, fontSize: 13, color: '#39342f', cursor: 'not-allowed', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Icon size={14}>{icons.voiceLib}</Icon>
+              <span>Skylar — Friendly Guide</span>
+            </div>
+            <p style={{ fontSize: 12, color: '#9b9895', margin: '6px 0 0' }}>Language: English</p>
+          </div>
+
+          {/* Automatic Speech Recognition */}
+          <div>
+            <h3 style={sectionHead}>Automatic Speech Recognition</h3>
+            <div style={{ marginBottom: 12 }}>
+              <label style={{ ...fieldLabel, fontSize: 12, color: '#636260' }}>Model</label>
+              <div style={{ ...readonlyInput, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span>Ink-2</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9b9895" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+              <div style={{ width: 32, height: 18, borderRadius: 99, background: '#004e23', position: 'relative', flexShrink: 0, marginTop: 2 }}>
+                <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#fff', position: 'absolute', top: 2, right: 2 }} />
+              </div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                  <span style={{ fontSize: 13, color: '#39342f', fontWeight: 500 }}>Language detection</span>
+                  <span style={{ fontSize: 11, fontWeight: 500, color: '#636260', background: '#f1f0ec', border: '1px solid #dfdcd7', borderRadius: 4, padding: '1px 6px' }}>Beta</span>
+                </div>
+                <p style={{ fontSize: 12, color: '#9b9895', margin: 0, lineHeight: 1.5 }}>
+                  Auto-detect the caller's language and respond in kind. Supports English, Spanish, French, German, Hindi, Russian, Portuguese, Japanese, Italian, and Dutch.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Background Sound */}
+          <div>
+            <h3 style={sectionHead}>Background Sound</h3>
+            <p style={{ fontSize: 12, color: '#9b9895', margin: '0 0 10px', lineHeight: 1.5 }}>
+              Add sound to play in the background of your agent's speech.
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <button disabled style={{ padding: '5px 10px', fontSize: 12, fontWeight: 500, color: '#39342f', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 7, cursor: 'not-allowed' }}>
+                Choose File
+              </button>
+              <span style={{ fontSize: 12, color: '#9b9895' }}>No file chosen</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
