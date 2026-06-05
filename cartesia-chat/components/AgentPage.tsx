@@ -244,8 +244,8 @@ interface DesignTabProps {
 
 function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle }: DesignTabProps) {
   const fields = [
-    { label: 'Widget label', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
-    { label: 'Agent name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
+    { label: 'Widget Label', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
+    { label: 'Agent Name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
     { label: 'Subtitle',     value: subtitle,    set: setSubtitle,    placeholder: 'e.g. AI Voice Companion' },
   ];
 
