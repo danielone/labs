@@ -503,7 +503,19 @@ export default function VoiceChat({
         {widgetExpanded && (
           <div className="relative flex flex-col items-center">
 
-            {/* Card */}
+            {/* Card — wrapped so Preview button can anchor to its top-right */}
+            <div style={{ position: 'relative', width: 360 }}>
+              {callState === 'idle' && (
+                <button
+                  onClick={startTestMode}
+                  className="text-xs underline underline-offset-2 transition-colors duration-150"
+                  style={{ position: 'absolute', top: -22, right: 0, color: '#c4c0bb', cursor: 'pointer', background: 'none', border: 'none', padding: 0 }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#7c7770'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = '#c4c0bb'; }}
+                >
+                  Preview animations
+                </button>
+              )}
             <div
               className="flex flex-col items-center gap-4 rounded-3xl"
               style={{
@@ -617,18 +629,7 @@ export default function VoiceChat({
               </p>
             </div>
 
-            {/* Preview animations */}
-            {callState === 'idle' && (
-              <button
-                onClick={startTestMode}
-                className="text-xs underline underline-offset-2 transition-colors duration-150"
-                style={{ color: '#c4c0bb', marginTop: 10, cursor: 'pointer' }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#7c7770'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#c4c0bb'; }}
-              >
-                Preview animations
-              </button>
-            )}
+            </div>
           </div>
         )}
       </div>
