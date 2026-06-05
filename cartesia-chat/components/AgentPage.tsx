@@ -333,7 +333,30 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         <div style={{ height: 4 }} />
       </Accordion>
 
-      {/* Display Settings accordion (formerly Avatar) */}
+      {/* Widget accordion */}
+      <Accordion title="Widget">
+        {textFields.map(field => (
+          <div key={field.label} style={{ marginBottom: 14 }}>
+            <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 5 }}>
+              {field.label}
+            </label>
+            <input
+              value={field.value}
+              placeholder={field.placeholder}
+              onChange={e => field.set(e.target.value)}
+              style={{
+                width: '100%', padding: '8px 12px', fontSize: 13, color: '#39342f',
+                background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8,
+                outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s',
+              }}
+              onFocus={e => { e.currentTarget.style.borderColor = '#a0bfa8'; }}
+              onBlur={e => { e.currentTarget.style.borderColor = '#dfdcd7'; }}
+            />
+          </div>
+        ))}
+      </Accordion>
+
+      {/* Display Settings accordion */}
       <Accordion title="Display Settings">
         <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
           View
@@ -363,29 +386,6 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
             </button>
           ))}
         </div>
-      </Accordion>
-
-      {/* Widget accordion */}
-      <Accordion title="Widget">
-        {textFields.map(field => (
-          <div key={field.label} style={{ marginBottom: 14 }}>
-            <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 5 }}>
-              {field.label}
-            </label>
-            <input
-              value={field.value}
-              placeholder={field.placeholder}
-              onChange={e => field.set(e.target.value)}
-              style={{
-                width: '100%', padding: '8px 12px', fontSize: 13, color: '#39342f',
-                background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8,
-                outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s',
-              }}
-              onFocus={e => { e.currentTarget.style.borderColor = '#a0bfa8'; }}
-              onBlur={e => { e.currentTarget.style.borderColor = '#dfdcd7'; }}
-            />
-          </div>
-        ))}
       </Accordion>
 
       {/* Close border at bottom */}
