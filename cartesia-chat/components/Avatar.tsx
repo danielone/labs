@@ -136,12 +136,12 @@ export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize 
         height={size}
         priority
         style={{
-          objectFit: bare ? 'contain' : 'cover',
+          objectFit: bare ? 'contain' : (!bare && avatarSrc === '/monster.svg' ? 'contain' : 'cover'),
+          objectPosition: (!bare && avatarSrc === '/monster.svg') ? 'center 60%' : 'center',
           width: '100%',
           height: '100%',
           display: 'block',
           ...(bare ? { mixBlendMode: 'multiply' as const } : {}),
-          ...(!bare && avatarSrc === '/monster.svg' ? { transform: 'translateY(10px)' } : {}),
         }}
       />
       {/* Canvas sits exactly on top of the image, pointer-events off */}
