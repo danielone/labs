@@ -8,6 +8,7 @@ interface AvatarProps {
   audioLevel: number;
   bare?: boolean;
   bareSize?: number; // override default 220
+  avatarSrc?: string; // override default /avatar.png
 }
 
 // Facial landmark positions as fractions of the display size.
@@ -114,7 +115,7 @@ function useAvatarCanvas(
   }, [size]); // only re-run if size changes; state accessed via refs
 }
 
-export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize = 220 }: AvatarProps) {
+export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize = 220, avatarSrc = '/avatar.png' }: AvatarProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isSpeakingRef = useRef(isSpeaking);
   const audioLevelRef = useRef(audioLevel);
@@ -129,7 +130,7 @@ export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize 
   const imageAndCanvas = (
     <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
       <Image
-        src="/avatar.png"
+        src={avatarSrc}
         alt="Skylar"
         width={size}
         height={size}

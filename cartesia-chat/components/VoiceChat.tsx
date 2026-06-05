@@ -69,6 +69,7 @@ interface VoiceChatProps {
   subtitle?:    string;
   showScene?:   boolean;
   setShowScene?: (v: boolean) => void;
+  avatarSrc?:   string;
 }
 
 export default function VoiceChat({
@@ -77,6 +78,7 @@ export default function VoiceChat({
   subtitle     = 'AI Voice Companion',
   showScene:   showSceneProp,
   setShowScene: setShowSceneProp,
+  avatarSrc    = '/avatar.png',
 }: VoiceChatProps = {}) {
   const [widgetExpanded, setWidgetExpanded] = useState(false);
   const [callState, setCallState] = useState<CallState>('idle');
@@ -443,7 +445,7 @@ export default function VoiceChat({
                 width: 43, height: 43, borderRadius: '50%', overflow: 'hidden',
                 border: '2px solid #dfdcd7', background: '#f1f0ec', flexShrink: 0,
               }}>
-                <Image src="/avatar.png" alt="Skylar" width={43} height={43}
+                <Image src={avatarSrc} alt="Skylar" width={43} height={43}
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
               </div>
               <span style={{ fontSize: 13, fontWeight: 500, color: '#39342f', flex: 1 }}>{widgetLabel}</span>
@@ -542,7 +544,7 @@ export default function VoiceChat({
                   <Image src="/coworking-bg.jpg" alt="Office" fill priority
                     style={{ objectFit: 'cover', objectPosition: 'center' }} />
                   <div className="absolute bottom-0 left-1/2" style={{ transform: 'translateX(-50%)' }}>
-                    <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} bare bareSize={AVATAR_BARE} />
+                    <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} bare bareSize={AVATAR_BARE} avatarSrc={avatarSrc} />
                   </div>
                   {isActive && (
                     <div className="absolute top-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap"
@@ -555,7 +557,7 @@ export default function VoiceChat({
                 </div>
               ) : (
                 <div className="relative">
-                  <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} />
+                  <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} avatarSrc={avatarSrc} />
                   {isActive && (
                     <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap"
                       style={{ background: '#f1f0ec', border: '1px solid #dfdcd7', color: '#39342f' }}>

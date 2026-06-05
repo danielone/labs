@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import VoiceChat from './VoiceChat';
 
 type MainTab = 'configuration' | 'design' | 'metrics' | 'calls' | 'settings';
@@ -91,6 +92,7 @@ export default function AgentPage() {
   const [subtitle,    setSubtitle]    = useState('AI Voice Companion');
   const [showScene,   setShowScene]   = useState(true);
   const [avatarSource, setAvatarSource] = useState<'favorites' | 'library' | 'custom'>('favorites');
+  const [selectedAvatar, setSelectedAvatar] = useState<'/avatar.png' | '/monster.svg'>('/avatar.png');
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f9f9f8', fontFamily: 'var(--font-geist-sans), system-ui, sans-serif' }}>
@@ -261,6 +263,7 @@ export default function AgentPage() {
               subtitle={subtitle}           setSubtitle={setSubtitle}
               showScene={showScene}         setShowScene={setShowScene}
               avatarSource={avatarSource}   setAvatarSource={setAvatarSource}
+              selectedAvatar={selectedAvatar} setSelectedAvatar={setSelectedAvatar}
             />
           )}
           {activeTab === 'configuration' && <ConfigurationTab onPreview={() => setConfigPreview(p => !p)} previewActive={configPreview} />}
@@ -272,7 +275,7 @@ export default function AgentPage() {
 
       {/* Widget: hidden on Configuration tab unless Preview clicked */}
       {(activeTab !== 'configuration' || configPreview) && (
-        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} />
+        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} />
       )}
     </div>
   );
@@ -284,8 +287,10 @@ interface DesignTabProps {
   agentName:     string;   setAgentName:     (v: string) => void;
   subtitle:      string;   setSubtitle:      (v: string) => void;
   showScene:     boolean;  setShowScene:     (v: boolean) => void;
-  avatarSource:  'favorites' | 'library' | 'custom';
+  avatarSource:    'favorites' | 'library' | 'custom';
   setAvatarSource: (v: 'favorites' | 'library' | 'custom') => void;
+  selectedAvatar:    '/avatar.png' | '/monster.svg';
+  setSelectedAvatar: (v: '/avatar.png' | '/monster.svg') => void;
 }
 
 // ── Accordion primitive ────────────────────────────────────────────────────
@@ -312,7 +317,7 @@ function Accordion({ title, defaultOpen = true, children }: { title: string; def
   );
 }
 
-function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource }: DesignTabProps) {
+function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar }: DesignTabProps) {
   const textFields = [
     { label: 'Widget Label', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
     { label: 'Agent Name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
@@ -338,7 +343,8 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
           Image
         </label>
-        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
+        {/* Source toggle */}
+        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden', marginBottom: 16 }}>
           {([
             { src: 'favorites' as const, label: 'Favorites', iconKey: 'heart' },
             { src: 'library'   as const, label: 'Library',   iconKey: 'book'  },
@@ -371,6 +377,41 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
             );
           })}
         </div>
+
+        {/* Favorites image grid — shown when avatarSource === 'favorites' */}
+        {avatarSource === 'favorites' && (
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            {([
+              { src: '/avatar.png'   as '/avatar.png' | '/monster.svg', tooltip: 'Sam the Designer' },
+              { src: '/monster.svg'  as '/avatar.png' | '/monster.svg', tooltip: 'Monster Mash'     },
+            ]).map(({ src, tooltip }) => {
+              const isSelected = selectedAvatar === src;
+              return (
+                <div
+                  key={src}
+                  title={tooltip}
+                  onClick={() => setSelectedAvatar(src)}
+                  style={{
+                    width: 80, height: 80, flexShrink: 0,
+                    borderRadius: 8,
+                    border: `2px solid ${isSelected ? '#004e23' : '#dfdcd7'}`,
+                    background: '#ffffff',
+                    cursor: 'pointer',
+                    overflow: 'hidden',
+                    position: 'relative',
+                    transition: 'border-color 0.15s',
+                    boxSizing: 'border-box',
+                  }}
+                  onMouseEnter={e => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#b0d4bb'; }}
+                  onMouseLeave={e => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#dfdcd7'; }}
+                >
+                  <Image src={src} alt={tooltip} fill
+                    style={{ objectFit: 'contain', padding: 4 }} />
+                </div>
+              );
+            })}
+          </div>
+        )}
       </Accordion>
 
       {/* Widget accordion */}
