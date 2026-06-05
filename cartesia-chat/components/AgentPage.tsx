@@ -76,6 +76,9 @@ const TABS: { id: MainTab; label: string }[] = [
 export default function AgentPage() {
   const [activeTab, setActiveTab] = useState<MainTab>('design');
   const [configPreview, setConfigPreview] = useState(false);
+  const [widgetLabel, setWidgetLabel] = useState('Need help?');
+  const [agentName,   setAgentName]   = useState('Skylar');
+  const [subtitle,    setSubtitle]    = useState('AI Voice Companion');
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f9f9f8', fontFamily: 'var(--font-geist-sans), system-ui, sans-serif' }}>
@@ -210,7 +213,13 @@ export default function AgentPage() {
 
         {/* Tab content */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '28px 24px' }}>
-          {activeTab === 'design' && <DesignTab />}
+          {activeTab === 'design' && (
+            <DesignTab
+              widgetLabel={widgetLabel} setWidgetLabel={setWidgetLabel}
+              agentName={agentName}     setAgentName={setAgentName}
+              subtitle={subtitle}       setSubtitle={setSubtitle}
+            />
+          )}
           {activeTab === 'configuration' && <ConfigurationTab onPreview={() => setConfigPreview(p => !p)} previewActive={configPreview} />}
           {(activeTab === 'metrics' || activeTab === 'calls' || activeTab === 'settings') && (
             <EmptyTab label={TABS.find(t => t.id === activeTab)?.label || ''} />
@@ -219,30 +228,49 @@ export default function AgentPage() {
       </div>
 
       {/* Widget: hidden on Configuration tab unless Preview clicked */}
-      {(activeTab !== 'configuration' || configPreview) && <VoiceChat />}
+      {(activeTab !== 'configuration' || configPreview) && (
+        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} />
+      )}
     </div>
   );
 }
 
 // ── Design tab ─────────────────────────────────────────────────────────────
-function DesignTab() {
+interface DesignTabProps {
+  widgetLabel: string; setWidgetLabel: (v: string) => void;
+  agentName:   string; setAgentName:   (v: string) => void;
+  subtitle:    string; setSubtitle:    (v: string) => void;
+}
+
+function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle }: DesignTabProps) {
+  const fields = [
+    { label: 'Widget label', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
+    { label: 'Agent name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Skylar' },
+    { label: 'Subtitle',     value: subtitle,    set: setSubtitle,    placeholder: 'e.g. AI Voice Companion' },
+  ];
+
   return (
     <div style={{ maxWidth: 560 }}>
-      <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: '0 0 20px' }}>Design</h2>
-      <p style={{ fontSize: 14, color: '#636260', lineHeight: 1.6, marginBottom: 20 }}>
-        Customize the appearance of your voice companion widget.
+      <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: '0 0 8px' }}>Design</h2>
+      <p style={{ fontSize: 14, color: '#636260', lineHeight: 1.6, marginBottom: 24 }}>
+        Changes appear in the widget instantly. They reset when you leave the page.
       </p>
-      {[
-        { label: 'Widget label', value: 'Need help?' },
-        { label: 'Agent name', value: 'Skylar' },
-        { label: 'Subtitle', value: 'AI Voice Companion' },
-      ].map(field => (
+      {fields.map(field => (
         <div key={field.label} style={{ marginBottom: 16 }}>
-          <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 6 }}>{field.label}</label>
+          <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 6 }}>
+            {field.label}
+          </label>
           <input
-            defaultValue={field.value}
-            readOnly
-            style={{ width: '100%', padding: '8px 12px', fontSize: 13, color: '#39342f', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, outline: 'none', cursor: 'not-allowed', boxSizing: 'border-box' }}
+            value={field.value}
+            placeholder={field.placeholder}
+            onChange={e => field.set(e.target.value)}
+            style={{
+              width: '100%', padding: '8px 12px', fontSize: 13, color: '#39342f',
+              background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8,
+              outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s',
+            }}
+            onFocus={e => { e.currentTarget.style.borderColor = '#a0bfa8'; }}
+            onBlur={e => { e.currentTarget.style.borderColor = '#dfdcd7'; }}
           />
         </div>
       ))}

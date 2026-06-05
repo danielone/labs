@@ -49,7 +49,17 @@ function WaveBars({ speaking }: { speaking: boolean }) {
   );
 }
 
-export default function VoiceChat() {
+interface VoiceChatProps {
+  widgetLabel?: string;
+  agentName?:   string;
+  subtitle?:    string;
+}
+
+export default function VoiceChat({
+  widgetLabel = 'Need help?',
+  agentName   = 'Skylar',
+  subtitle    = 'AI Voice Companion',
+}: VoiceChatProps = {}) {
   const [widgetExpanded, setWidgetExpanded] = useState(false);
   const [callState, setCallState] = useState<CallState>('idle');
   const [agentSpeaking, setAgentSpeaking] = useState(false);
@@ -416,7 +426,7 @@ export default function VoiceChat() {
                 <Image src="/avatar.png" alt="Skylar" width={43} height={43}
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
               </div>
-              <span style={{ fontSize: 13, fontWeight: 500, color: '#39342f', flex: 1 }}>Need help?</span>
+              <span style={{ fontSize: 13, fontWeight: 500, color: '#39342f', flex: 1 }}>{widgetLabel}</span>
               {/* Expand button — opens card without starting a call */}
               <button
                 onClick={() => setWidgetExpanded(true)}
@@ -528,8 +538,8 @@ export default function VoiceChat() {
               {/* Header row with minimize button */}
               <div className="flex items-start justify-between w-full">
                 <div className="flex-1 text-center">
-                  <h1 className="text-base font-semibold tracking-wide" style={{ color: '#39342f' }}>Skylar</h1>
-                  <p className="text-xs mt-0.5" style={{ color: '#7c7770' }}>AI Voice Companion</p>
+                  <h1 className="text-base font-semibold tracking-wide" style={{ color: '#39342f' }}>{agentName}</h1>
+                  <p className="text-xs mt-0.5" style={{ color: '#7c7770' }}>{subtitle}</p>
                 </div>
                 {/* Minimize — only when call is not active */}
                 {callState === 'idle' && <button
