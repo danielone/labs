@@ -585,6 +585,39 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
             );
           })}
         </div>
+
+        {/* Widget Style */}
+        <div style={{ marginTop: 16 }}>
+          <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
+            Widget Style
+          </label>
+          <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
+            {([
+              { key: 'full',    label: 'Full',    disabled: false },
+              { key: 'compact', label: 'Compact', disabled: true  },
+            ] as const).map(({ key, label, disabled }, i, arr) => {
+              const isActive = key === 'full'; // Full is always selected
+              const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
+              return (
+                <button key={key}
+                  style={{
+                    padding: '7px 14px', border: 'none',
+                    borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
+                    borderRadius: borderR,
+                    background: isActive ? '#f1f0ec' : 'transparent',
+                    cursor: disabled ? 'not-allowed' : 'pointer',
+                    fontSize: 12, fontWeight: 500, color: '#39342f',
+                    transition: 'background 0.15s',
+                  }}
+                  onMouseEnter={e => { if (!disabled && !isActive) e.currentTarget.style.background = '#f1f0ec'; }}
+                  onMouseLeave={e => { if (!disabled && !isActive) e.currentTarget.style.background = 'transparent'; }}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </Accordion>
 
       {/* Close border at bottom */}
