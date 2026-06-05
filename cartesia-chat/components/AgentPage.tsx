@@ -336,7 +336,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
       {/* Avatar accordion */}
       <Accordion title="Avatar">
         <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
-          Source
+          Image
         </label>
         <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
           {([
