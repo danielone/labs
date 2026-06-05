@@ -386,39 +386,47 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
           Image
         </label>
-        {/* Source toggle */}
-        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden', marginBottom: 16 }}>
-          {([
-            { src: 'favorites' as const, label: 'Favorites', iconKey: 'heart' },
-            { src: 'library'   as const, label: 'Library',   iconKey: 'book'  },
-            { src: 'custom'    as const, label: 'Custom',    iconKey: 'image' },
-          ]).map(({ src, label, iconKey }, i, arr) => {
-            const isActive = avatarSource === src;
-            const disabled = src !== 'favorites';
-            const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
-            return (
-              <button
-                key={src}
-                onClick={() => !disabled && setAvatarSource(src)}
-                style={{
-                  padding: '7px 14px', border: 'none',
-                  borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
-                  borderRadius: borderR,
-                  background: isActive ? '#f1f0ec' : 'transparent',
-                  cursor: disabled ? 'not-allowed' : 'pointer',
-                  fontSize: 12, fontWeight: 500,
-                  color: '#39342f',
-                  transition: 'background 0.15s',
-                  display: 'flex', alignItems: 'center', gap: 5,
-                }}
-                onMouseEnter={e => { if (!disabled && !isActive) e.currentTarget.style.background = '#f1f0ec'; }}
-                onMouseLeave={e => { if (!disabled && !isActive) e.currentTarget.style.background = 'transparent'; }}
-              >
-                <Icon size={12}>{icons[iconKey as keyof typeof icons]}</Icon>
-                {label}
-              </button>
-            );
-          })}
+        {/* Source toggle + Library button */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+          <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
+            {([
+              { src: 'favorites' as const, label: 'Favorites', iconKey: 'heart' },
+              { src: 'custom'    as const, label: 'Custom',    iconKey: 'image' },
+            ]).map(({ src, label, iconKey }, i, arr) => {
+              const isActive = avatarSource === src;
+              const disabled = src !== 'favorites';
+              const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
+              return (
+                <button key={src} onClick={() => !disabled && setAvatarSource(src)}
+                  style={{
+                    padding: '7px 14px', border: 'none',
+                    borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
+                    borderRadius: borderR,
+                    background: isActive ? '#f1f0ec' : 'transparent',
+                    cursor: disabled ? 'not-allowed' : 'pointer',
+                    fontSize: 12, fontWeight: 500, color: '#39342f',
+                    transition: 'background 0.15s',
+                    display: 'flex', alignItems: 'center', gap: 5,
+                  }}
+                  onMouseEnter={e => { if (!disabled && !isActive) e.currentTarget.style.background = '#f1f0ec'; }}
+                  onMouseLeave={e => { if (!disabled && !isActive) e.currentTarget.style.background = 'transparent'; }}
+                >
+                  <Icon size={12}>{icons[iconKey as keyof typeof icons]}</Icon>
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+          {/* Library as standalone secondary button */}
+          <button style={{
+            padding: '7px 14px', border: '1px solid #dfdcd7', borderRadius: 8,
+            background: '#f9f9f8', cursor: 'not-allowed',
+            fontSize: 12, fontWeight: 500, color: '#39342f',
+            display: 'flex', alignItems: 'center', gap: 5,
+          }}>
+            <Icon size={12}>{icons.book}</Icon>
+            Library
+          </button>
         </div>
 
         {/* Favorites image grid — shown when avatarSource === 'favorites' */}
@@ -461,36 +469,47 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
             Background Scene
           </label>
-          {/* Source toggle */}
-          <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden', marginBottom: 16 }}>
-            {([
-              { src: 'favorites' as const, label: 'Favorites', iconKey: 'heart' },
-              { src: 'library'   as const, label: 'Library',   iconKey: 'book'  },
-              { src: 'custom'    as const, label: 'Custom',    iconKey: 'image' },
-            ]).map(({ src, label, iconKey }, i, arr) => {
-              const isActive = bgSource === src;
-              const disabled = src !== 'favorites';
-              const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
-              return (
-                <button key={src} onClick={() => !disabled && setBgSource(src)}
-                  style={{
-                    padding: '7px 14px', border: 'none',
-                    borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
-                    borderRadius: borderR,
-                    background: isActive ? '#f1f0ec' : 'transparent',
-                    cursor: disabled ? 'not-allowed' : 'pointer',
-                    fontSize: 12, fontWeight: 500, color: '#39342f',
-                    transition: 'background 0.15s',
-                    display: 'flex', alignItems: 'center', gap: 5,
-                  }}
-                  onMouseEnter={e => { if (!disabled && !isActive) e.currentTarget.style.background = '#f1f0ec'; }}
-                  onMouseLeave={e => { if (!disabled && !isActive) e.currentTarget.style.background = 'transparent'; }}
-                >
-                  <Icon size={12}>{icons[iconKey as keyof typeof icons]}</Icon>
-                  {label}
-                </button>
-              );
-            })}
+          {/* Source toggle + Library button */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+            <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
+              {([
+                { src: 'favorites' as const, label: 'Favorites', iconKey: 'heart' },
+                { src: 'custom'    as const, label: 'Custom',    iconKey: 'image' },
+              ]).map(({ src, label, iconKey }, i, arr) => {
+                const isActive = bgSource === src;
+                const disabled = src !== 'favorites';
+                const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
+                return (
+                  <button key={src} onClick={() => !disabled && setBgSource(src)}
+                    style={{
+                      padding: '7px 14px', border: 'none',
+                      borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
+                      borderRadius: borderR,
+                      background: isActive ? '#f1f0ec' : 'transparent',
+                      cursor: disabled ? 'not-allowed' : 'pointer',
+                      fontSize: 12, fontWeight: 500, color: '#39342f',
+                      transition: 'background 0.15s',
+                      display: 'flex', alignItems: 'center', gap: 5,
+                    }}
+                    onMouseEnter={e => { if (!disabled && !isActive) e.currentTarget.style.background = '#f1f0ec'; }}
+                    onMouseLeave={e => { if (!disabled && !isActive) e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    <Icon size={12}>{icons[iconKey as keyof typeof icons]}</Icon>
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+            {/* Library as standalone secondary button */}
+            <button style={{
+              padding: '7px 14px', border: '1px solid #dfdcd7', borderRadius: 8,
+              background: '#f9f9f8', cursor: 'not-allowed',
+              fontSize: 12, fontWeight: 500, color: '#39342f',
+              display: 'flex', alignItems: 'center', gap: 5,
+            }}>
+              <Icon size={12}>{icons.book}</Icon>
+              Library
+            </button>
           </div>
 
           {bgSource === 'favorites' && (
