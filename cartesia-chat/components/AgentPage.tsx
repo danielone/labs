@@ -362,9 +362,9 @@ function Accordion({ title, defaultOpen = true, children }: { title: string; def
 
 function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource }: DesignTabProps) {
   const textFields = [
-    { label: 'Widget Label', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
+    { label: 'Widget Prompt', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
     { label: 'Agent Name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
-    { label: 'Subtitle',     value: subtitle,    set: setSubtitle,    placeholder: 'e.g. AI Voice Companion' },
+    { label: 'Agent Subtitle', value: subtitle,  set: setSubtitle,    placeholder: 'e.g. AI Voice Companion' },
   ];
 
   const views = [
@@ -528,7 +528,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
       </Accordion>
 
       {/* Widget accordion */}
-      <Accordion title="Widget">
+      <Accordion title="Display Text">
         {textFields.map(field => (
           <div key={field.label} style={{ marginBottom: 14 }}>
             <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 5 }}>
