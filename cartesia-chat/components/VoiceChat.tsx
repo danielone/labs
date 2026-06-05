@@ -407,7 +407,7 @@ export default function VoiceChat() {
               gap: 10,
             }}
           >
-            {/* Avatar + label row */}
+            {/* Avatar + label row + expand button */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{
                 width: 43, height: 43, borderRadius: '50%', overflow: 'hidden',
@@ -416,7 +416,25 @@ export default function VoiceChat() {
                 <Image src="/avatar.png" alt="Skylar" width={43} height={43}
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
               </div>
-              <span style={{ fontSize: 13, fontWeight: 500, color: '#39342f' }}>Need help?</span>
+              <span style={{ fontSize: 13, fontWeight: 500, color: '#39342f', flex: 1 }}>Need help?</span>
+              {/* Expand button — opens card without starting a call */}
+              <button
+                onClick={() => setWidgetExpanded(true)}
+                title="Expand"
+                style={{
+                  width: 26, height: 26, borderRadius: 7, border: '1px solid #dfdcd7',
+                  background: '#f1f0ec', cursor: 'pointer', display: 'flex',
+                  alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                  transition: 'background 0.15s',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#dfdcd7'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#f1f0ec'; }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c7770"
+                  strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="7 13 12 8 17 13"/><polyline points="7 19 12 14 17 19"/>
+                </svg>
+              </button>
             </div>
 
             {/* Start button */}
