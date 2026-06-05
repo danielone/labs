@@ -559,8 +559,8 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           </label>
           <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
             {([
-              { key: 'full',    label: 'Full',    disabled: false },
               { key: 'compact', label: 'Compact', disabled: true  },
+              { key: 'full',    label: 'Full',    disabled: false },
             ] as const).map(({ key, label, disabled }, i, arr) => {
               const isActive = key === 'full'; // Full is always selected
               const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
