@@ -141,6 +141,7 @@ export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize 
           height: '100%',
           display: 'block',
           ...(bare ? { mixBlendMode: 'multiply' as const } : {}),
+          ...(!bare && avatarSrc === '/monster.svg' ? { transform: 'translateY(10px)' } : {}),
         }}
       />
       {/* Canvas sits exactly on top of the image, pointer-events off */}
