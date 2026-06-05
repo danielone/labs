@@ -89,6 +89,7 @@ export default function AgentPage() {
   const [agentName,   setAgentName]   = useState('Daniel II');
   const [subtitle,    setSubtitle]    = useState('AI Voice Companion');
   const [showScene,   setShowScene]   = useState(true);
+  const [avatarSource, setAvatarSource] = useState<'favorites' | 'library' | 'custom'>('favorites');
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f9f9f8', fontFamily: 'var(--font-geist-sans), system-ui, sans-serif' }}>
@@ -254,10 +255,11 @@ export default function AgentPage() {
         <div style={{ flex: 1, overflowY: 'auto', padding: '28px 24px' }}>
           {activeTab === 'design' && (
             <DesignTab
-              widgetLabel={widgetLabel} setWidgetLabel={setWidgetLabel}
-              agentName={agentName}     setAgentName={setAgentName}
-              subtitle={subtitle}       setSubtitle={setSubtitle}
-              showScene={showScene}     setShowScene={setShowScene}
+              widgetLabel={widgetLabel}     setWidgetLabel={setWidgetLabel}
+              agentName={agentName}         setAgentName={setAgentName}
+              subtitle={subtitle}           setSubtitle={setSubtitle}
+              showScene={showScene}         setShowScene={setShowScene}
+              avatarSource={avatarSource}   setAvatarSource={setAvatarSource}
             />
           )}
           {activeTab === 'configuration' && <ConfigurationTab onPreview={() => setConfigPreview(p => !p)} previewActive={configPreview} />}
@@ -277,10 +279,12 @@ export default function AgentPage() {
 
 // ── Design tab ─────────────────────────────────────────────────────────────
 interface DesignTabProps {
-  widgetLabel: string; setWidgetLabel: (v: string) => void;
-  agentName:   string; setAgentName:   (v: string) => void;
-  subtitle:    string; setSubtitle:    (v: string) => void;
-  showScene:   boolean; setShowScene:  (v: boolean) => void;
+  widgetLabel:   string;   setWidgetLabel:   (v: string) => void;
+  agentName:     string;   setAgentName:     (v: string) => void;
+  subtitle:      string;   setSubtitle:      (v: string) => void;
+  showScene:     boolean;  setShowScene:     (v: boolean) => void;
+  avatarSource:  'favorites' | 'library' | 'custom';
+  setAvatarSource: (v: 'favorites' | 'library' | 'custom') => void;
 }
 
 // ── Accordion primitive ────────────────────────────────────────────────────
@@ -307,7 +311,7 @@ function Accordion({ title, defaultOpen = true, children }: { title: string; def
   );
 }
 
-function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene }: DesignTabProps) {
+function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource }: DesignTabProps) {
   const textFields = [
     { label: 'Widget Label', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
     { label: 'Agent Name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
@@ -328,9 +332,40 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         Changes appear in the widget instantly and reset when you leave the page.
       </p>
 
-      {/* New Avatar accordion */}
+      {/* Avatar accordion */}
       <Accordion title="Avatar">
-        <div style={{ height: 4 }} />
+        <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
+          Source
+        </label>
+        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
+          {(['favorites', 'library', 'custom'] as const).map((src, i, arr) => {
+            const isActive = avatarSource === src;
+            const disabled = src !== 'favorites';
+            const label = src.charAt(0).toUpperCase() + src.slice(1);
+            const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
+            return (
+              <button
+                key={src}
+                onClick={() => !disabled && setAvatarSource(src)}
+                style={{
+                  padding: '7px 14px', border: 'none',
+                  borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
+                  borderRadius: borderR,
+                  background: isActive ? '#f1f0ec' : 'transparent',
+                  cursor: disabled ? 'not-allowed' : 'pointer',
+                  fontSize: 12, fontWeight: 500,
+                  color: disabled ? '#c4c0bb' : '#39342f',
+                  opacity: disabled ? 0.6 : 1,
+                  transition: 'background 0.15s',
+                }}
+                onMouseEnter={e => { if (!disabled && !isActive) e.currentTarget.style.background = '#f1f0ec'; }}
+                onMouseLeave={e => { if (!disabled && !isActive) e.currentTarget.style.background = 'transparent'; }}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
       </Accordion>
 
       {/* Widget accordion */}
@@ -361,30 +396,35 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
           View
         </label>
-        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', overflow: 'hidden' }}>
-          {views.map(({ val, title, icon }, i) => (
-            <button
-              key={title}
-              onClick={() => setShowScene(val)}
-              title={title}
-              style={{
-                padding: '7px 12px', border: 'none',
-                borderRight: i === 0 ? '1px solid #dfdcd7' : 'none',
-                background: showScene === val ? '#f1f0ec' : 'transparent',
-                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
-                fontSize: 12, fontWeight: 500, color: '#39342f',
-                transition: 'background 0.15s',
-              }}
-              onMouseEnter={e => { if (showScene !== val) e.currentTarget.style.background = '#f1f0ec'; }}
-              onMouseLeave={e => { if (showScene !== val) e.currentTarget.style.background = 'transparent'; }}
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-                stroke="#39342f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                {icon}
-              </svg>
-              {val ? 'Scene' : 'Avatar'}
-            </button>
-          ))}
+        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
+          {views.map(({ val, title, icon }, i, arr) => {
+            const isActive = showScene === val;
+            const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
+            return (
+              <button
+                key={title}
+                onClick={() => setShowScene(val)}
+                title={title}
+                style={{
+                  padding: '7px 12px', border: 'none',
+                  borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
+                  borderRadius: borderR,
+                  background: isActive ? '#f1f0ec' : 'transparent',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+                  fontSize: 12, fontWeight: 500, color: '#39342f',
+                  transition: 'background 0.15s',
+                }}
+                onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = '#f1f0ec'; }}
+                onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                  stroke="#39342f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  {icon}
+                </svg>
+                {val ? 'Scene' : 'Avatar'}
+              </button>
+            );
+          })}
         </div>
       </Accordion>
 
