@@ -360,7 +360,7 @@ function ConfigurationTab({ onPreview, previewActive }: { onPreview: () => void;
             <h3 style={sectionHead}>Voice &amp; Language</h3>
             <div style={{ padding: '10px 12px', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, fontSize: 13, color: '#39342f', cursor: 'not-allowed', display: 'flex', alignItems: 'center', gap: 8 }}>
               <Icon size={14}>{icons.voiceLib}</Icon>
-              <span>Skylar — Friendly Guide</span>
+              <span>Daniel - Modern Assistant</span>
             </div>
             <p style={{ fontSize: 12, color: '#9b9895', margin: '6px 0 0' }}>Language: English</p>
           </div>
