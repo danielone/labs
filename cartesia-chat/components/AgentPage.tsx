@@ -6,6 +6,15 @@ import VoiceChat from './VoiceChat';
 type MainTab = 'configuration' | 'design' | 'metrics' | 'calls' | 'settings';
 
 // ── Sidebar icons (minimal SVG approximations) ─────────────────────────────
+// Exact Streamline phone icon copied from play.cartesia.ai
+const PhoneStreamlineIcon = ({ size = 13 }: { size?: number }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="-2.4 -2.4 28.8 28.8"
+    width={size} height={size} aria-hidden="true">
+    <path fill="currentColor" fillRule="evenodd" clipRule="evenodd"
+      d="m12.59 16.587 1.5-2.513.395-.66.739.21 6.441 1.84.82.235-.102.846-.626 5.227-.111.932-.937-.052a20.5 20.5 0 0 1-8.978-2.631c-1.572-.893-3.051-2.009-4.39-3.348s-2.455-2.817-3.347-4.39a20.5 20.5 0 0 1-2.632-8.978l-.051-.936.931-.112 5.227-.626.846-.101.234.82 1.84 6.44.212.74-.66.394-2.513 1.5a18.6 18.6 0 0 0 2.327 2.835c.884.884 1.835 1.66 2.836 2.328"/>
+  </svg>
+);
+
 const Icon = ({ children, size = 16 }: { children: React.ReactNode; size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor"
     strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
@@ -188,7 +197,7 @@ export default function AgentPage() {
                 border: '1px solid transparent', borderRadius: '8px 0 0 8px',
                 cursor: 'not-allowed',
               }}>
-                <Icon size={13}>{icons.phone}</Icon>
+                <PhoneStreamlineIcon />
                 Call
               </button>
               {/* Chevron dropdown trigger */}
@@ -218,8 +227,8 @@ export default function AgentPage() {
                   onMouseLeave={() => setCallDropdownOpen(false)}
                 >
                   {[
-                    { label: 'Call in browser',   icon: icons.phone },
-                    { label: 'Call phone number',  icon: icons.phone },
+                    { label: 'Call in browser' },
+                    { label: 'Call phone number' },
                   ].map(item => (
                     <button key={item.label} style={{
                       width: '100%', display: 'flex', alignItems: 'center', gap: 8,
@@ -230,7 +239,7 @@ export default function AgentPage() {
                     onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#f1f0ec'; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; }}
                     >
-                      <Icon size={13}>{item.icon}</Icon>
+                      <PhoneStreamlineIcon />
                       {item.label}
                     </button>
                   ))}
