@@ -169,8 +169,8 @@ export default function AgentPage() {
             </button>
 
             {/* Connect button — next to agent ID */}
-            <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px', fontSize: 13, fontWeight: 500, color: '#39342f', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, cursor: 'not-allowed' }}>
-              <Icon size={13}>{icons.github}</Icon>
+            <button style={{ height: 28, display: 'flex', alignItems: 'center', gap: 4, padding: '0 10px', fontSize: '0.8rem', fontWeight: 500, color: '#39342f', background: '#f9f9f8', border: '1px solid #dfdcd7', borderRadius: 8, cursor: 'not-allowed' }}>
+              <Icon size={12}>{icons.github}</Icon>
               Connect
             </button>
 
