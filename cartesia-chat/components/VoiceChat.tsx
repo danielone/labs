@@ -571,16 +571,15 @@ export default function VoiceChat({
                 <button
                   onClick={startCall}
                   disabled={callState === 'ending'}
-                  className="w-full py-2.5 font-semibold text-sm transition-all duration-150 active:scale-95"
+                  className="w-full py-2.5 rounded-xl font-semibold text-sm transition-all duration-150 active:scale-95"
                   style={{
-                    background: callState === 'ending' ? '#c4c0bb' : '#171715',
-                    color: '#ffffff', border: 'none',
-                    borderRadius: 999,
+                    background: callState === 'ending' ? '#c4c0bb' : '#004e23',
+                    color: '#ffffff', border: '1px solid transparent',
                     cursor: callState === 'ending' ? 'default' : 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
                   }}
-                  onMouseEnter={e => { if (callState !== 'ending') e.currentTarget.style.background = '#2a2826'; }}
-                  onMouseLeave={e => { if (callState !== 'ending') e.currentTarget.style.background = '#171715'; }}
+                  onMouseEnter={e => { if (callState !== 'ending') e.currentTarget.style.background = 'rgba(0,78,35,0.82)'; }}
+                  onMouseLeave={e => { if (callState !== 'ending') e.currentTarget.style.background = '#004e23'; }}
                 >
                   {callState !== 'ending' && (
                     <svg width="13" height="13" viewBox="0 0 64 64" fill="currentColor" style={{ fillRule: 'evenodd', clipRule: 'evenodd', flexShrink: 0 }}>
