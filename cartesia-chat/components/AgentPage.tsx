@@ -295,7 +295,7 @@ function Accordion({ title, defaultOpen = true, children }: { title: string; def
           padding: '12px 0', background: 'none', border: 'none', cursor: 'pointer',
         }}
       >
-        <span style={{ fontSize: 13, fontWeight: 500, color: '#39342f' }}>{title}</span>
+        <span style={{ fontSize: 13, fontWeight: 600, color: '#39342f' }}>{title}</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9b9895"
           strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
           style={{ transform: open ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s ease', flexShrink: 0 }}>
