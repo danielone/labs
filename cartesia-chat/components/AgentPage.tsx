@@ -557,7 +557,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
             Widget Style
           </label>
-          <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
+          <div style={{ display: 'inline-grid', gridTemplateColumns: '1fr 1fr', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
             {([
               { key: 'compact', label: 'Compact', disabled: true  },
               { key: 'full',    label: 'Full',    disabled: false },
@@ -573,6 +573,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
                     background: isActive ? '#f1f0ec' : 'transparent',
                     cursor: disabled ? 'not-allowed' : 'pointer',
                     fontSize: 12, fontWeight: 500, color: '#39342f',
+                    textAlign: 'center',
                     transition: 'background 0.15s',
                   }}
                   onMouseEnter={e => { if (!disabled && !isActive) e.currentTarget.style.background = '#f1f0ec'; }}
