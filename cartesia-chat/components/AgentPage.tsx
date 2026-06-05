@@ -285,6 +285,41 @@ export default function AgentPage() {
   );
 }
 
+// ── Tooltip ───────────────────────────────────────────────────────────────
+function Tooltip({ text, children }: { text: string; children: React.ReactNode }) {
+  const [visible, setVisible] = useState(false);
+  return (
+    <div style={{ position: 'relative', display: 'inline-block' }}
+      onMouseEnter={() => setVisible(true)}
+      onMouseLeave={() => setVisible(false)}
+    >
+      {children}
+      {visible && (
+        <div style={{
+          position: 'absolute', bottom: 'calc(100% + 6px)', left: '50%',
+          transform: 'translateX(-50%)',
+          background: '#2b2a27', color: '#f5f5f4',
+          fontSize: 11, fontWeight: 500, whiteSpace: 'nowrap',
+          padding: '4px 8px', borderRadius: 6,
+          pointerEvents: 'none', zIndex: 100,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.18)',
+        }}>
+          {text}
+          {/* Arrow */}
+          <div style={{
+            position: 'absolute', top: '100%', left: '50%',
+            transform: 'translateX(-50%)',
+            width: 0, height: 0,
+            borderLeft: '4px solid transparent',
+            borderRight: '4px solid transparent',
+            borderTop: '4px solid #2b2a27',
+          }} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Design tab ─────────────────────────────────────────────────────────────
 interface DesignTabProps {
   widgetLabel:   string;   setWidgetLabel:   (v: string) => void;
@@ -395,27 +430,27 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
             ]).map(({ src, tooltip }) => {
               const isSelected = selectedAvatar === src;
               return (
-                <div
-                  key={src}
-                  title={tooltip}
-                  onClick={() => setSelectedAvatar(src)}
-                  style={{
-                    width: 80, height: 80, flexShrink: 0,
-                    borderRadius: 8,
-                    border: `2px solid ${isSelected ? '#004e23' : '#dfdcd7'}`,
-                    background: '#ffffff',
-                    cursor: 'pointer',
-                    overflow: 'hidden',
-                    position: 'relative',
-                    transition: 'border-color 0.15s',
-                    boxSizing: 'border-box',
-                  }}
-                  onMouseEnter={e => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#b0d4bb'; }}
-                  onMouseLeave={e => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#dfdcd7'; }}
-                >
-                  <Image src={src} alt={tooltip} fill
-                    style={{ objectFit: 'contain', padding: 4 }} />
-                </div>
+                <Tooltip key={src} text={tooltip}>
+                  <div
+                    onClick={() => setSelectedAvatar(src)}
+                    style={{
+                      width: 80, height: 80, flexShrink: 0,
+                      borderRadius: 8,
+                      border: `2px solid ${isSelected ? '#004e23' : '#dfdcd7'}`,
+                      background: '#ffffff',
+                      cursor: 'pointer',
+                      overflow: 'hidden',
+                      position: 'relative',
+                      transition: 'border-color 0.15s',
+                      boxSizing: 'border-box',
+                    }}
+                    onMouseEnter={e => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#b0d4bb'; }}
+                    onMouseLeave={e => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#dfdcd7'; }}
+                  >
+                    <Image src={src} alt={tooltip} fill
+                      style={{ objectFit: 'contain', padding: 4 }} />
+                  </div>
+                </Tooltip>
               );
             })}
           </div>
