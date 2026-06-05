@@ -79,6 +79,7 @@ export default function AgentPage() {
   const [widgetLabel, setWidgetLabel] = useState('Need help?');
   const [agentName,   setAgentName]   = useState('Daniel II');
   const [subtitle,    setSubtitle]    = useState('AI Voice Companion');
+  const [showScene,   setShowScene]   = useState(true);
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f9f9f8', fontFamily: 'var(--font-geist-sans), system-ui, sans-serif' }}>
@@ -218,6 +219,7 @@ export default function AgentPage() {
               widgetLabel={widgetLabel} setWidgetLabel={setWidgetLabel}
               agentName={agentName}     setAgentName={setAgentName}
               subtitle={subtitle}       setSubtitle={setSubtitle}
+              showScene={showScene}     setShowScene={setShowScene}
             />
           )}
           {activeTab === 'configuration' && <ConfigurationTab onPreview={() => setConfigPreview(p => !p)} previewActive={configPreview} />}
@@ -229,7 +231,7 @@ export default function AgentPage() {
 
       {/* Widget: hidden on Configuration tab unless Preview clicked */}
       {(activeTab !== 'configuration' || configPreview) && (
-        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} />
+        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} />
       )}
     </div>
   );
@@ -240,14 +242,22 @@ interface DesignTabProps {
   widgetLabel: string; setWidgetLabel: (v: string) => void;
   agentName:   string; setAgentName:   (v: string) => void;
   subtitle:    string; setSubtitle:    (v: string) => void;
+  showScene:   boolean; setShowScene:  (v: boolean) => void;
 }
 
-function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle }: DesignTabProps) {
+function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene }: DesignTabProps) {
   const fields = [
     { label: 'Widget Label', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
     { label: 'Agent Name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
     { label: 'Subtitle',     value: subtitle,    set: setSubtitle,    placeholder: 'e.g. AI Voice Companion' },
   ];
+
+  const views = [
+    { val: true,  title: 'Scene view',
+      icon: <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 15 5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="8.5" r="1.5"/></> },
+    { val: false, title: 'Avatar view',
+      icon: <><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></> },
+  ] as const;
 
   return (
     <div style={{ maxWidth: 560 }}>
@@ -255,6 +265,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
       <p style={{ fontSize: 14, color: '#636260', lineHeight: 1.6, marginBottom: 24 }}>
         Changes appear in the widget instantly. They reset when you leave the page.
       </p>
+
       {fields.map(field => (
         <div key={field.label} style={{ marginBottom: 16 }}>
           <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 6 }}>
@@ -274,6 +285,38 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           />
         </div>
       ))}
+
+      {/* Avatar view toggle */}
+      <div style={{ marginBottom: 16 }}>
+        <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 6 }}>
+          Avatar View
+        </label>
+        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', overflow: 'hidden' }}>
+          {views.map(({ val, title, icon }, i) => (
+            <button
+              key={title}
+              onClick={() => setShowScene(val)}
+              title={title}
+              style={{
+                padding: '7px 12px', border: 'none',
+                borderRight: i === 0 ? '1px solid #dfdcd7' : 'none',
+                background: showScene === val ? '#f1f0ec' : 'transparent',
+                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+                fontSize: 12, fontWeight: 500, color: '#39342f',
+                transition: 'background 0.15s',
+              }}
+              onMouseEnter={e => { if (showScene !== val) e.currentTarget.style.background = '#f1f0ec'; }}
+              onMouseLeave={e => { if (showScene !== val) e.currentTarget.style.background = 'transparent'; }}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                stroke="#39342f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                {icon}
+              </svg>
+              {val ? 'Scene' : 'Avatar'}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
