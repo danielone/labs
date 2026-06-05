@@ -305,8 +305,32 @@ interface DesignTabProps {
   showScene:   boolean; setShowScene:  (v: boolean) => void;
 }
 
+// ── Accordion primitive ────────────────────────────────────────────────────
+function Accordion({ title, defaultOpen = true, children }: { title: string; defaultOpen?: boolean; children: React.ReactNode }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div style={{ borderTop: '1px solid #dfdcd7' }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '12px 0', background: 'none', border: 'none', cursor: 'pointer',
+        }}
+      >
+        <span style={{ fontSize: 13, fontWeight: 500, color: '#39342f' }}>{title}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9b9895"
+          strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+          style={{ transform: open ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s ease', flexShrink: 0 }}>
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      {open && <div style={{ paddingBottom: 16 }}>{children}</div>}
+    </div>
+  );
+}
+
 function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene }: DesignTabProps) {
-  const fields = [
+  const textFields = [
     { label: 'Widget Label', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
     { label: 'Agent Name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
     { label: 'Subtitle',     value: subtitle,    set: setSubtitle,    placeholder: 'e.g. AI Voice Companion' },
@@ -321,35 +345,38 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
 
   return (
     <div style={{ maxWidth: 560 }}>
-      <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: '0 0 8px' }}>Design</h2>
-      <p style={{ fontSize: 14, color: '#636260', lineHeight: 1.6, marginBottom: 24 }}>
-        Changes appear in the widget instantly. They reset when you leave the page.
+      <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: '0 0 4px' }}>Design</h2>
+      <p style={{ fontSize: 13, color: '#636260', lineHeight: 1.6, marginBottom: 20 }}>
+        Changes appear in the widget instantly and reset when you leave the page.
       </p>
 
-      {fields.map(field => (
-        <div key={field.label} style={{ marginBottom: 16 }}>
-          <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 6 }}>
-            {field.label}
-          </label>
-          <input
-            value={field.value}
-            placeholder={field.placeholder}
-            onChange={e => field.set(e.target.value)}
-            style={{
-              width: '100%', padding: '8px 12px', fontSize: 13, color: '#39342f',
-              background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8,
-              outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s',
-            }}
-            onFocus={e => { e.currentTarget.style.borderColor = '#a0bfa8'; }}
-            onBlur={e => { e.currentTarget.style.borderColor = '#dfdcd7'; }}
-          />
-        </div>
-      ))}
+      {/* Widget accordion */}
+      <Accordion title="Widget">
+        {textFields.map(field => (
+          <div key={field.label} style={{ marginBottom: 14 }}>
+            <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 5 }}>
+              {field.label}
+            </label>
+            <input
+              value={field.value}
+              placeholder={field.placeholder}
+              onChange={e => field.set(e.target.value)}
+              style={{
+                width: '100%', padding: '8px 12px', fontSize: 13, color: '#39342f',
+                background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8,
+                outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s',
+              }}
+              onFocus={e => { e.currentTarget.style.borderColor = '#a0bfa8'; }}
+              onBlur={e => { e.currentTarget.style.borderColor = '#dfdcd7'; }}
+            />
+          </div>
+        ))}
+      </Accordion>
 
-      {/* Avatar view toggle */}
-      <div style={{ marginBottom: 16 }}>
-        <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 6 }}>
-          Avatar View
+      {/* Avatar accordion */}
+      <Accordion title="Avatar">
+        <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
+          View
         </label>
         <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', overflow: 'hidden' }}>
           {views.map(({ val, title, icon }, i) => (
@@ -376,7 +403,10 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
             </button>
           ))}
         </div>
-      </div>
+      </Accordion>
+
+      {/* Close border at bottom */}
+      <div style={{ borderTop: '1px solid #dfdcd7' }} />
     </div>
   );
 }
