@@ -543,7 +543,7 @@ export default function VoiceChat({
                   style={{ height: SCENE_H }}>
                   <Image src="/coworking-bg.jpg" alt="Office" fill priority
                     style={{ objectFit: 'cover', objectPosition: 'center' }} />
-                  <div className="absolute bottom-0 left-1/2" style={{ transform: 'translateX(-50%)' }}>
+                  <div className="absolute left-1/2" style={{ transform: 'translateX(-50%)', bottom: avatarSrc === '/monster.svg' ? -20 : 0 }}>
                     <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} bare bareSize={AVATAR_BARE} avatarSrc={avatarSrc} />
                   </div>
                   {isActive && (
