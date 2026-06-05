@@ -74,6 +74,7 @@ const TABS: { id: MainTab; label: string }[] = [
 ];
 
 export default function AgentPage() {
+  const [callDropdownOpen, setCallDropdownOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<MainTab>('design');
   const [configPreview, setConfigPreview] = useState(false);
   const [widgetLabel, setWidgetLabel] = useState('Need help?');
@@ -167,16 +168,75 @@ export default function AgentPage() {
 
             <div style={{ flex: 1 }} />
 
-            {/* Get Phone Number */}
-            <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px', fontSize: 13, fontWeight: 500, color: '#39342f', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, cursor: 'not-allowed' }}>
+            {/* Get Phone Number — h-7 (28px), text-[0.8rem], outline style */}
+            <button style={{
+              height: 28, display: 'flex', alignItems: 'center', gap: 4,
+              padding: '0 10px', fontSize: '0.8rem', fontWeight: 500,
+              color: '#39342f', background: '#f9f9f8',
+              border: '1px solid #dfdcd7', borderRadius: 8, cursor: 'not-allowed',
+            }}>
               Get Phone Number
             </button>
 
-            {/* Call button */}
-            <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px', fontSize: 13, fontWeight: 500, color: '#39342f', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, cursor: 'not-allowed' }}>
-              <Icon size={13}>{icons.phone}</Icon>
-              Call
-            </button>
+            {/* Call — split green button: [📞 Call][▼] */}
+            <div style={{ position: 'relative', display: 'flex' }}>
+              {/* Main Call button */}
+              <button style={{
+                height: 32, display: 'flex', alignItems: 'center', gap: 6,
+                padding: '0 10px', fontSize: 14, fontWeight: 500,
+                color: '#ffffff', background: '#004e23',
+                border: '1px solid transparent', borderRadius: '8px 0 0 8px',
+                cursor: 'not-allowed',
+              }}>
+                <Icon size={13}>{icons.phone}</Icon>
+                Call
+              </button>
+              {/* Chevron dropdown trigger */}
+              <button
+                onClick={() => setCallDropdownOpen(o => !o)}
+                style={{
+                  height: 32, width: 32, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: '#004e23', color: '#ffffff',
+                  border: '1px solid transparent', borderLeft: '1px solid rgba(255,255,255,0.2)',
+                  borderRadius: '0 8px 8px 0', cursor: 'pointer',
+                }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+
+              {/* Dropdown menu */}
+              {callDropdownOpen && (
+                <div
+                  style={{
+                    position: 'absolute', top: 36, right: 0, zIndex: 50,
+                    background: '#fdfdfc', border: '1px solid #dfdcd7',
+                    borderRadius: 10, boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
+                    minWidth: 180, overflow: 'hidden',
+                  }}
+                  onMouseLeave={() => setCallDropdownOpen(false)}
+                >
+                  {[
+                    { label: 'Call in browser',   icon: icons.phone },
+                    { label: 'Call phone number',  icon: icons.phone },
+                  ].map(item => (
+                    <button key={item.label} style={{
+                      width: '100%', display: 'flex', alignItems: 'center', gap: 8,
+                      padding: '9px 14px', fontSize: 13, fontWeight: 400,
+                      color: '#39342f', background: 'transparent', border: 'none',
+                      cursor: 'not-allowed', textAlign: 'left',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#f1f0ec'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; }}
+                    >
+                      <Icon size={13}>{item.icon}</Icon>
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Tab navigation */}
