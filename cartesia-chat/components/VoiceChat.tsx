@@ -446,7 +446,8 @@ export default function VoiceChat({
                 border: '2px solid #dfdcd7', background: '#f1f0ec', flexShrink: 0,
               }}>
                 <Image src={avatarSrc} alt="Skylar" width={43} height={43}
-                  style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+                  style={{ objectFit: 'cover', width: '100%', height: '100%',
+                    transform: avatarSrc === '/monster.svg' ? 'translateY(5px)' : 'none' }} />
               </div>
               <span style={{ fontSize: 13, fontWeight: 500, color: '#39342f', flex: 1 }}>{widgetLabel}</span>
               {/* Expand button — opens card without starting a call */}
