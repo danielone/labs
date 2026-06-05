@@ -560,7 +560,7 @@ export default function VoiceChat({
               {isActive && (
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
                   <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap"
-                    style={{ background: '#f1f0ec', border: '1px solid #dfdcd7', color: '#39342f' }}>
+                    style={{ background: '#ffffff', border: '1px solid #dfdcd7', color: '#39342f' }}>
                     <WaveBars speaking={agentSpeaking} />
                     {agentSpeaking ? 'Speaking…' : 'Listening…'}
                   </div>
