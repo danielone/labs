@@ -552,42 +552,8 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
 
       {/* Display Settings accordion */}
       <Accordion title="Display Settings">
-        <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
-          Avatar Size
-        </label>
-        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
-          {views.map(({ val, title, icon }, i, arr) => {
-            const isActive = showScene === val;
-            const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
-            return (
-              <button
-                key={title}
-                onClick={() => setShowScene(val)}
-                title={title}
-                style={{
-                  padding: '7px 12px', border: 'none',
-                  borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
-                  borderRadius: borderR,
-                  background: isActive ? '#f1f0ec' : 'transparent',
-                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
-                  fontSize: 12, fontWeight: 500, color: '#39342f',
-                  transition: 'background 0.15s',
-                }}
-                onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = '#f1f0ec'; }}
-                onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-                  stroke="#39342f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  {icon}
-                </svg>
-                {val ? 'Avatar & Scene' : 'Avatar Only'}
-              </button>
-            );
-          })}
-        </div>
-
         {/* Widget Style */}
-        <div style={{ marginTop: 16 }}>
+        <div style={{ marginBottom: 16 }}>
           <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
             Widget Style
           </label>
@@ -617,6 +583,38 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
               );
             })}
           </div>
+        </div>
+
+        {/* Avatar Size */}
+        <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
+          Avatar Size
+        </label>
+        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
+          {views.map(({ val, title, icon }, i, arr) => {
+            const isActive = showScene === val;
+            const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
+            return (
+              <button key={title} onClick={() => setShowScene(val)} title={title}
+                style={{
+                  padding: '7px 12px', border: 'none',
+                  borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
+                  borderRadius: borderR,
+                  background: isActive ? '#f1f0ec' : 'transparent',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+                  fontSize: 12, fontWeight: 500, color: '#39342f',
+                  transition: 'background 0.15s',
+                }}
+                onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = '#f1f0ec'; }}
+                onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                  stroke="#39342f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  {icon}
+                </svg>
+                {val ? 'Avatar & Scene' : 'Avatar Only'}
+              </button>
+            );
+          })}
         </div>
       </Accordion>
 
