@@ -328,8 +328,13 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         Changes appear in the widget instantly and reset when you leave the page.
       </p>
 
-      {/* Avatar accordion */}
+      {/* New Avatar accordion */}
       <Accordion title="Avatar">
+        <div style={{ height: 4 }} />
+      </Accordion>
+
+      {/* Display Settings accordion (formerly Avatar) */}
+      <Accordion title="Display Settings">
         <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
           View
         </label>
