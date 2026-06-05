@@ -70,6 +70,7 @@ interface VoiceChatProps {
   showScene?:   boolean;
   setShowScene?: (v: boolean) => void;
   avatarSrc?:   string;
+  sceneBg?:     string;
 }
 
 export default function VoiceChat({
@@ -79,6 +80,7 @@ export default function VoiceChat({
   showScene:   showSceneProp,
   setShowScene: setShowSceneProp,
   avatarSrc    = '/avatar.png',
+  sceneBg      = '/coworking-bg.jpg',
 }: VoiceChatProps = {}) {
   const [widgetExpanded, setWidgetExpanded] = useState(false);
   const [callState, setCallState] = useState<CallState>('idle');
@@ -542,7 +544,7 @@ export default function VoiceChat({
               {showScene ? (
                 <div className="relative w-full overflow-hidden rounded-xl"
                   style={{ height: SCENE_H }}>
-                  <Image src="/coworking-bg.jpg" alt="Office" fill priority
+                  <Image src={sceneBg} alt="Office" fill priority
                     style={{ objectFit: 'cover', objectPosition: 'center' }} />
                   <div className="absolute left-1/2" style={{ transform: 'translateX(-50%)', bottom: avatarSrc === '/monster.svg' ? -20 : 0 }}>
                     <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} bare bareSize={AVATAR_BARE} avatarSrc={avatarSrc} />

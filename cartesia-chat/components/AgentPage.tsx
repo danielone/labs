@@ -93,6 +93,8 @@ export default function AgentPage() {
   const [showScene,   setShowScene]   = useState(true);
   const [avatarSource, setAvatarSource] = useState<'favorites' | 'library' | 'custom'>('favorites');
   const [selectedAvatar, setSelectedAvatar] = useState<'/avatar.png' | '/monster.svg'>('/avatar.png');
+  const [selectedBg, setSelectedBg] = useState<'/coworking-bg.jpg' | '/bg2.jpg'>('/coworking-bg.jpg');
+  const [bgSource, setBgSource] = useState<'favorites' | 'library' | 'custom'>('favorites');
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f9f9f8', fontFamily: 'var(--font-geist-sans), system-ui, sans-serif' }}>
@@ -264,6 +266,8 @@ export default function AgentPage() {
               showScene={showScene}         setShowScene={setShowScene}
               avatarSource={avatarSource}   setAvatarSource={setAvatarSource}
               selectedAvatar={selectedAvatar} setSelectedAvatar={setSelectedAvatar}
+              selectedBg={selectedBg}         setSelectedBg={setSelectedBg}
+              bgSource={bgSource}             setBgSource={setBgSource}
             />
           )}
           {activeTab === 'configuration' && <ConfigurationTab onPreview={() => setConfigPreview(p => !p)} previewActive={configPreview} />}
@@ -275,7 +279,7 @@ export default function AgentPage() {
 
       {/* Widget: hidden on Configuration tab unless Preview clicked */}
       {(activeTab !== 'configuration' || configPreview) && (
-        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} />
+        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} />
       )}
     </div>
   );
@@ -291,6 +295,10 @@ interface DesignTabProps {
   setAvatarSource: (v: 'favorites' | 'library' | 'custom') => void;
   selectedAvatar:    '/avatar.png' | '/monster.svg';
   setSelectedAvatar: (v: '/avatar.png' | '/monster.svg') => void;
+  selectedBg:        '/coworking-bg.jpg' | '/bg2.jpg';
+  setSelectedBg:     (v: '/coworking-bg.jpg' | '/bg2.jpg') => void;
+  bgSource:          'favorites' | 'library' | 'custom';
+  setBgSource:       (v: 'favorites' | 'library' | 'custom') => void;
 }
 
 // ── Accordion primitive ────────────────────────────────────────────────────
@@ -317,7 +325,7 @@ function Accordion({ title, defaultOpen = true, children }: { title: string; def
   );
 }
 
-function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar }: DesignTabProps) {
+function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource }: DesignTabProps) {
   const textFields = [
     { label: 'Widget Label', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
     { label: 'Agent Name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
@@ -412,6 +420,74 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
             })}
           </div>
         )}
+
+        {/* ── Background ── */}
+        <div style={{ marginTop: 20 }}>
+          <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
+            Background
+          </label>
+          {/* Source toggle */}
+          <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden', marginBottom: 16 }}>
+            {([
+              { src: 'favorites' as const, label: 'Favorites', iconKey: 'heart' },
+              { src: 'library'   as const, label: 'Library',   iconKey: 'book'  },
+              { src: 'custom'    as const, label: 'Custom',    iconKey: 'image' },
+            ]).map(({ src, label, iconKey }, i, arr) => {
+              const isActive = bgSource === src;
+              const disabled = src !== 'favorites';
+              const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
+              return (
+                <button key={src} onClick={() => !disabled && setBgSource(src)}
+                  style={{
+                    padding: '7px 14px', border: 'none',
+                    borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
+                    borderRadius: borderR,
+                    background: isActive ? '#f1f0ec' : 'transparent',
+                    cursor: disabled ? 'not-allowed' : 'pointer',
+                    fontSize: 12, fontWeight: 500, color: '#39342f',
+                    transition: 'background 0.15s',
+                    display: 'flex', alignItems: 'center', gap: 5,
+                  }}
+                  onMouseEnter={e => { if (!disabled && !isActive) e.currentTarget.style.background = '#f1f0ec'; }}
+                  onMouseLeave={e => { if (!disabled && !isActive) e.currentTarget.style.background = 'transparent'; }}
+                >
+                  <Icon size={12}>{icons[iconKey as keyof typeof icons]}</Icon>
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+
+          {bgSource === 'favorites' && (
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              {([
+                { src: '/coworking-bg.jpg' as '/coworking-bg.jpg' | '/bg2.jpg', tooltip: 'SF Coworking' },
+                { src: '/bg2.jpg'          as '/coworking-bg.jpg' | '/bg2.jpg', tooltip: 'Industrial Loft' },
+              ]).map(({ src, tooltip }) => {
+                const isSelected = selectedBg === src;
+                return (
+                  <div key={src} title={tooltip} onClick={() => setSelectedBg(src)}
+                    style={{
+                      width: 80, height: 80, flexShrink: 0,
+                      borderRadius: 8,
+                      border: `2px solid ${isSelected ? '#004e23' : '#dfdcd7'}`,
+                      background: '#ffffff',
+                      cursor: 'pointer',
+                      overflow: 'hidden',
+                      position: 'relative',
+                      transition: 'border-color 0.15s',
+                      boxSizing: 'border-box',
+                    }}
+                    onMouseEnter={e => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#b0d4bb'; }}
+                    onMouseLeave={e => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#dfdcd7'; }}
+                  >
+                    <Image src={src} alt={tooltip} fill style={{ objectFit: 'cover' }} />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </Accordion>
 
       {/* Widget accordion */}
