@@ -504,7 +504,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
                   <Tooltip key={src} text={tooltip}>
                     <div onClick={() => setSelectedBg(src)}
                       style={{
-                        width: 80, height: 80, flexShrink: 0,
+                        width: 160, height: 160, flexShrink: 0,
                         borderRadius: 8,
                         border: `2px solid ${isSelected ? '#004e23' : '#dfdcd7'}`,
                         background: '#ffffff',
