@@ -459,7 +459,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         {/* ── Background ── */}
         <div style={{ marginTop: 20 }}>
           <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
-            Background
+            Background Scene
           </label>
           {/* Source toggle */}
           <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden', marginBottom: 16 }}>
@@ -553,7 +553,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
       {/* Display Settings accordion */}
       <Accordion title="Display Settings">
         <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
-          View
+          Avatar Size
         </label>
         <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
           {views.map(({ val, title, icon }, i, arr) => {
@@ -580,7 +580,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
                   stroke="#39342f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   {icon}
                 </svg>
-                {val ? 'Scene' : 'Avatar'}
+                {val ? 'Avatar & Scene' : 'Avatar Only'}
               </button>
             );
           })}
