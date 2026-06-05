@@ -496,28 +496,30 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           {bgSource === 'favorites' && (
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               {([
-                { src: '/coworking-bg.jpg' as '/coworking-bg.jpg' | '/bg2.jpg', tooltip: 'SF Coworking' },
-                { src: '/bg2.jpg'          as '/coworking-bg.jpg' | '/bg2.jpg', tooltip: 'Industrial Loft' },
+                { src: '/coworking-bg.jpg' as '/coworking-bg.jpg' | '/bg2.jpg', tooltip: 'Green office' },
+                { src: '/bg2.jpg'          as '/coworking-bg.jpg' | '/bg2.jpg', tooltip: 'Startup loft' },
               ]).map(({ src, tooltip }) => {
                 const isSelected = selectedBg === src;
                 return (
-                  <div key={src} title={tooltip} onClick={() => setSelectedBg(src)}
-                    style={{
-                      width: 80, height: 80, flexShrink: 0,
-                      borderRadius: 8,
-                      border: `2px solid ${isSelected ? '#004e23' : '#dfdcd7'}`,
-                      background: '#ffffff',
-                      cursor: 'pointer',
-                      overflow: 'hidden',
-                      position: 'relative',
-                      transition: 'border-color 0.15s',
-                      boxSizing: 'border-box',
-                    }}
-                    onMouseEnter={e => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#b0d4bb'; }}
-                    onMouseLeave={e => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#dfdcd7'; }}
-                  >
-                    <Image src={src} alt={tooltip} fill style={{ objectFit: 'cover' }} />
-                  </div>
+                  <Tooltip key={src} text={tooltip}>
+                    <div onClick={() => setSelectedBg(src)}
+                      style={{
+                        width: 80, height: 80, flexShrink: 0,
+                        borderRadius: 8,
+                        border: `2px solid ${isSelected ? '#004e23' : '#dfdcd7'}`,
+                        background: '#ffffff',
+                        cursor: 'pointer',
+                        overflow: 'hidden',
+                        position: 'relative',
+                        transition: 'border-color 0.15s',
+                        boxSizing: 'border-box',
+                      }}
+                      onMouseEnter={e => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#b0d4bb'; }}
+                      onMouseLeave={e => { if (!isSelected) (e.currentTarget as HTMLDivElement).style.borderColor = '#dfdcd7'; }}
+                    >
+                      <Image src={src} alt={tooltip} fill style={{ objectFit: 'cover' }} />
+                    </div>
+                  </Tooltip>
                 );
               })}
             </div>
