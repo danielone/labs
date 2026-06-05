@@ -35,6 +35,7 @@ const icons = {
   translate:   <><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></>,
   spark:       <><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></>,
   book:        <><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>,
+  heart:       <><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></>,
   key:         <><circle cx="11" cy="11" r="5"/><path d="m21 21-4.3-4.3"/><path d="M8 11h6"/></>,
   card:        <><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></>,
   signal:      <><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></>,
@@ -338,10 +339,13 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           Source
         </label>
         <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
-          {(['favorites', 'library', 'custom'] as const).map((src, i, arr) => {
+          {([
+            { src: 'favorites' as const, label: 'Favorites', iconKey: 'heart' },
+            { src: 'library'   as const, label: 'Library',   iconKey: 'book'  },
+            { src: 'custom'    as const, label: 'Custom',    iconKey: 'image' },
+          ]).map(({ src, label, iconKey }, i, arr) => {
             const isActive = avatarSource === src;
             const disabled = src !== 'favorites';
-            const label = src.charAt(0).toUpperCase() + src.slice(1);
             const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
             return (
               <button
@@ -357,10 +361,12 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
                   color: disabled ? '#c4c0bb' : '#39342f',
                   opacity: disabled ? 0.6 : 1,
                   transition: 'background 0.15s',
+                  display: 'flex', alignItems: 'center', gap: 5,
                 }}
                 onMouseEnter={e => { if (!disabled && !isActive) e.currentTarget.style.background = '#f1f0ec'; }}
                 onMouseLeave={e => { if (!disabled && !isActive) e.currentTarget.style.background = 'transparent'; }}
               >
+                <Icon size={12}>{icons[iconKey as keyof typeof icons]}</Icon>
                 {label}
               </button>
             );
