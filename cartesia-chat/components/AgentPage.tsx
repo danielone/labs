@@ -337,24 +337,27 @@ interface DesignTabProps {
 }
 
 // ── Accordion primitive ────────────────────────────────────────────────────
-function Accordion({ title, defaultOpen = true, children }: { title: string; defaultOpen?: boolean; children: React.ReactNode }) {
+function Accordion({ title, defaultOpen = true, headerRight, children }: { title: string; defaultOpen?: boolean; headerRight?: React.ReactNode; children: React.ReactNode }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <div style={{ borderTop: '1px solid #dfdcd7' }}>
-      <button
-        onClick={() => setOpen(o => !o)}
-        style={{
-          width: '100%', display: 'flex', alignItems: 'center',
-          padding: '12px 0', background: 'none', border: 'none', cursor: 'pointer',
-        }}
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9b9895"
-          strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-          style={{ transform: open ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s ease', flexShrink: 0, marginRight: 8 }}>
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
-        <span style={{ fontSize: 13, fontWeight: 600, color: '#39342f' }}>{title}</span>
-      </button>
+      <div style={{ display: 'flex', alignItems: 'center', padding: '12px 0' }}>
+        <button
+          onClick={() => setOpen(o => !o)}
+          style={{
+            flex: 1, display: 'flex', alignItems: 'center',
+            background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+          }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9b9895"
+            strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+            style={{ transform: open ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s ease', flexShrink: 0, marginRight: 8 }}>
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+          <span style={{ fontSize: 13, fontWeight: 600, color: '#39342f' }}>{title}</span>
+        </button>
+        {headerRight}
+      </div>
       {open && <div style={{ paddingBottom: 16 }}>{children}</div>}
     </div>
   );
@@ -382,51 +385,49 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
       </p>
 
       {/* Avatar accordion */}
-      <Accordion title="Avatar">
+      <Accordion title="Avatar" headerRight={
+        <button style={{
+          padding: '5px 12px', border: '1px solid #dfdcd7', borderRadius: 8,
+          background: '#f9f9f8', cursor: 'not-allowed',
+          fontSize: 12, fontWeight: 500, color: '#39342f',
+          display: 'flex', alignItems: 'center', gap: 5,
+        }}>
+          <Icon size={12}>{icons.book}</Icon>
+          Library
+        </button>
+      }>
         <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
           Image
         </label>
-        {/* Source toggle + Library button */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-          <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
-            {([
-              { src: 'favorites' as const, label: 'Favorites', iconKey: 'heart' },
-              { src: 'custom'    as const, label: 'Custom',    iconKey: 'image' },
-            ]).map(({ src, label, iconKey }, i, arr) => {
-              const isActive = avatarSource === src;
-              const disabled = src !== 'favorites';
-              const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
-              return (
-                <button key={src} onClick={() => !disabled && setAvatarSource(src)}
-                  style={{
-                    padding: '7px 14px', border: 'none',
-                    borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
-                    borderRadius: borderR,
-                    background: isActive ? '#f1f0ec' : 'transparent',
-                    cursor: disabled ? 'not-allowed' : 'pointer',
-                    fontSize: 12, fontWeight: 500, color: '#39342f',
-                    transition: 'background 0.15s',
-                    display: 'flex', alignItems: 'center', gap: 5,
-                  }}
-                  onMouseEnter={e => { if (!disabled && !isActive) e.currentTarget.style.background = '#f1f0ec'; }}
-                  onMouseLeave={e => { if (!disabled && !isActive) e.currentTarget.style.background = 'transparent'; }}
-                >
-                  <Icon size={12}>{icons[iconKey as keyof typeof icons]}</Icon>
-                  {label}
-                </button>
-              );
-            })}
-          </div>
-          {/* Library as standalone secondary button */}
-          <button style={{
-            padding: '7px 14px', border: '1px solid #dfdcd7', borderRadius: 8,
-            background: '#f9f9f8', cursor: 'not-allowed',
-            fontSize: 12, fontWeight: 500, color: '#39342f',
-            display: 'flex', alignItems: 'center', gap: 5,
-          }}>
-            <Icon size={12}>{icons.book}</Icon>
-            Library
-          </button>
+        {/* Source toggle */}
+        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden', marginBottom: 16 }}>
+          {([
+            { src: 'favorites' as const, label: 'Favorites', iconKey: 'heart' },
+            { src: 'custom'    as const, label: 'Custom',    iconKey: 'image' },
+          ]).map(({ src, label, iconKey }, i, arr) => {
+            const isActive = avatarSource === src;
+            const disabled = src !== 'favorites';
+            const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
+            return (
+              <button key={src} onClick={() => !disabled && setAvatarSource(src)}
+                style={{
+                  padding: '7px 14px', border: 'none',
+                  borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
+                  borderRadius: borderR,
+                  background: isActive ? '#f1f0ec' : 'transparent',
+                  cursor: disabled ? 'not-allowed' : 'pointer',
+                  fontSize: 12, fontWeight: 500, color: '#39342f',
+                  transition: 'background 0.15s',
+                  display: 'flex', alignItems: 'center', gap: 5,
+                }}
+                onMouseEnter={e => { if (!disabled && !isActive) e.currentTarget.style.background = '#f1f0ec'; }}
+                onMouseLeave={e => { if (!disabled && !isActive) e.currentTarget.style.background = 'transparent'; }}
+              >
+                <Icon size={12}>{icons[iconKey as keyof typeof icons]}</Icon>
+                {label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Favorites image grid — shown when avatarSource === 'favorites' */}
@@ -469,47 +470,35 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
             Background Scene
           </label>
-          {/* Source toggle + Library button */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-            <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
-              {([
-                { src: 'favorites' as const, label: 'Favorites', iconKey: 'heart' },
-                { src: 'custom'    as const, label: 'Custom',    iconKey: 'image' },
-              ]).map(({ src, label, iconKey }, i, arr) => {
-                const isActive = bgSource === src;
-                const disabled = src !== 'favorites';
-                const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
-                return (
-                  <button key={src} onClick={() => !disabled && setBgSource(src)}
-                    style={{
-                      padding: '7px 14px', border: 'none',
-                      borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
-                      borderRadius: borderR,
-                      background: isActive ? '#f1f0ec' : 'transparent',
-                      cursor: disabled ? 'not-allowed' : 'pointer',
-                      fontSize: 12, fontWeight: 500, color: '#39342f',
-                      transition: 'background 0.15s',
-                      display: 'flex', alignItems: 'center', gap: 5,
-                    }}
-                    onMouseEnter={e => { if (!disabled && !isActive) e.currentTarget.style.background = '#f1f0ec'; }}
-                    onMouseLeave={e => { if (!disabled && !isActive) e.currentTarget.style.background = 'transparent'; }}
-                  >
-                    <Icon size={12}>{icons[iconKey as keyof typeof icons]}</Icon>
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
-            {/* Library as standalone secondary button */}
-            <button style={{
-              padding: '7px 14px', border: '1px solid #dfdcd7', borderRadius: 8,
-              background: '#f9f9f8', cursor: 'not-allowed',
-              fontSize: 12, fontWeight: 500, color: '#39342f',
-              display: 'flex', alignItems: 'center', gap: 5,
-            }}>
-              <Icon size={12}>{icons.book}</Icon>
-              Library
-            </button>
+          {/* Source toggle */}
+          <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden', marginBottom: 16 }}>
+            {([
+              { src: 'favorites' as const, label: 'Favorites', iconKey: 'heart' },
+              { src: 'custom'    as const, label: 'Custom',    iconKey: 'image' },
+            ]).map(({ src, label, iconKey }, i, arr) => {
+              const isActive = bgSource === src;
+              const disabled = src !== 'favorites';
+              const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
+              return (
+                <button key={src} onClick={() => !disabled && setBgSource(src)}
+                  style={{
+                    padding: '7px 14px', border: 'none',
+                    borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
+                    borderRadius: borderR,
+                    background: isActive ? '#f1f0ec' : 'transparent',
+                    cursor: disabled ? 'not-allowed' : 'pointer',
+                    fontSize: 12, fontWeight: 500, color: '#39342f',
+                    transition: 'background 0.15s',
+                    display: 'flex', alignItems: 'center', gap: 5,
+                  }}
+                  onMouseEnter={e => { if (!disabled && !isActive) e.currentTarget.style.background = '#f1f0ec'; }}
+                  onMouseLeave={e => { if (!disabled && !isActive) e.currentTarget.style.background = 'transparent'; }}
+                >
+                  <Icon size={12}>{icons[iconKey as keyof typeof icons]}</Icon>
+                  {label}
+                </button>
+              );
+            })}
           </div>
 
           {bgSource === 'favorites' && (
