@@ -474,7 +474,7 @@ export default function VoiceChat({
                 background: '#171715',
                 color: '#ffffff',
                 border: 'none',
-                borderRadius: 999,
+                borderRadius: 12,
                 padding: '9px 15px',
                 fontSize: 12,
                 fontWeight: 600,
@@ -581,13 +581,13 @@ export default function VoiceChat({
                   disabled={callState === 'ending'}
                   className="w-full py-2.5 rounded-xl font-semibold text-sm transition-all duration-150 active:scale-95"
                   style={{
-                    background: callState === 'ending' ? '#c4c0bb' : '#004e23',
-                    color: '#ffffff', border: '1px solid transparent',
+                    background: callState === 'ending' ? '#c4c0bb' : '#171715',
+                    color: '#ffffff', border: 'none',
                     cursor: callState === 'ending' ? 'default' : 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
                   }}
-                  onMouseEnter={e => { if (callState !== 'ending') e.currentTarget.style.background = 'rgba(0,78,35,0.82)'; }}
-                  onMouseLeave={e => { if (callState !== 'ending') e.currentTarget.style.background = '#004e23'; }}
+                  onMouseEnter={e => { if (callState !== 'ending') e.currentTarget.style.background = '#2a2826'; }}
+                  onMouseLeave={e => { if (callState !== 'ending') e.currentTarget.style.background = '#171715'; }}
                 >
                   {callState !== 'ending' && <PhoneIcon size={13} />}
                   {callState === 'ending' ? 'Ending…' : 'Start Conversation'}
