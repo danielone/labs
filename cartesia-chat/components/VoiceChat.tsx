@@ -471,7 +471,7 @@ export default function VoiceChat({
             <button
               onClick={() => { setWidgetExpanded(true); startCall(); }}
               style={{
-                background: '#171715',
+                background: '#004e23',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: 12,
@@ -485,8 +485,8 @@ export default function VoiceChat({
                 gap: 7,
                 transition: 'background 0.15s ease',
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#2a2826'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#171715'; }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,78,35,0.82)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#004e23'; }}
             >
               <PhoneIcon size={12} />
               Start Conversation
@@ -581,13 +581,13 @@ export default function VoiceChat({
                   disabled={callState === 'ending'}
                   className="w-full py-2.5 rounded-xl font-semibold text-sm transition-all duration-150 active:scale-95"
                   style={{
-                    background: callState === 'ending' ? '#c4c0bb' : '#171715',
+                    background: callState === 'ending' ? '#c4c0bb' : '#004e23',
                     color: '#ffffff', border: 'none',
                     cursor: callState === 'ending' ? 'default' : 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
                   }}
-                  onMouseEnter={e => { if (callState !== 'ending') e.currentTarget.style.background = '#2a2826'; }}
-                  onMouseLeave={e => { if (callState !== 'ending') e.currentTarget.style.background = '#171715'; }}
+                  onMouseEnter={e => { if (callState !== 'ending') e.currentTarget.style.background = 'rgba(0,78,35,0.82)'; }}
+                  onMouseLeave={e => { if (callState !== 'ending') e.currentTarget.style.background = '#004e23'; }}
                 >
                   {callState !== 'ending' && <PhoneIcon size={13} />}
                   {callState === 'ending' ? 'Ending…' : 'Start Conversation'}
