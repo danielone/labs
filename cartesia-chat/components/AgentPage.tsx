@@ -320,7 +320,7 @@ Off-topic or unusual request: Roll with it—you can chat about anything
 
 # Topics you can discuss
 Anything the caller wants: their day, current events, science, culture, philosophy, personal decisions, interesting ideas. Help think through problems by asking clarifying questions. Use light, natural humor when appropriate.`, multiline: true },
-        { label: 'Initial Message', content: '', multiline: true },
+        { label: 'Initial Message', content: `Hey! I'm a Daniel's Cartesia voice assistant. What would you like to talk about?`, multiline: true },
       ].map(field => (
         <div key={field.label} style={{ marginBottom: 20 }}>
           <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: '#39342f', marginBottom: 8 }}>{field.label}</label>
