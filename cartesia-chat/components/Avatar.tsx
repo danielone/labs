@@ -28,12 +28,15 @@ function useAvatarCanvas(
   isSpeakingRef: React.RefObject<boolean>,
   audioLevelRef: React.RefObject<number>,
   size: number,
+  avatarSrc: string,
 ) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+    // Monster has its own art — skip all overlays
+    if (avatarSrc === '/monster.svg') return;
 
     // Blink state machine
     let phase: 'open' | 'closing' | 'holding' | 'opening' = 'open';
@@ -125,7 +128,7 @@ export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize 
   audioLevelRef.current = audioLevel;
 
   const size = bare ? bareSize : 200;
-  useAvatarCanvas(canvasRef, isSpeakingRef, audioLevelRef, size);
+  useAvatarCanvas(canvasRef, isSpeakingRef, audioLevelRef, size, avatarSrc);
 
   const imageAndCanvas = (
     <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
