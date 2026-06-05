@@ -83,7 +83,6 @@ const TABS: { id: MainTab; label: string }[] = [
 ];
 
 export default function AgentPage() {
-  const [callDropdownOpen, setCallDropdownOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<MainTab>('design');
   const [configPreview, setConfigPreview] = useState(false);
   const [widgetLabel, setWidgetLabel] = useState('Need help?');
@@ -200,14 +199,14 @@ export default function AgentPage() {
                 <PhoneStreamlineIcon />
                 Call
               </button>
-              {/* Chevron dropdown trigger */}
+              {/* Chevron — disabled like the live console */}
               <button
-                onClick={() => setCallDropdownOpen(o => !o)}
+                disabled
                 style={{
                   height: 32, width: 32, display: 'flex', alignItems: 'center', justifyContent: 'center',
                   background: '#004e23', color: '#ffffff',
                   border: '1px solid transparent', borderLeft: '1px solid rgba(255,255,255,0.2)',
-                  borderRadius: '0 8px 8px 0', cursor: 'pointer',
+                  borderRadius: '0 8px 8px 0', cursor: 'not-allowed', opacity: 0.6,
                 }}
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -215,36 +214,6 @@ export default function AgentPage() {
                 </svg>
               </button>
 
-              {/* Dropdown menu */}
-              {callDropdownOpen && (
-                <div
-                  style={{
-                    position: 'absolute', top: 36, right: 0, zIndex: 50,
-                    background: '#fdfdfc', border: '1px solid #dfdcd7',
-                    borderRadius: 10, boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
-                    minWidth: 180, overflow: 'hidden',
-                  }}
-                  onMouseLeave={() => setCallDropdownOpen(false)}
-                >
-                  {[
-                    { label: 'Call in browser' },
-                    { label: 'Call phone number' },
-                  ].map(item => (
-                    <button key={item.label} style={{
-                      width: '100%', display: 'flex', alignItems: 'center', gap: 8,
-                      padding: '9px 14px', fontSize: 13, fontWeight: 400,
-                      color: '#39342f', background: 'transparent', border: 'none',
-                      cursor: 'not-allowed', textAlign: 'left',
-                    }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#f1f0ec'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; }}
-                    >
-                      <PhoneStreamlineIcon />
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
 
