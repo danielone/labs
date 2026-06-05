@@ -576,10 +576,18 @@ export default function VoiceChat({
                     background: callState === 'ending' ? '#c4c0bb' : '#004e23',
                     color: '#ffffff', border: '1px solid transparent',
                     cursor: callState === 'ending' ? 'default' : 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
                   }}
                   onMouseEnter={e => { if (callState !== 'ending') e.currentTarget.style.background = 'rgba(0,78,35,0.82)'; }}
                   onMouseLeave={e => { if (callState !== 'ending') e.currentTarget.style.background = '#004e23'; }}
                 >
+                  {callState !== 'ending' && (
+                    <svg width="13" height="13" viewBox="0 0 64 64" fill="currentColor" style={{ fillRule: 'evenodd', clipRule: 'evenodd', flexShrink: 0 }}>
+                      <g transform="matrix(1,0,0,1,-18.0625,-18.061461)">
+                        <path d="M19.9,44.5C22.1,50.4 25.4,55.9 30.2,61.8C36.1,68.9 43.3,74.5 51.4,78.4C54.5,79.9 58.7,81.6 63.3,81.9L64.1,81.9C67.2,81.9 69.8,80.8 71.8,78.6L71.9,78.5C72.6,77.6 73.4,76.9 74.3,76C74.9,75.4 75.5,74.9 76.1,74.3C78.8,71.5 78.8,68 76.1,65.3L68.6,57.8C67.3,56.5 65.8,55.8 64.2,55.8C62.6,55.8 61,56.5 59.7,57.8L55.3,62.2C54.9,62 54.5,61.8 54.1,61.6C53.6,61.4 53.1,61.1 52.7,60.9C48.7,58.3 45,55 41.5,50.7C39.7,48.5 38.6,46.6 37.7,44.7C38.8,43.7 39.9,42.6 41,41.5C41.4,41.1 41.8,40.7 42.2,40.3C45,37.5 45,34 42.2,31.2L38.5,27.5C38.1,27.1 37.7,26.6 37.2,26.2C36.4,25.4 35.5,24.5 34.7,23.7C33.4,22.4 31.9,21.7 30.3,21.7C28.7,21.7 27.2,22.4 25.8,23.7L21,28.4C19.3,30.1 18.3,32.2 18.1,34.6C17.9,37.5 18.5,40.7 19.9,44.5Z" />
+                      </g>
+                    </svg>
+                  )}
                   {callState === 'ending' ? 'Ending…' : 'Start Conversation'}
                 </button>
               ) : callState === 'connecting' ? (
