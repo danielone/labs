@@ -547,31 +547,23 @@ export default function VoiceChat({
                   <div className="absolute left-1/2" style={{ transform: 'translateX(-50%)', bottom: avatarSrc === '/monster.svg' ? -20 : 0 }}>
                     <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} bare bareSize={AVATAR_BARE} avatarSrc={avatarSrc} />
                   </div>
-                  {isActive && (
-                    <div className="absolute top-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap"
-                      style={{ background: 'rgba(253,253,252,0.9)', backdropFilter: 'blur(8px)',
-                        border: '1px solid #dfdcd7', color: '#39342f' }}>
-                      <WaveBars speaking={agentSpeaking} />
-                      {agentSpeaking ? 'Speaking…' : 'Listening…'}
-                    </div>
-                  )}
                 </div>
               ) : (
-                <div className="relative">
+                <div>
                   <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} avatarSrc={avatarSrc} />
-                  {isActive && (
-                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap"
-                      style={{ background: '#f1f0ec', border: '1px solid #dfdcd7', color: '#39342f' }}>
-                      <WaveBars speaking={agentSpeaking} />
-                      {agentSpeaking ? 'Speaking…' : 'Listening…'}
-                    </div>
-                  )}
                 </div>
               )}
 
-              {/* Timer */}
+              {/* Badge + Timer row — centered */}
               {isActive && (
-                <p className="text-xs tabular-nums" style={{ color: '#7c7770' }}>{formatDuration(duration)}</p>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap"
+                    style={{ background: '#f1f0ec', border: '1px solid #dfdcd7', color: '#39342f' }}>
+                    <WaveBars speaking={agentSpeaking} />
+                    {agentSpeaking ? 'Speaking…' : 'Listening…'}
+                  </div>
+                  <p className="text-xs tabular-nums" style={{ color: '#7c7770', margin: 0 }}>{formatDuration(duration)}</p>
+                </div>
               )}
 
               {/* Error */}
