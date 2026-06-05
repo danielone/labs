@@ -358,8 +358,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
                   background: isActive ? '#f1f0ec' : 'transparent',
                   cursor: disabled ? 'not-allowed' : 'pointer',
                   fontSize: 12, fontWeight: 500,
-                  color: disabled ? '#c4c0bb' : '#39342f',
-                  opacity: disabled ? 0.6 : 1,
+                  color: '#39342f',
                   transition: 'background 0.15s',
                   display: 'flex', alignItems: 'center', gap: 5,
                 }}
