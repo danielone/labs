@@ -90,14 +90,13 @@ export default function WidgetBaseColorPicker({ value, onChange }: Props) {
         <div
           ref={rowRef}
           style={{
-            display: 'flex',
+            display: 'inline-flex',
             alignItems: 'center',
             gap: 8,
             padding: '8px 12px',
             background: '#fdfdfc',
             border: '1px solid #dfdcd7',
             borderRadius: 8,
-            width: '100%',
             boxSizing: 'border-box',
             transition: 'border-color 0.15s',
           }}
@@ -133,7 +132,6 @@ export default function WidgetBaseColorPicker({ value, onChange }: Props) {
               if (rowRef.current) rowRef.current.style.borderColor = '#dfdcd7'
             }}
             style={{
-              flex: 1,
               background: 'transparent',
               border: 'none',
               outline: 'none',
@@ -141,7 +139,7 @@ export default function WidgetBaseColorPicker({ value, onChange }: Props) {
               color: '#39342f',
               fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
               padding: 0,
-              width: '100%',
+              width: '7ch',
               boxShadow: 'none',
             }}
           />
