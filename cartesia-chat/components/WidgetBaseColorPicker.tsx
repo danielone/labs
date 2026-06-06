@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 interface Props {
   value: string
@@ -20,6 +20,11 @@ export default function WidgetBaseColorPicker({ value, onChange, onReset }: Prop
   const [hexInput, setHexInput] = useState(value)
   const colorInputRef = useRef<HTMLInputElement>(null)
   const rowRef = useRef<HTMLDivElement>(null)
+
+  // Sync internal state when the parent resets the value (e.g. clicking Reset)
+  useEffect(() => {
+    setHexInput(value)
+  }, [value])
 
   // Always show a valid color on the swatch; fall back to committed value
   const swatchColor = isValidHex(hexInput) ? normalizeHex(hexInput) : value
