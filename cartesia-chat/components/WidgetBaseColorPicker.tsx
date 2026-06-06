@@ -50,31 +50,12 @@ export default function WidgetBaseColorPicker({ label = 'Widget Base', value, on
 
   return (
     <div style={{ marginBottom: 14 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5 }}>
-        <label style={{ fontSize: 12, fontWeight: 500, color: '#636260' }}>
-          {label}
-        </label>
-        {onReset && (
-          <button
-            type="button"
-            onClick={onReset}
-            style={{
-              background: 'none',
-              border: 'none',
-              padding: 0,
-              fontSize: 11,
-              fontWeight: 500,
-              color: '#9b9895',
-              cursor: 'pointer',
-              fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#39342f' }}
-            onMouseLeave={e => { e.currentTarget.style.color = '#9b9895' }}
-          >
-            Reset
-          </button>
-        )}
-      </div>
+      <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 5 }}>
+        {label}
+      </label>
+
+      {/* Input + Reset row */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
 
       {/* Wrapper: relative so the hidden native input can be stacked */}
       <div style={{ position: 'relative', display: 'inline-block' }}>
@@ -162,6 +143,30 @@ export default function WidgetBaseColorPicker({ label = 'Widget Base', value, on
             }}
           />
         </div>
+      </div>
+
+      {onReset && (
+        <button
+          type="button"
+          onClick={onReset}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            fontSize: 11,
+            fontWeight: 500,
+            color: '#9b9895',
+            cursor: 'pointer',
+            flexShrink: 0,
+            fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color = '#39342f' }}
+          onMouseLeave={e => { e.currentTarget.style.color = '#9b9895' }}
+        >
+          Reset
+        </button>
+      )}
+
       </div>
     </div>
   )
