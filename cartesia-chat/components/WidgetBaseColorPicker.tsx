@@ -85,7 +85,7 @@ export default function WidgetBaseColorPicker({ value, onChange, onReset }: Prop
           tabIndex={-1}
           style={{
             position: 'absolute',
-            top: -20,
+            top: -24,
             left: 0,
             width: 1,
             height: 1,
