@@ -154,8 +154,11 @@ export default function WidgetBaseColorPicker({ value, onChange }: Props) {
               minWidth: 260,
             }}
           >
+            {/* HSB gradient area */}
+            <ColorPicker.Area style={{ borderRadius: 8 }} />
+
             {/* Hue + alpha sliders + eyedropper */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12 }}>
               <ColorPicker.EyeDropper
                 size="xs"
                 variant="outline"
