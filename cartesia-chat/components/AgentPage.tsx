@@ -97,6 +97,7 @@ export default function AgentPage() {
   const [selectedBg, setSelectedBg] = useState<'/coworking-bg.jpg' | '/bg2.jpg'>('/coworking-bg.jpg');
   const [bgSource, setBgSource] = useState<'favorites' | 'library' | 'custom'>('favorites');
   const [widgetBase, setWidgetBase] = useState('#fdfdfc');
+  const [widgetBorderColor, setWidgetBorderColor] = useState('#dfdcd7');
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f9f9f8', fontFamily: 'var(--font-geist-sans), system-ui, sans-serif' }}>
@@ -271,6 +272,7 @@ export default function AgentPage() {
               selectedBg={selectedBg}         setSelectedBg={setSelectedBg}
               bgSource={bgSource}             setBgSource={setBgSource}
               widgetBase={widgetBase}         setWidgetBase={setWidgetBase}
+              widgetBorderColor={widgetBorderColor} setWidgetBorderColor={setWidgetBorderColor}
             />
           )}
           {activeTab === 'configuration' && <ConfigurationTab onPreview={() => setConfigPreview(p => !p)} previewActive={configPreview} />}
@@ -282,7 +284,7 @@ export default function AgentPage() {
 
       {/* Widget: hidden on Configuration tab unless Preview clicked */}
       {(activeTab !== 'configuration' || configPreview) && (
-        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} widgetBase={widgetBase} />
+        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} widgetBase={widgetBase} widgetBorderColor={widgetBorderColor} />
       )}
     </div>
   );
@@ -337,8 +339,10 @@ interface DesignTabProps {
   setSelectedBg:     (v: '/coworking-bg.jpg' | '/bg2.jpg') => void;
   bgSource:          'favorites' | 'library' | 'custom';
   setBgSource:       (v: 'favorites' | 'library' | 'custom') => void;
-  widgetBase:        string;
-  setWidgetBase:     (v: string) => void;
+  widgetBase:          string;
+  setWidgetBase:       (v: string) => void;
+  widgetBorderColor:   string;
+  setWidgetBorderColor:(v: string) => void;
 }
 
 // ── Accordion primitive ────────────────────────────────────────────────────
@@ -368,7 +372,7 @@ function Accordion({ title, defaultOpen = true, headerRight, children }: { title
   );
 }
 
-function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource, widgetBase, setWidgetBase }: DesignTabProps) {
+function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource, widgetBase, setWidgetBase, widgetBorderColor, setWidgetBorderColor }: DesignTabProps) {
   const textFields = [
     { label: 'Widget Prompt', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
     { label: 'Agent Name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
@@ -634,11 +638,36 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
       </Accordion>
 
       {/* Display Colors accordion */}
-      <Accordion title="Display Colors">
+      <Accordion
+        title="Display Colors"
+        headerRight={
+          <button
+            type="button"
+            onClick={() => { setWidgetBase('#fdfdfc'); setWidgetBorderColor('#dfdcd7'); }}
+            style={{
+              background: 'none', border: 'none', padding: '0 0 0 8px',
+              fontSize: 11, fontWeight: 500, color: '#9b9895',
+              cursor: 'pointer', flexShrink: 0,
+              fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#39342f'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = '#9b9895'; }}
+          >
+            Reset All
+          </button>
+        }
+      >
         <WidgetBaseColorPicker
+          label="Widget Base"
           value={widgetBase}
           onChange={setWidgetBase}
           onReset={widgetBase !== '#fdfdfc' ? () => setWidgetBase('#fdfdfc') : undefined}
+        />
+        <WidgetBaseColorPicker
+          label="Widget Border Color"
+          value={widgetBorderColor}
+          onChange={setWidgetBorderColor}
+          onReset={widgetBorderColor !== '#dfdcd7' ? () => setWidgetBorderColor('#dfdcd7') : undefined}
         />
       </Accordion>
 

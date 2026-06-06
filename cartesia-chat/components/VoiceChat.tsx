@@ -71,7 +71,8 @@ interface VoiceChatProps {
   setShowScene?: (v: boolean) => void;
   avatarSrc?:   string;
   sceneBg?:     string;
-  widgetBase?:  string;
+  widgetBase?:        string;
+  widgetBorderColor?: string;
 }
 
 export default function VoiceChat({
@@ -82,7 +83,8 @@ export default function VoiceChat({
   setShowScene: setShowSceneProp,
   avatarSrc    = '/avatar.png',
   sceneBg      = '/coworking-bg.jpg',
-  widgetBase   = '#fdfdfc',
+  widgetBase        = '#fdfdfc',
+  widgetBorderColor = '#dfdcd7',
 }: VoiceChatProps = {}) {
   const [widgetExpanded, setWidgetExpanded] = useState(false);
   const [callState, setCallState] = useState<CallState>('idle');
@@ -434,7 +436,7 @@ export default function VoiceChat({
             style={{
               width: 238,
               background: widgetBase,
-              border: '1px solid #dfdcd7',
+              border: `1px solid ${widgetBorderColor}`,
               borderRadius: 17,
               boxShadow: '0 8px 40px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.06)',
               padding: 13,
@@ -522,7 +524,7 @@ export default function VoiceChat({
               className="flex flex-col items-center gap-4 rounded-3xl"
               style={{
                 background: widgetBase,
-                border: '1px solid #dfdcd7',
+                border: `1px solid ${widgetBorderColor}`,
                 boxShadow: '0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)',
                 width: 360,
                 padding: 20,
@@ -646,6 +648,11 @@ export default function VoiceChat({
         @keyframes bar-pulse-b { 0%, 100% { height: 18% } 50%  { height: 100% } }
         @keyframes bar-pulse-c { 0%, 100% { height: 28% } 25%  { height: 55% } 60%  { height: 92% } 82% { height: 35% } }
         @keyframes bar-pulse-d { 0%, 100% { height: 25% } 35%  { height: 70% } 75%  { height: 50% } }
+        @keyframes halo-ring-expand {
+          0%   { transform: scale(1);    opacity: 0.65; }
+          70%  { opacity: 0.2; }
+          100% { transform: scale(1.65); opacity: 0; }
+        }
       `}</style>
     </>
   );

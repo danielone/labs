@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 
 interface Props {
+  label?: string
   value: string
   onChange: (hex: string) => void
   onReset?: () => void
@@ -16,7 +17,7 @@ function normalizeHex(s: string): string {
   return s.startsWith('#') ? s : `#${s}`
 }
 
-export default function WidgetBaseColorPicker({ value, onChange, onReset }: Props) {
+export default function WidgetBaseColorPicker({ label = 'Widget Base', value, onChange, onReset }: Props) {
   const [hexInput, setHexInput] = useState(value)
   const colorInputRef = useRef<HTMLInputElement>(null)
   const rowRef = useRef<HTMLDivElement>(null)
@@ -51,7 +52,7 @@ export default function WidgetBaseColorPicker({ value, onChange, onReset }: Prop
     <div style={{ marginBottom: 14 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5 }}>
         <label style={{ fontSize: 12, fontWeight: 500, color: '#636260' }}>
-          Widget Base
+          {label}
         </label>
         {onReset && (
           <button
