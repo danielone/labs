@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import VoiceChat from './VoiceChat';
+import WidgetBaseColorPicker from './WidgetBaseColorPicker';
 
 type MainTab = 'configuration' | 'design' | 'metrics' | 'calls' | 'settings';
 
@@ -95,6 +96,7 @@ export default function AgentPage() {
   const [selectedAvatar, setSelectedAvatar] = useState<'/avatar.png' | '/monster.svg'>('/avatar.png');
   const [selectedBg, setSelectedBg] = useState<'/coworking-bg.jpg' | '/bg2.jpg'>('/coworking-bg.jpg');
   const [bgSource, setBgSource] = useState<'favorites' | 'library' | 'custom'>('favorites');
+  const [widgetBase, setWidgetBase] = useState('#fdfdfc');
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f9f9f8', fontFamily: 'var(--font-geist-sans), system-ui, sans-serif' }}>
@@ -268,6 +270,7 @@ export default function AgentPage() {
               selectedAvatar={selectedAvatar} setSelectedAvatar={setSelectedAvatar}
               selectedBg={selectedBg}         setSelectedBg={setSelectedBg}
               bgSource={bgSource}             setBgSource={setBgSource}
+              widgetBase={widgetBase}         setWidgetBase={setWidgetBase}
             />
           )}
           {activeTab === 'configuration' && <ConfigurationTab onPreview={() => setConfigPreview(p => !p)} previewActive={configPreview} />}
@@ -279,7 +282,7 @@ export default function AgentPage() {
 
       {/* Widget: hidden on Configuration tab unless Preview clicked */}
       {(activeTab !== 'configuration' || configPreview) && (
-        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} />
+        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} widgetBase={widgetBase} />
       )}
     </div>
   );
@@ -334,6 +337,8 @@ interface DesignTabProps {
   setSelectedBg:     (v: '/coworking-bg.jpg' | '/bg2.jpg') => void;
   bgSource:          'favorites' | 'library' | 'custom';
   setBgSource:       (v: 'favorites' | 'library' | 'custom') => void;
+  widgetBase:        string;
+  setWidgetBase:     (v: string) => void;
 }
 
 // ── Accordion primitive ────────────────────────────────────────────────────
@@ -363,7 +368,7 @@ function Accordion({ title, defaultOpen = true, headerRight, children }: { title
   );
 }
 
-function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource }: DesignTabProps) {
+function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource, widgetBase, setWidgetBase }: DesignTabProps) {
   const textFields = [
     { label: 'Widget Prompt', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
     { label: 'Agent Name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
@@ -598,7 +603,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
           Avatar Size
         </label>
-        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
+        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden', marginBottom: 20 }}>
           {views.map(({ val, title, icon }, i, arr) => {
             const isActive = showScene === val;
             const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
@@ -625,6 +630,9 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
             );
           })}
         </div>
+
+        {/* Widget Base color picker */}
+        <WidgetBaseColorPicker value={widgetBase} onChange={setWidgetBase} />
       </Accordion>
 
       {/* Close border at bottom */}

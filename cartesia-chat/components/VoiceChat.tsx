@@ -71,6 +71,7 @@ interface VoiceChatProps {
   setShowScene?: (v: boolean) => void;
   avatarSrc?:   string;
   sceneBg?:     string;
+  widgetBase?:  string;
 }
 
 export default function VoiceChat({
@@ -81,6 +82,7 @@ export default function VoiceChat({
   setShowScene: setShowSceneProp,
   avatarSrc    = '/avatar.png',
   sceneBg      = '/coworking-bg.jpg',
+  widgetBase   = '#fdfdfc',
 }: VoiceChatProps = {}) {
   const [widgetExpanded, setWidgetExpanded] = useState(false);
   const [callState, setCallState] = useState<CallState>('idle');
@@ -431,7 +433,7 @@ export default function VoiceChat({
           <div
             style={{
               width: 238,
-              background: '#fdfdfc',
+              background: widgetBase,
               border: '1px solid #dfdcd7',
               borderRadius: 17,
               boxShadow: '0 8px 40px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.06)',
@@ -519,7 +521,7 @@ export default function VoiceChat({
             <div
               className="flex flex-col items-center gap-4 rounded-3xl"
               style={{
-                background: '#fdfdfc',
+                background: widgetBase,
                 border: '1px solid #dfdcd7',
                 boxShadow: '0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)',
                 width: 360,
