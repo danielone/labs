@@ -623,12 +623,17 @@ export default function VoiceChat({
                 </button>
               )}
 
-              <p className="text-xs" style={{ color: '#b0aba5' }}>
-                Powered by{' '}
-                <a href="http://cartesia.ai/" target="_blank" rel="noopener noreferrer" style={{ color: '#7c7770' }}>
-                  Cartesia
-                </a>
-              </p>
+              <a
+                href="https://www.cartesia.ai/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs"
+                style={{ color: '#b0aba5', textDecoration: 'none', transition: 'color 0.15s' }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#7c7770'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#b0aba5'; }}
+              >
+                Powered by Cartesia
+              </a>
             </div>
 
             </div>
