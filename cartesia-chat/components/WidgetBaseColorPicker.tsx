@@ -5,6 +5,7 @@ import { useState, useRef } from 'react'
 interface Props {
   value: string
   onChange: (hex: string) => void
+  onReset?: () => void
 }
 
 function isValidHex(s: string): boolean {
@@ -15,7 +16,7 @@ function normalizeHex(s: string): string {
   return s.startsWith('#') ? s : `#${s}`
 }
 
-export default function WidgetBaseColorPicker({ value, onChange }: Props) {
+export default function WidgetBaseColorPicker({ value, onChange, onReset }: Props) {
   const [hexInput, setHexInput] = useState(value)
   const colorInputRef = useRef<HTMLInputElement>(null)
   const rowRef = useRef<HTMLDivElement>(null)
@@ -43,17 +44,31 @@ export default function WidgetBaseColorPicker({ value, onChange }: Props) {
 
   return (
     <div style={{ marginBottom: 14 }}>
-      <label
-        style={{
-          display: 'block',
-          fontSize: 12,
-          fontWeight: 500,
-          color: '#636260',
-          marginBottom: 5,
-        }}
-      >
-        Widget Base
-      </label>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5 }}>
+        <label style={{ fontSize: 12, fontWeight: 500, color: '#636260' }}>
+          Widget Base
+        </label>
+        {onReset && (
+          <button
+            type="button"
+            onClick={onReset}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              fontSize: 11,
+              fontWeight: 500,
+              color: '#9b9895',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#39342f' }}
+            onMouseLeave={e => { e.currentTarget.style.color = '#9b9895' }}
+          >
+            Reset
+          </button>
+        )}
+      </div>
 
       {/* Wrapper: relative so the hidden native input can be stacked */}
       <div style={{ position: 'relative', display: 'inline-block' }}>

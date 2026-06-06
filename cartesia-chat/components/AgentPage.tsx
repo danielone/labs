@@ -603,7 +603,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
           Avatar Size
         </label>
-        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden', marginBottom: 20 }}>
+        <div style={{ display: 'inline-flex', border: '1px solid #dfdcd7', background: '#f9f9f8', borderRadius: 8, overflow: 'hidden' }}>
           {views.map(({ val, title, icon }, i, arr) => {
             const isActive = showScene === val;
             const borderR = i === 0 ? '8px 0 0 8px' : i === arr.length - 1 ? '0 8px 8px 0' : '0';
@@ -631,8 +631,15 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           })}
         </div>
 
-        {/* Widget Base color picker */}
-        <WidgetBaseColorPicker value={widgetBase} onChange={setWidgetBase} />
+      </Accordion>
+
+      {/* Display Colors accordion */}
+      <Accordion title="Display Colors">
+        <WidgetBaseColorPicker
+          value={widgetBase}
+          onChange={setWidgetBase}
+          onReset={widgetBase !== '#fdfdfc' ? () => setWidgetBase('#fdfdfc') : undefined}
+        />
       </Accordion>
 
       {/* Close border at bottom */}
