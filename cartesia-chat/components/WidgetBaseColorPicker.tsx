@@ -31,6 +31,7 @@ export default function WidgetBaseColorPicker({ value, onChange }: Props) {
     try { return parseColor(value).toString('hex') } catch { return '#fdfdfc' }
   })
 
+  const [open, setOpen] = useState(false)
   const rowRef = useRef<HTMLDivElement>(null)
 
   const applyColor = (c: Color) => {
@@ -75,6 +76,8 @@ export default function WidgetBaseColorPicker({ value, onChange }: Props) {
       <ColorPicker.Root
         value={color}
         onValueChange={(e) => applyColor(e.value)}
+        open={open}
+        onOpenChange={(e) => setOpen(e.open)}
       >
         {/* Hidden input for any surrounding form */}
         <ColorPicker.HiddenInput />
@@ -99,14 +102,17 @@ export default function WidgetBaseColorPicker({ value, onChange }: Props) {
             transition: 'border-color 0.15s',
           }}
         >
-          {/* Swatch button — opens the color picker popover */}
-          <ColorPicker.Trigger
+          {/* Plain colored square — avoids Chakra's Trigger sub-elements */}
+          <button
+            onClick={() => setOpen((o) => !o)}
+            aria-label="Open color picker"
             style={{
               width: 20,
               height: 20,
               minWidth: 20,
+              background: hexInput,
               borderRadius: 4,
-              border: '1px solid rgba(0,0,0,0.12)',
+              border: '1px solid rgba(0,0,0,0.15)',
               flexShrink: 0,
               cursor: 'pointer',
               padding: 0,
