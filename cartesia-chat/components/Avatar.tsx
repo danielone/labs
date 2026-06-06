@@ -167,30 +167,17 @@ export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize 
 
   return (
     <div className="relative flex items-center justify-center">
-      {/* Green halo rings when speaking */}
+      {/* Subtle pulse halo when speaking — single box-shadow ring, no scale */}
       <div
         className="absolute rounded-full"
         style={{
-          inset: '-8px',
-          opacity: isSpeaking ? Math.min(1, 0.25 + audioLevel * 0.75) : 0,
-          transition: 'opacity 0.2s ease-out',
+          inset: 0,
           pointerEvents: 'none',
+          opacity: isSpeaking ? 1 : 0,
+          transition: 'opacity 0.4s ease-out',
+          animation: isSpeaking ? 'avatar-halo-pulse 2s infinite' : 'none',
         }}
-      >
-        {([0, 700, 1400] as const).map(delay => (
-          <div
-            key={delay}
-            className="absolute rounded-full"
-            style={{
-              inset: 0,
-              border: '2px solid #004e23',
-              animation: isSpeaking
-                ? `halo-ring-expand 2.1s ease-out ${delay}ms infinite`
-                : 'none',
-            }}
-          />
-        ))}
-      </div>
+      />
       <div
         style={{
           width: size,

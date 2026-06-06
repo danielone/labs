@@ -648,10 +648,10 @@ export default function VoiceChat({
         @keyframes bar-pulse-b { 0%, 100% { height: 18% } 50%  { height: 100% } }
         @keyframes bar-pulse-c { 0%, 100% { height: 28% } 25%  { height: 55% } 60%  { height: 92% } 82% { height: 35% } }
         @keyframes bar-pulse-d { 0%, 100% { height: 25% } 35%  { height: 70% } 75%  { height: 50% } }
-        @keyframes halo-ring-expand {
-          0%   { transform: scale(1);    opacity: 0.65; }
-          70%  { opacity: 0.2; }
-          100% { transform: scale(1.65); opacity: 0; }
+        @keyframes avatar-halo-pulse {
+          0%   { box-shadow: 0 0 0 0px  rgba(0, 78, 35, 0.4); }
+          70%  { box-shadow: 0 0 0 12px rgba(0, 78, 35, 0);   }
+          100% { box-shadow: 0 0 0 0px  rgba(0, 78, 35, 0);   }
         }
       `}</style>
     </>
