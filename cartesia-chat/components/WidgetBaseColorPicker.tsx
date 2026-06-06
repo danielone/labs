@@ -1,89 +1,92 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
-import {
-  ChakraProvider,
-  ColorPicker,
-  createSystem,
-  defaultConfig,
-  defineConfig,
-  parseColor,
-  type Color,
-} from '@chakra-ui/react'
-
-// Scoped Chakra system — no global CSS so nothing leaks outside this component
-const system = createSystem(defaultConfig, defineConfig({ globalCss: {} }))
+import { useState, useRef } from 'react'
 
 interface Props {
   value: string
   onChange: (hex: string) => void
 }
 
-function ColorPickerInner({ value, onChange }: Props) {
-  const [color, setColor] = useState<Color>(() => {
-    try { return parseColor(value) } catch { return parseColor('#fdfdfc') }
-  })
-  const [hexInput, setHexInput] = useState<string>(() => {
-    try { return parseColor(value).toString('hex') } catch { return '#fdfdfc' }
-  })
-  const [open, setOpen] = useState(false)
+function isValidHex(s: string): boolean {
+  return /^#[0-9a-f]{6}$/i.test(s.startsWith('#') ? s : `#${s}`)
+}
 
-  const rowRef    = useRef<HTMLDivElement>(null)
-  const wrapRef   = useRef<HTMLDivElement>(null)
+function normalizeHex(s: string): string {
+  return s.startsWith('#') ? s : `#${s}`
+}
 
-  // Close on outside click
-  useEffect(() => {
-    if (!open) return
-    const handler = (e: MouseEvent) => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
-        setOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [open])
+export default function WidgetBaseColorPicker({ value, onChange }: Props) {
+  const [hexInput, setHexInput] = useState(value)
+  const colorInputRef = useRef<HTMLInputElement>(null)
+  const rowRef = useRef<HTMLDivElement>(null)
 
-  const applyColor = (c: Color) => {
-    const hex = c.toString('hex')
-    setColor(c)
+  // Always show a valid color on the swatch; fall back to committed value
+  const swatchColor = isValidHex(hexInput) ? normalizeHex(hexInput) : value
+
+  const applyColor = (hex: string) => {
     setHexInput(hex)
     onChange(hex)
   }
 
   const handleHexChange = (raw: string) => {
     setHexInput(raw)
-    const v = raw.startsWith('#') ? raw : `#${raw}`
-    if (/^#[0-9a-f]{6}$/i.test(v)) {
-      try { applyColor(parseColor(v)) } catch {}
-    }
+    if (isValidHex(raw)) onChange(normalizeHex(raw))
   }
 
   const handleHexBlur = (raw: string) => {
-    const v = raw.startsWith('#') ? raw : `#${raw}`
-    try { applyColor(parseColor(v)) }
-    catch { setHexInput(color.toString('hex')) }
+    if (isValidHex(raw)) {
+      applyColor(normalizeHex(raw))
+    } else {
+      setHexInput(value) // revert to last valid committed color
+    }
   }
 
   return (
-    /* ColorPicker.Root must wrap Area + Sliders + EyeDropper for state access */
-    <ColorPicker.Root
-      value={color}
-      onValueChange={(e) => applyColor(e.value)}
-      open={open}
-      onOpenChange={(e) => setOpen(e.open)}
-      style={{ width: 'fit-content' }}
-    >
-      <ColorPicker.HiddenInput />
+    <div style={{ marginBottom: 14 }}>
+      <label
+        style={{
+          display: 'block',
+          fontSize: 12,
+          fontWeight: 500,
+          color: '#636260',
+          marginBottom: 5,
+        }}
+      >
+        Widget Base
+      </label>
 
-      {/* Wrapper provides the relative anchor for the custom dropdown */}
-      <div ref={wrapRef} style={{ position: 'relative', display: 'inline-block' }}>
+      {/* Wrapper: relative so the hidden native input can be stacked */}
+      <div style={{ position: 'relative', display: 'inline-block' }}>
+        {/*
+          Native <input type="color"> — hidden, positioned over the swatch so
+          clicking the swatch button (which programmatically clicks this input)
+          opens the OS color picker. Width/height 0 so it never affects layout.
+        */}
+        <input
+          ref={colorInputRef}
+          type="color"
+          value={swatchColor}
+          onChange={(e) => applyColor(e.target.value)}
+          tabIndex={-1}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: 1,
+            height: 1,
+            opacity: 0,
+            pointerEvents: 'none',
+            overflow: 'hidden',
+            border: 'none',
+            padding: 0,
+          }}
+        />
 
-        {/* Control row — shrinks to fit the swatch + hex text */}
+        {/* Visible field: colored swatch + hex text input */}
         <div
           ref={rowRef}
           style={{
             display: 'inline-flex',
-            alignSelf: 'flex-start',
             alignItems: 'center',
             gap: 8,
             padding: '8px 12px',
@@ -94,15 +97,16 @@ function ColorPickerInner({ value, onChange }: Props) {
             transition: 'border-color 0.15s',
           }}
         >
-          {/* Colored square — toggles the dropdown */}
+          {/* Colored square — programmatically opens the native color picker */}
           <button
-            onClick={() => setOpen((o) => !o)}
-            aria-label="Open color picker"
+            type="button"
+            onClick={() => colorInputRef.current?.click()}
+            aria-label="Pick a color"
             style={{
               width: 20,
               height: 20,
               minWidth: 20,
-              background: hexInput,
+              background: swatchColor,
               borderRadius: 4,
               border: '1px solid rgba(0,0,0,0.15)',
               flexShrink: 0,
@@ -112,7 +116,7 @@ function ColorPickerInner({ value, onChange }: Props) {
             }}
           />
 
-          {/* Hex text — 7ch fits #rrggbb exactly */}
+          {/* Hex text input — matches other Design tab input styles */}
           <input
             type="text"
             value={hexInput}
@@ -137,53 +141,7 @@ function ColorPickerInner({ value, onChange }: Props) {
             }}
           />
         </div>
-
-        {/* Custom dropdown — absolutely anchored below the control row */}
-        {open && (
-          <div
-            style={{
-              position: 'absolute',
-              top: 'calc(100% + 6px)',
-              left: 0,
-              zIndex: 2000,
-              background: '#fdfdfc',
-              border: '1px solid #dfdcd7',
-              borderRadius: 12,
-              boxShadow: '0 8px 32px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.06)',
-              padding: 16,
-              minWidth: 260,
-            }}
-          >
-            <ColorPicker.Area style={{ borderRadius: 8 }} />
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12 }}>
-              <ColorPicker.EyeDropper size="xs" variant="outline" style={{ flexShrink: 0 }} />
-              <ColorPicker.Sliders style={{ flex: 1 }} />
-            </div>
-          </div>
-        )}
       </div>
-    </ColorPicker.Root>
-  )
-}
-
-export default function WidgetBaseColorPicker(props: Props) {
-  return (
-    <div style={{ marginBottom: 14 }}>
-      <label
-        style={{
-          display: 'block',
-          fontSize: 12,
-          fontWeight: 500,
-          color: '#636260',
-          marginBottom: 5,
-        }}
-      >
-        Widget Base
-      </label>
-      {/* ChakraProvider scoped here — nothing leaks to the rest of the app */}
-      <ChakraProvider value={system}>
-        <ColorPickerInner {...props} />
-      </ChakraProvider>
     </div>
   )
 }
