@@ -71,10 +71,13 @@ interface VoiceChatProps {
   setShowScene?: (v: boolean) => void;
   avatarSrc?:   string;
   sceneBg?:     string;
-  widgetBase?:        string;
-  widgetBorderColor?: string;
-  avatarBorderColor?: string;
-  avatarHaloColor?:   string;
+  widgetBase?:             string;
+  widgetBorderColor?:      string;
+  widgetPromptTextColor?:  string;
+  agentNameColor?:         string;
+  agentTitleColor?:        string;
+  avatarBorderColor?:      string;
+  avatarHaloColor?:        string;
 }
 
 export default function VoiceChat({
@@ -85,10 +88,13 @@ export default function VoiceChat({
   setShowScene: setShowSceneProp,
   avatarSrc    = '/avatar.png',
   sceneBg      = '/coworking-bg.jpg',
-  widgetBase        = '#fdfdfc',
-  widgetBorderColor = '#dfdcd7',
-  avatarBorderColor = '#dfdcd7',
-  avatarHaloColor   = '#abd49e',
+  widgetBase             = '#fdfdfc',
+  widgetBorderColor      = '#dfdcd7',
+  widgetPromptTextColor  = '#39342f',
+  agentNameColor         = '#39342f',
+  agentTitleColor        = '#7c7770',
+  avatarBorderColor      = '#dfdcd7',
+  avatarHaloColor        = '#abd49e',
 }: VoiceChatProps = {}) {
   const [widgetExpanded, setWidgetExpanded] = useState(false);
   const [callState, setCallState] = useState<CallState>('idle');
@@ -461,7 +467,7 @@ export default function VoiceChat({
                   style={{ objectFit: 'cover', width: '100%', height: '100%',
                     transform: avatarSrc === '/monster.svg' ? 'translateY(5px)' : 'none' }} />
               </div>
-              <span style={{ fontSize: 13, fontWeight: 500, color: '#39342f', flex: 1 }}>{widgetLabel}</span>
+              <span style={{ fontSize: 13, fontWeight: 500, color: widgetPromptTextColor, flex: 1 }}>{widgetLabel}</span>
               {/* Expand button — opens card without starting a call */}
               <button
                 onClick={() => setWidgetExpanded(true)}
@@ -539,8 +545,8 @@ export default function VoiceChat({
               {/* Header row with minimize button */}
               <div className="flex items-start justify-between w-full">
                 <div className="flex-1 text-center">
-                  <h1 className="text-base font-semibold tracking-wide" style={{ color: '#39342f' }}>{agentName}</h1>
-                  <p className="text-xs mt-0.5" style={{ color: '#7c7770' }}>{subtitle}</p>
+                  <h1 className="text-base font-semibold tracking-wide" style={{ color: agentNameColor }}>{agentName}</h1>
+                  <p className="text-xs mt-0.5" style={{ color: agentTitleColor }}>{subtitle}</p>
                 </div>
                 {/* Minimize — only when call is not active */}
                 {callState === 'idle' && <button

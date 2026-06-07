@@ -98,6 +98,9 @@ export default function AgentPage() {
   const [bgSource, setBgSource] = useState<'favorites' | 'library' | 'custom'>('favorites');
   const [widgetBase, setWidgetBase] = useState('#fdfdfc');
   const [widgetBorderColor, setWidgetBorderColor] = useState('#dfdcd7');
+  const [widgetPromptTextColor, setWidgetPromptTextColor] = useState('#39342f');
+  const [agentNameColor,  setAgentNameColor]  = useState('#39342f');
+  const [agentTitleColor, setAgentTitleColor] = useState('#7c7770');
   const [avatarBorderColor, setAvatarBorderColor] = useState('#dfdcd7');
   const [avatarHaloColor,   setAvatarHaloColor]   = useState('#abd49e');
 
@@ -275,6 +278,9 @@ export default function AgentPage() {
               bgSource={bgSource}             setBgSource={setBgSource}
               widgetBase={widgetBase}         setWidgetBase={setWidgetBase}
               widgetBorderColor={widgetBorderColor} setWidgetBorderColor={setWidgetBorderColor}
+              widgetPromptTextColor={widgetPromptTextColor} setWidgetPromptTextColor={setWidgetPromptTextColor}
+              agentNameColor={agentNameColor}   setAgentNameColor={setAgentNameColor}
+              agentTitleColor={agentTitleColor} setAgentTitleColor={setAgentTitleColor}
               avatarBorderColor={avatarBorderColor} setAvatarBorderColor={setAvatarBorderColor}
               avatarHaloColor={avatarHaloColor}     setAvatarHaloColor={setAvatarHaloColor}
             />
@@ -288,7 +294,7 @@ export default function AgentPage() {
 
       {/* Widget: hidden on Configuration tab unless Preview clicked */}
       {(activeTab !== 'configuration' || configPreview) && (
-        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} widgetBase={widgetBase} widgetBorderColor={widgetBorderColor} avatarBorderColor={avatarBorderColor} avatarHaloColor={avatarHaloColor} />
+        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} widgetBase={widgetBase} widgetBorderColor={widgetBorderColor} widgetPromptTextColor={widgetPromptTextColor} agentNameColor={agentNameColor} agentTitleColor={agentTitleColor} avatarBorderColor={avatarBorderColor} avatarHaloColor={avatarHaloColor} />
       )}
     </div>
   );
@@ -343,14 +349,20 @@ interface DesignTabProps {
   setSelectedBg:     (v: '/coworking-bg.jpg' | '/bg2.jpg') => void;
   bgSource:          'favorites' | 'library' | 'custom';
   setBgSource:       (v: 'favorites' | 'library' | 'custom') => void;
-  widgetBase:          string;
-  setWidgetBase:       (v: string) => void;
-  widgetBorderColor:   string;
-  setWidgetBorderColor:(v: string) => void;
-  avatarBorderColor:   string;
-  setAvatarBorderColor:(v: string) => void;
-  avatarHaloColor:     string;
-  setAvatarHaloColor:  (v: string) => void;
+  widgetBase:              string;
+  setWidgetBase:           (v: string) => void;
+  widgetBorderColor:       string;
+  setWidgetBorderColor:    (v: string) => void;
+  widgetPromptTextColor:   string;
+  setWidgetPromptTextColor:(v: string) => void;
+  agentNameColor:          string;
+  setAgentNameColor:       (v: string) => void;
+  agentTitleColor:         string;
+  setAgentTitleColor:      (v: string) => void;
+  avatarBorderColor:       string;
+  setAvatarBorderColor:    (v: string) => void;
+  avatarHaloColor:         string;
+  setAvatarHaloColor:      (v: string) => void;
 }
 
 // ── Accordion primitive ────────────────────────────────────────────────────
@@ -380,7 +392,7 @@ function Accordion({ title, defaultOpen = true, headerRight, children }: { title
   );
 }
 
-function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource, widgetBase, setWidgetBase, widgetBorderColor, setWidgetBorderColor, avatarBorderColor, setAvatarBorderColor, avatarHaloColor, setAvatarHaloColor }: DesignTabProps) {
+function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource, widgetBase, setWidgetBase, widgetBorderColor, setWidgetBorderColor, widgetPromptTextColor, setWidgetPromptTextColor, agentNameColor, setAgentNameColor, agentTitleColor, setAgentTitleColor, avatarBorderColor, setAvatarBorderColor, avatarHaloColor, setAvatarHaloColor }: DesignTabProps) {
   const textFields = [
     { label: 'Widget Prompt', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
     { label: 'Agent Name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
@@ -651,7 +663,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         headerRight={
           <button
             type="button"
-            onClick={() => { setWidgetBase('#fdfdfc'); setWidgetBorderColor('#dfdcd7'); setAvatarBorderColor('#dfdcd7'); setAvatarHaloColor('#abd49e'); }}
+            onClick={() => { setWidgetBase('#fdfdfc'); setWidgetBorderColor('#dfdcd7'); setWidgetPromptTextColor('#39342f'); setAgentNameColor('#39342f'); setAgentTitleColor('#7c7770'); setAvatarBorderColor('#dfdcd7'); setAvatarHaloColor('#abd49e'); }}
             style={{
               background: 'none', border: 'none', padding: '0 0 0 8px',
               fontSize: 11, fontWeight: 500, color: '#9b9895',
@@ -676,6 +688,24 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           value={widgetBorderColor}
           onChange={setWidgetBorderColor}
           onReset={widgetBorderColor !== '#dfdcd7' ? () => setWidgetBorderColor('#dfdcd7') : undefined}
+        />
+        <WidgetBaseColorPicker
+          label="Widget Prompt Text Color"
+          value={widgetPromptTextColor}
+          onChange={setWidgetPromptTextColor}
+          onReset={widgetPromptTextColor !== '#39342f' ? () => setWidgetPromptTextColor('#39342f') : undefined}
+        />
+        <WidgetBaseColorPicker
+          label="Agent Name"
+          value={agentNameColor}
+          onChange={setAgentNameColor}
+          onReset={agentNameColor !== '#39342f' ? () => setAgentNameColor('#39342f') : undefined}
+        />
+        <WidgetBaseColorPicker
+          label="Agent Title"
+          value={agentTitleColor}
+          onChange={setAgentTitleColor}
+          onReset={agentTitleColor !== '#7c7770' ? () => setAgentTitleColor('#7c7770') : undefined}
         />
         <WidgetBaseColorPicker
           label="Avatar Border Color"
