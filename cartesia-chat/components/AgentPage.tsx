@@ -697,72 +697,80 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           </button>
         }
       >
-        <WidgetBaseColorPicker
-          label="Widget Base"
-          value={widgetBase}
-          onChange={setWidgetBase}
-          onReset={widgetBase !== '#fdfdfc' ? () => setWidgetBase('#fdfdfc') : undefined}
-        />
-        <WidgetBaseColorPicker
-          label="Widget Border"
-          value={widgetBorderColor}
-          onChange={setWidgetBorderColor}
-          onReset={widgetBorderColor !== '#dfdcd7' ? () => setWidgetBorderColor('#dfdcd7') : undefined}
-        />
-        <WidgetBaseColorPicker
-          label="Widget Prompt Text"
-          value={widgetPromptTextColor}
-          onChange={setWidgetPromptTextColor}
-          onReset={widgetPromptTextColor !== '#39342f' ? () => setWidgetPromptTextColor('#39342f') : undefined}
-        />
-        <WidgetBaseColorPicker
-          label="Agent Name"
-          value={agentNameColor}
-          onChange={setAgentNameColor}
-          onReset={agentNameColor !== '#39342f' ? () => setAgentNameColor('#39342f') : undefined}
-        />
-        <WidgetBaseColorPicker
-          label="Agent Title"
-          value={agentTitleColor}
-          onChange={setAgentTitleColor}
-          onReset={agentTitleColor !== '#7c7770' ? () => setAgentTitleColor('#7c7770') : undefined}
-        />
-        <WidgetBaseColorPicker
-          label="Start Button"
-          value={startBtnBg}
-          onChange={setStartBtnBg}
-          onReset={startBtnBg !== '#004e23' ? () => setStartBtnBg('#004e23') : undefined}
-        />
-        <WidgetBaseColorPicker
-          label="Start Button - Text"
-          value={startBtnText}
-          onChange={setStartBtnText}
-          onReset={startBtnText !== '#ffffff' ? () => setStartBtnText('#ffffff') : undefined}
-        />
-        <WidgetBaseColorPicker
-          label="Start Button - Hover"
-          value={startBtnHoverBg}
-          onChange={setStartBtnHoverBg}
-          onReset={startBtnHoverBg !== '#003a1a' ? () => setStartBtnHoverBg('#003a1a') : undefined}
-        />
-        <WidgetBaseColorPicker
-          label="Start Button - Hover State Text"
-          value={startBtnHoverText}
-          onChange={setStartBtnHoverText}
-          onReset={startBtnHoverText !== '#ffffff' ? () => setStartBtnHoverText('#ffffff') : undefined}
-        />
-        <WidgetBaseColorPicker
-          label="Avatar Border"
-          value={avatarBorderColor}
-          onChange={setAvatarBorderColor}
-          onReset={avatarBorderColor !== '#dfdcd7' ? () => setAvatarBorderColor('#dfdcd7') : undefined}
-        />
-        <WidgetBaseColorPicker
-          label="Avatar Border - Speaking Halo"
-          value={avatarHaloColor}
-          onChange={setAvatarHaloColor}
-          onReset={avatarHaloColor !== '#abd49e' ? () => setAvatarHaloColor('#abd49e') : undefined}
-        />
+        <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+          {/* Column 1 */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <WidgetBaseColorPicker
+              label="Widget Base"
+              value={widgetBase}
+              onChange={setWidgetBase}
+              onReset={widgetBase !== '#fdfdfc' ? () => setWidgetBase('#fdfdfc') : undefined}
+            />
+            <WidgetBaseColorPicker
+              label="Widget Border"
+              value={widgetBorderColor}
+              onChange={setWidgetBorderColor}
+              onReset={widgetBorderColor !== '#dfdcd7' ? () => setWidgetBorderColor('#dfdcd7') : undefined}
+            />
+            <WidgetBaseColorPicker
+              label="Widget Prompt Text"
+              value={widgetPromptTextColor}
+              onChange={setWidgetPromptTextColor}
+              onReset={widgetPromptTextColor !== '#39342f' ? () => setWidgetPromptTextColor('#39342f') : undefined}
+            />
+            <WidgetBaseColorPicker
+              label="Agent Name"
+              value={agentNameColor}
+              onChange={setAgentNameColor}
+              onReset={agentNameColor !== '#39342f' ? () => setAgentNameColor('#39342f') : undefined}
+            />
+            <WidgetBaseColorPicker
+              label="Agent Title"
+              value={agentTitleColor}
+              onChange={setAgentTitleColor}
+              onReset={agentTitleColor !== '#7c7770' ? () => setAgentTitleColor('#7c7770') : undefined}
+            />
+            <WidgetBaseColorPicker
+              label="Avatar Border"
+              value={avatarBorderColor}
+              onChange={setAvatarBorderColor}
+              onReset={avatarBorderColor !== '#dfdcd7' ? () => setAvatarBorderColor('#dfdcd7') : undefined}
+            />
+            <WidgetBaseColorPicker
+              label="Avatar Border - Speaking Halo"
+              value={avatarHaloColor}
+              onChange={setAvatarHaloColor}
+              onReset={avatarHaloColor !== '#abd49e' ? () => setAvatarHaloColor('#abd49e') : undefined}
+            />
+          </div>
+          {/* Column 2 — Start Button */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <WidgetBaseColorPicker
+              label="Start Button"
+              value={startBtnBg}
+              onChange={setStartBtnBg}
+              onReset={startBtnBg !== '#004e23' ? () => setStartBtnBg('#004e23') : undefined}
+            />
+            <WidgetBaseColorPicker
+              label="Start Button - Text"
+              value={startBtnText}
+              onChange={setStartBtnText}
+              onReset={startBtnText !== '#ffffff' ? () => setStartBtnText('#ffffff') : undefined}
+            />
+            <WidgetBaseColorPicker
+              label="Start Button - Hover"
+              value={startBtnHoverBg}
+              onChange={setStartBtnHoverBg}
+              onReset={startBtnHoverBg !== '#003a1a' ? () => setStartBtnHoverBg('#003a1a') : undefined}
+            />
+            <WidgetBaseColorPicker
+              label="Start Button - Hover State Text"
+              value={startBtnHoverText}
+              onChange={setStartBtnHoverText}
+              onReset={startBtnHoverText !== '#ffffff' ? () => setStartBtnHoverText('#ffffff') : undefined}
+            />
+          </div>
+        </div>
       </Accordion>
 
       {/* Close border at bottom */}
