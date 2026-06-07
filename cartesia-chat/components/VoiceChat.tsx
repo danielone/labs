@@ -572,7 +572,7 @@ export default function VoiceChat({
                 </div>
               ) : (
                 <div>
-                  <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} avatarSrc={avatarSrc} />
+                  <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} avatarSrc={avatarSrc} avatarBorderColor={avatarBorderColor} />
                 </div>
               )}
 

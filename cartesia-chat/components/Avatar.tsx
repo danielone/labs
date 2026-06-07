@@ -9,6 +9,7 @@ interface AvatarProps {
   bare?: boolean;
   bareSize?: number; // override default 220
   avatarSrc?: string; // override default /avatar.png
+  avatarBorderColor?: string; // override default border colour
 }
 
 // Facial landmark positions as fractions of the display size.
@@ -118,7 +119,7 @@ function useAvatarCanvas(
   }, [size]); // only re-run if size changes; state accessed via refs
 }
 
-export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize = 220, avatarSrc = '/avatar.png' }: AvatarProps) {
+export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize = 220, avatarSrc = '/avatar.png', avatarBorderColor = '#dfdcd7' }: AvatarProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isSpeakingRef = useRef(isSpeaking);
   const audioLevelRef = useRef(audioLevel);
@@ -184,7 +185,7 @@ export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize 
           height: size,
           borderRadius: '50%',
           overflow: 'hidden',
-          border: isSpeaking ? '2px solid #b0aba5' : '2px solid #dfdcd7',
+          border: `2px solid ${isSpeaking ? '#b0aba5' : avatarBorderColor}`,
           boxShadow: isSpeaking
             ? '0 8px 32px rgba(0,0,0,0.12)'
             : '0 4px 16px rgba(0,0,0,0.07)',
