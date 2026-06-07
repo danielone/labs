@@ -440,7 +440,28 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
 
   return (
     <div style={{ maxWidth: 560 }}>
-      <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: '0 0 4px' }}>Widget Design</h2>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+        <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: 0 }}>Widget Design</h2>
+        <button
+          style={{
+            background: '#004e23', color: '#ffffff', border: 'none',
+            borderRadius: 8, padding: '6px 14px',
+            fontSize: 13, fontWeight: 600, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: 6,
+            transition: 'background 0.15s ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#003a1a'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = '#004e23'; }}
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" x2="12" y1="15" y2="3"/>
+          </svg>
+          Deploy
+        </button>
+      </div>
       <p style={{ fontSize: 13, color: '#636260', lineHeight: 1.6, marginBottom: 20 }}>
         Support users to interact with voice agent directly from a website. Here you can customize the widget for the agent as best for your users and the design of your site, and then deploy to your website.
       </p>
