@@ -448,18 +448,11 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
             background: '#004e23', color: '#ffffff', border: 'none',
             borderRadius: 8, padding: '6px 14px',
             fontSize: 13, fontWeight: 600, cursor: 'pointer',
-            display: 'flex', alignItems: 'center', gap: 6,
             transition: 'background 0.15s ease',
           }}
           onMouseEnter={e => { e.currentTarget.style.background = '#003a1a'; }}
           onMouseLeave={e => { e.currentTarget.style.background = '#004e23'; }}
         >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" x2="12" y1="15" y2="3"/>
-          </svg>
           Deploy
         </button>
       </div>
