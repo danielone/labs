@@ -445,9 +445,9 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: 0 }}>Widget</h2>
         <button
           style={{
-            background: '#004e23', color: '#ffffff', border: 'none',
-            borderRadius: 8, padding: '6px 14px',
-            fontSize: 13, fontWeight: 600, cursor: 'pointer',
+            height: 32, background: '#004e23', color: '#ffffff', border: 'none',
+            borderRadius: 8, padding: '0 14px',
+            fontSize: 14, fontWeight: 600, cursor: 'pointer',
             transition: 'background 0.15s ease',
           }}
           onMouseEnter={e => { e.currentTarget.style.background = '#003a1a'; }}
