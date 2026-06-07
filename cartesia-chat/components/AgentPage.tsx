@@ -411,7 +411,19 @@ function Accordion({ title, defaultOpen = true, headerRight, children }: { title
   );
 }
 
+const EXPRESSIVENESS_STEPS = [
+  { label: 'Zen',              file: 'zen.svg'             },
+  { label: 'Calm',             file: 'calm.svg'            },
+  { label: 'Neutral',          file: 'neutral.svg'         },
+  { label: 'Expressive',       file: 'expressive.svg'      },
+  { label: 'Excited',          file: 'excited.svg'         },
+  { label: 'Energetic',        file: 'energetic.svg'       },
+  { label: 'Highly Emotional', file: 'highly-emotional.svg'},
+] as const;
+
 function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, startBtnLabel, setStartBtnLabel, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource, widgetBase, setWidgetBase, widgetBorderColor, setWidgetBorderColor, widgetPromptTextColor, setWidgetPromptTextColor, agentNameColor, setAgentNameColor, agentTitleColor, setAgentTitleColor, startBtnBg, setStartBtnBg, startBtnText, setStartBtnText, startBtnHoverBg, setStartBtnHoverBg, startBtnHoverText, setStartBtnHoverText, avatarBorderColor, setAvatarBorderColor, avatarHaloColor, setAvatarHaloColor }: DesignTabProps) {
+  const [expressivenessStep, setExpressivenessStep] = useState(3); // default: Expressive
+
   const textFields = [
     { label: 'Widget Prompt', value: widgetLabel,   set: setWidgetLabel,   placeholder: 'e.g. Need help?' },
     { label: 'Agent Name',   value: agentName,     set: setAgentName,     placeholder: 'e.g. Daniel II' },
@@ -674,6 +686,79 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
             );
           })}
         </div>
+
+        {/* Avatar expressiveness slider */}
+        {(() => {
+          const pct = (expressivenessStep / (EXPRESSIVENESS_STEPS.length - 1)) * 100;
+          const step = EXPRESSIVENESS_STEPS[expressivenessStep];
+          return (
+            <div style={{ marginTop: 20 }}>
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 14 }}>
+                Avatar expressiveness
+              </label>
+
+              {/* Track + thumb */}
+              <div style={{ position: 'relative', height: 24, marginBottom: 6 }}>
+                {/* Background track — inset 8px each side to align with thumb centre */}
+                <div style={{
+                  position: 'absolute', left: 8, right: 8,
+                  top: '50%', transform: 'translateY(-50%)',
+                  height: 6, borderRadius: 3, background: '#dfdcd7',
+                  pointerEvents: 'none',
+                }}>
+                  {/* Gradient fill */}
+                  <div style={{
+                    position: 'absolute', left: 0, top: 0, bottom: 0,
+                    borderRadius: 3,
+                    background: 'linear-gradient(to right, #abd49e, #004e23)',
+                    width: `${pct}%`,
+                    transition: 'width 0.1s ease',
+                    pointerEvents: 'none',
+                  }} />
+                </div>
+                {/* Native range — transparent track/thumb handled by CSS */}
+                <input
+                  type="range"
+                  min={0}
+                  max={EXPRESSIVENESS_STEPS.length - 1}
+                  step={1}
+                  value={expressivenessStep}
+                  onChange={e => setExpressivenessStep(Number(e.target.value))}
+                  className="expr-slider"
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', margin: 0, padding: 0 }}
+                />
+              </div>
+
+              {/* Step markers */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingLeft: 8, paddingRight: 8, marginBottom: 12 }}>
+                {EXPRESSIVENESS_STEPS.map((_, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      width: 2, height: 5,
+                      background: i <= expressivenessStep ? '#abd49e' : '#dfdcd7',
+                      borderRadius: 1,
+                      transition: 'background 0.15s',
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Selected step label */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/mood/${step.file}`}
+                  width={16}
+                  height={16}
+                  alt=""
+                  style={{ display: 'block', opacity: 0.65 }}
+                />
+                <span style={{ fontSize: 12, color: '#39342f' }}>{step.label}</span>
+              </div>
+            </div>
+          );
+        })()}
 
       </Accordion>
 

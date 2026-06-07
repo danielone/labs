@@ -33,3 +33,59 @@ body {
   min-height: 100vh;
   overflow: hidden; /* AgentPage manages its own scroll */
 }
+
+/* ── Avatar Expressiveness Slider ─────────────────────────────────────────── */
+.expr-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  display: block;
+}
+
+.expr-slider::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 6px;
+}
+
+.expr-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #004e23;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  margin-top: -5px;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+
+.expr-slider:hover::-webkit-slider-thumb,
+.expr-slider:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 5px rgba(171, 212, 158, 0.35), 0 1px 3px rgba(0, 0, 0, 0.18);
+}
+
+.expr-slider::-moz-range-track {
+  background: transparent;
+  height: 6px;
+}
+
+.expr-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #004e23;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+
+.expr-slider:hover::-moz-range-thumb,
+.expr-slider:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 5px rgba(171, 212, 158, 0.35), 0 1px 3px rgba(0, 0, 0, 0.18);
+}
