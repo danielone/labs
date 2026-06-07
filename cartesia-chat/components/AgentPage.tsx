@@ -608,7 +608,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
       </Accordion>
 
       {/* Display Settings accordion */}
-      <Accordion title="Display Styles">
+      <Accordion title="Widget & Avatar Styles">
         {/* Widget Style */}
         <div style={{ marginBottom: 16 }}>
           <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 8 }}>
