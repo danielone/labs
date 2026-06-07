@@ -694,7 +694,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           return (
             <div style={{ marginTop: 20 }}>
               <label style={{ display: 'block', fontSize: 12, fontWeight: 500, color: '#636260', marginBottom: 14 }}>
-                Avatar expressiveness
+                Avatar Expressiveness
               </label>
 
               {/* Track + thumb */}
