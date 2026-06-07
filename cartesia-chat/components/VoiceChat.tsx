@@ -449,7 +449,9 @@ export default function VoiceChat({
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{
                 width: 43, height: 43, borderRadius: '50%', overflow: 'hidden',
-                border: '2px solid #dfdcd7', background: '#f1f0ec', flexShrink: 0,
+                border: `2px solid ${agentSpeaking ? '#abd49e' : '#dfdcd7'}`,
+                background: '#f1f0ec', flexShrink: 0,
+                transition: 'border-color 0.2s ease',
               }}>
                 <Image src={avatarSrc} alt="Skylar" width={43} height={43}
                   style={{ objectFit: 'cover', width: '100%', height: '100%',
