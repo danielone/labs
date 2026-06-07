@@ -777,9 +777,9 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
                   width={18}
                   height={18}
                   alt=""
-                  style={{ display: 'block', opacity: 0.77, flexShrink: 0 }}
+                  style={{ display: 'block', opacity: 0.77, flexShrink: 0, marginTop: '2px' }}
                 />
-                <span style={{ fontSize: 12, color: '#39342f', lineHeight: 1 }}>{step.label}</span>
+                <span style={{ fontSize: 12, color: '#39342f' }}>{step.label}</span>
               </div>
             </div>
           );
