@@ -412,7 +412,7 @@ function Accordion({ title, defaultOpen = true, headerRight, children }: { title
           </svg>
           <span style={{ fontSize: 13, fontWeight: 600, color: '#39342f' }}>{title}</span>
         </button>
-        {headerRight}
+        {open && headerRight}
       </div>
       {open && <div style={{ paddingBottom: 16 }}>{children}</div>}
     </div>
