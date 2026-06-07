@@ -88,7 +88,7 @@ export default function VoiceChat({
   widgetBase        = '#fdfdfc',
   widgetBorderColor = '#dfdcd7',
   avatarBorderColor = '#dfdcd7',
-  avatarHaloColor   = '#004e23',
+  avatarHaloColor   = '#abd49e',
 }: VoiceChatProps = {}) {
   const [widgetExpanded, setWidgetExpanded] = useState(false);
   const [callState, setCallState] = useState<CallState>('idle');

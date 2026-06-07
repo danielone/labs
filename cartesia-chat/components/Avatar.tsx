@@ -129,7 +129,7 @@ function useAvatarCanvas(
   }, [size]); // only re-run if size changes; state accessed via refs
 }
 
-export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize = 220, avatarSrc = '/avatar.png', avatarBorderColor = '#dfdcd7', speakingHaloColor = '#004e23' }: AvatarProps) {
+export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize = 220, avatarSrc = '/avatar.png', avatarBorderColor = '#dfdcd7', speakingHaloColor = '#abd49e' }: AvatarProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isSpeakingRef = useRef(isSpeaking);
   const audioLevelRef = useRef(audioLevel);

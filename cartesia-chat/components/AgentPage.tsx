@@ -99,7 +99,7 @@ export default function AgentPage() {
   const [widgetBase, setWidgetBase] = useState('#fdfdfc');
   const [widgetBorderColor, setWidgetBorderColor] = useState('#dfdcd7');
   const [avatarBorderColor, setAvatarBorderColor] = useState('#dfdcd7');
-  const [avatarHaloColor,   setAvatarHaloColor]   = useState('#004e23');
+  const [avatarHaloColor,   setAvatarHaloColor]   = useState('#abd49e');
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f9f9f8', fontFamily: 'var(--font-geist-sans), system-ui, sans-serif' }}>
@@ -651,7 +651,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         headerRight={
           <button
             type="button"
-            onClick={() => { setWidgetBase('#fdfdfc'); setWidgetBorderColor('#dfdcd7'); setAvatarBorderColor('#dfdcd7'); setAvatarHaloColor('#004e23'); }}
+            onClick={() => { setWidgetBase('#fdfdfc'); setWidgetBorderColor('#dfdcd7'); setAvatarBorderColor('#dfdcd7'); setAvatarHaloColor('#abd49e'); }}
             style={{
               background: 'none', border: 'none', padding: '0 0 0 8px',
               fontSize: 11, fontWeight: 500, color: '#9b9895',
@@ -687,7 +687,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           label="Avatar Border Color - Speaking Halo"
           value={avatarHaloColor}
           onChange={setAvatarHaloColor}
-          onReset={avatarHaloColor !== '#004e23' ? () => setAvatarHaloColor('#004e23') : undefined}
+          onReset={avatarHaloColor !== '#abd49e' ? () => setAvatarHaloColor('#abd49e') : undefined}
         />
       </Accordion>
 
