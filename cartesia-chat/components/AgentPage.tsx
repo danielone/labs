@@ -79,7 +79,7 @@ const NAV: { group: string; items: { label: string; icon: string; active?: boole
 
 const TABS: { id: MainTab; label: string }[] = [
   { id: 'configuration', label: 'Configuration' },
-  { id: 'design',        label: 'Design' },
+  { id: 'design',        label: 'Widget' },
   { id: 'metrics',       label: 'Metrics' },
   { id: 'calls',         label: 'Calls' },
   { id: 'settings',      label: 'Settings' },
@@ -428,7 +428,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
 
   return (
     <div style={{ maxWidth: 560 }}>
-      <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: '0 0 4px' }}>Design</h2>
+      <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: '0 0 4px' }}>Widget</h2>
       <p style={{ fontSize: 13, color: '#636260', lineHeight: 1.6, marginBottom: 20 }}>
         Changes appear in the widget instantly and reset when you leave the page.
       </p>
