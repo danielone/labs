@@ -9,7 +9,17 @@ interface AvatarProps {
   bare?: boolean;
   bareSize?: number; // override default 220
   avatarSrc?: string; // override default /avatar.png
-  avatarBorderColor?: string; // override default border colour
+  avatarBorderColor?: string;  // idle border colour
+  speakingHaloColor?: string;  // speaking border + halo animation colour
+}
+
+// Convert #rrggbb → "r, g, b" for use in rgba() CSS vars
+function hexToRgb(hex: string): string {
+  const h = hex.replace('#', '');
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return `${r}, ${g}, ${b}`;
 }
 
 // Facial landmark positions as fractions of the display size.
@@ -119,7 +129,7 @@ function useAvatarCanvas(
   }, [size]); // only re-run if size changes; state accessed via refs
 }
 
-export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize = 220, avatarSrc = '/avatar.png', avatarBorderColor = '#dfdcd7' }: AvatarProps) {
+export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize = 220, avatarSrc = '/avatar.png', avatarBorderColor = '#dfdcd7', speakingHaloColor = '#004e23' }: AvatarProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isSpeakingRef = useRef(isSpeaking);
   const audioLevelRef = useRef(audioLevel);
@@ -177,6 +187,8 @@ export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize 
           opacity: isSpeaking ? 1 : 0,
           transition: 'opacity 0.4s ease-out',
           animation: isSpeaking ? 'avatar-halo-pulse 2s infinite' : 'none',
+          ['--halo-color-start' as string]: `rgba(${hexToRgb(speakingHaloColor)}, 0.4)`,
+          ['--halo-color-end'   as string]: `rgba(${hexToRgb(speakingHaloColor)}, 0)`,
         }}
       />
       <div
@@ -185,7 +197,7 @@ export default function Avatar({ isSpeaking, audioLevel, bare = false, bareSize 
           height: size,
           borderRadius: '50%',
           overflow: 'hidden',
-          border: `2px solid ${isSpeaking ? '#b0aba5' : avatarBorderColor}`,
+          border: `2px solid ${isSpeaking ? speakingHaloColor : avatarBorderColor}`,
           boxShadow: isSpeaking
             ? '0 8px 32px rgba(0,0,0,0.12)'
             : '0 4px 16px rgba(0,0,0,0.07)',

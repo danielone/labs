@@ -74,6 +74,7 @@ interface VoiceChatProps {
   widgetBase?:        string;
   widgetBorderColor?: string;
   avatarBorderColor?: string;
+  avatarHaloColor?:   string;
 }
 
 export default function VoiceChat({
@@ -87,6 +88,7 @@ export default function VoiceChat({
   widgetBase        = '#fdfdfc',
   widgetBorderColor = '#dfdcd7',
   avatarBorderColor = '#dfdcd7',
+  avatarHaloColor   = '#004e23',
 }: VoiceChatProps = {}) {
   const [widgetExpanded, setWidgetExpanded] = useState(false);
   const [callState, setCallState] = useState<CallState>('idle');
@@ -572,7 +574,7 @@ export default function VoiceChat({
                 </div>
               ) : (
                 <div>
-                  <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} avatarSrc={avatarSrc} avatarBorderColor={avatarBorderColor} />
+                  <Avatar isSpeaking={agentSpeaking} audioLevel={agentLevel} avatarSrc={avatarSrc} avatarBorderColor={avatarBorderColor} speakingHaloColor={avatarHaloColor} />
                 </div>
               )}
 
@@ -653,9 +655,9 @@ export default function VoiceChat({
         @keyframes bar-pulse-c { 0%, 100% { height: 28% } 25%  { height: 55% } 60%  { height: 92% } 82% { height: 35% } }
         @keyframes bar-pulse-d { 0%, 100% { height: 25% } 35%  { height: 70% } 75%  { height: 50% } }
         @keyframes avatar-halo-pulse {
-          0%   { box-shadow: 0 0 0 0px  rgba(0, 78, 35, 0.4); }
-          70%  { box-shadow: 0 0 0 12px rgba(0, 78, 35, 0);   }
-          100% { box-shadow: 0 0 0 0px  rgba(0, 78, 35, 0);   }
+          0%   { box-shadow: 0 0 0 0px  var(--halo-color-start); }
+          70%  { box-shadow: 0 0 0 12px var(--halo-color-end);   }
+          100% { box-shadow: 0 0 0 0px  var(--halo-color-end);   }
         }
       `}</style>
     </>
