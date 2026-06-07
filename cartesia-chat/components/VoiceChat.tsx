@@ -616,15 +616,16 @@ export default function VoiceChat({
                   disabled={callState === 'ending'}
                   className="w-full py-2.5 rounded-xl font-semibold text-sm transition-all duration-150 active:scale-95"
                   style={{
-                    background: callState === 'ending' ? '#f1f0ec' : '#004e23',
-                    color: callState === 'ending' ? '#c4c0bb' : '#ffffff',
+                    background: callState === 'ending' ? '#f1f0ec' : startBtnBg,
+                    color: callState === 'ending' ? '#c4c0bb' : startBtnText,
                     border: callState === 'ending' ? '1px solid #dfdcd7' : 'none',
                     cursor: callState === 'ending' ? 'default' : 'pointer',
                     pointerEvents: callState === 'ending' ? 'none' : 'auto',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+                    transition: 'background 0.15s ease, color 0.15s ease',
                   }}
-                  onMouseEnter={e => { if (callState !== 'ending') e.currentTarget.style.background = 'rgba(0,78,35,0.82)'; }}
-                  onMouseLeave={e => { if (callState !== 'ending') e.currentTarget.style.background = '#004e23'; }}
+                  onMouseEnter={e => { if (callState !== 'ending') { const b = e.currentTarget; b.style.background = startBtnHoverBg; b.style.color = startBtnHoverText; } }}
+                  onMouseLeave={e => { if (callState !== 'ending') { const b = e.currentTarget; b.style.background = startBtnBg; b.style.color = startBtnText; } }}
                 >
                   {callState !== 'ending' && <PhoneIcon size={13} />}
                   {callState === 'ending' ? 'Ending…' : startBtnLabel}
