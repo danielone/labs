@@ -64,9 +64,10 @@ function WaveBars({ speaking }: { speaking: boolean }) {
 }
 
 interface VoiceChatProps {
-  widgetLabel?: string;
-  agentName?:   string;
-  subtitle?:    string;
+  widgetLabel?:    string;
+  agentName?:      string;
+  subtitle?:       string;
+  startBtnLabel?:  string;
   showScene?:   boolean;
   setShowScene?: (v: boolean) => void;
   avatarSrc?:   string;
@@ -85,9 +86,10 @@ interface VoiceChatProps {
 }
 
 export default function VoiceChat({
-  widgetLabel  = 'Need help?',
-  agentName    = 'Daniel II',
-  subtitle     = 'AI Voice Companion',
+  widgetLabel    = 'Need help?',
+  agentName      = 'Daniel II',
+  subtitle       = 'AI Voice Companion',
+  startBtnLabel  = 'Start Conversation',
   showScene:   showSceneProp,
   setShowScene: setShowSceneProp,
   avatarSrc    = '/avatar.png',
@@ -518,7 +520,7 @@ export default function VoiceChat({
               onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.background = startBtnBg; b.style.color = startBtnText; }}
             >
               <PhoneIcon size={12} />
-              Start Conversation
+              {startBtnLabel}
             </button>
           </div>
         )}
@@ -625,7 +627,7 @@ export default function VoiceChat({
                   onMouseLeave={e => { if (callState !== 'ending') e.currentTarget.style.background = '#004e23'; }}
                 >
                   {callState !== 'ending' && <PhoneIcon size={13} />}
-                  {callState === 'ending' ? 'Ending…' : 'Start Conversation'}
+                  {callState === 'ending' ? 'Ending…' : startBtnLabel}
                 </button>
               ) : callState === 'connecting' ? (
                 <div className="flex items-center gap-2 text-sm" style={{ color: '#7c7770' }}>

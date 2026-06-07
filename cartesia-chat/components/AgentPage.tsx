@@ -88,9 +88,10 @@ const TABS: { id: MainTab; label: string }[] = [
 export default function AgentPage() {
   const [activeTab, setActiveTab] = useState<MainTab>('design');
   const [configPreview, setConfigPreview] = useState(false);
-  const [widgetLabel, setWidgetLabel] = useState('Need help?');
-  const [agentName,   setAgentName]   = useState('Daniel II');
-  const [subtitle,    setSubtitle]    = useState('AI Voice Companion');
+  const [widgetLabel,    setWidgetLabel]    = useState('Need help?');
+  const [agentName,      setAgentName]      = useState('Daniel II');
+  const [subtitle,       setSubtitle]       = useState('AI Voice Companion');
+  const [startBtnLabel,  setStartBtnLabel]  = useState('Start Conversation');
   const [showScene,   setShowScene]   = useState(true);
   const [avatarSource, setAvatarSource] = useState<'favorites' | 'library' | 'custom'>('favorites');
   const [selectedAvatar, setSelectedAvatar] = useState<'/avatar.png' | '/monster.svg'>('/avatar.png');
@@ -275,6 +276,7 @@ export default function AgentPage() {
               widgetLabel={widgetLabel}     setWidgetLabel={setWidgetLabel}
               agentName={agentName}         setAgentName={setAgentName}
               subtitle={subtitle}           setSubtitle={setSubtitle}
+              startBtnLabel={startBtnLabel} setStartBtnLabel={setStartBtnLabel}
               showScene={showScene}         setShowScene={setShowScene}
               avatarSource={avatarSource}   setAvatarSource={setAvatarSource}
               selectedAvatar={selectedAvatar} setSelectedAvatar={setSelectedAvatar}
@@ -302,7 +304,7 @@ export default function AgentPage() {
 
       {/* Widget: hidden on Configuration tab unless Preview clicked */}
       {(activeTab !== 'configuration' || configPreview) && (
-        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} widgetBase={widgetBase} widgetBorderColor={widgetBorderColor} widgetPromptTextColor={widgetPromptTextColor} agentNameColor={agentNameColor} agentTitleColor={agentTitleColor} startBtnBg={startBtnBg} startBtnText={startBtnText} startBtnHoverBg={startBtnHoverBg} startBtnHoverText={startBtnHoverText} avatarBorderColor={avatarBorderColor} avatarHaloColor={avatarHaloColor} />
+        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} startBtnLabel={startBtnLabel} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} widgetBase={widgetBase} widgetBorderColor={widgetBorderColor} widgetPromptTextColor={widgetPromptTextColor} agentNameColor={agentNameColor} agentTitleColor={agentTitleColor} startBtnBg={startBtnBg} startBtnText={startBtnText} startBtnHoverBg={startBtnHoverBg} startBtnHoverText={startBtnHoverText} avatarBorderColor={avatarBorderColor} avatarHaloColor={avatarHaloColor} />
       )}
     </div>
   );
@@ -348,6 +350,7 @@ interface DesignTabProps {
   widgetLabel:   string;   setWidgetLabel:   (v: string) => void;
   agentName:     string;   setAgentName:     (v: string) => void;
   subtitle:      string;   setSubtitle:      (v: string) => void;
+  startBtnLabel: string;   setStartBtnLabel: (v: string) => void;
   showScene:     boolean;  setShowScene:     (v: boolean) => void;
   avatarSource:    'favorites' | 'library' | 'custom';
   setAvatarSource: (v: 'favorites' | 'library' | 'custom') => void;
@@ -408,11 +411,12 @@ function Accordion({ title, defaultOpen = true, headerRight, children }: { title
   );
 }
 
-function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource, widgetBase, setWidgetBase, widgetBorderColor, setWidgetBorderColor, widgetPromptTextColor, setWidgetPromptTextColor, agentNameColor, setAgentNameColor, agentTitleColor, setAgentTitleColor, startBtnBg, setStartBtnBg, startBtnText, setStartBtnText, startBtnHoverBg, setStartBtnHoverBg, startBtnHoverText, setStartBtnHoverText, avatarBorderColor, setAvatarBorderColor, avatarHaloColor, setAvatarHaloColor }: DesignTabProps) {
+function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, startBtnLabel, setStartBtnLabel, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource, widgetBase, setWidgetBase, widgetBorderColor, setWidgetBorderColor, widgetPromptTextColor, setWidgetPromptTextColor, agentNameColor, setAgentNameColor, agentTitleColor, setAgentTitleColor, startBtnBg, setStartBtnBg, startBtnText, setStartBtnText, startBtnHoverBg, setStartBtnHoverBg, startBtnHoverText, setStartBtnHoverText, avatarBorderColor, setAvatarBorderColor, avatarHaloColor, setAvatarHaloColor }: DesignTabProps) {
   const textFields = [
-    { label: 'Widget Prompt', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
-    { label: 'Agent Name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
-    { label: 'Agent Subtitle', value: subtitle,  set: setSubtitle,    placeholder: 'e.g. AI Voice Companion' },
+    { label: 'Widget Prompt', value: widgetLabel,   set: setWidgetLabel,   placeholder: 'e.g. Need help?' },
+    { label: 'Agent Name',   value: agentName,     set: setAgentName,     placeholder: 'e.g. Daniel II' },
+    { label: 'Agent Subtitle', value: subtitle,    set: setSubtitle,      placeholder: 'e.g. AI Voice Companion' },
+    { label: 'Start Button', value: startBtnLabel, set: setStartBtnLabel, placeholder: 'e.g. Start Conversation' },
   ];
 
   const views = [
