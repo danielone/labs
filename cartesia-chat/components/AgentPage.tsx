@@ -749,12 +749,12 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/mood/${step.file}`}
-                  width={16}
-                  height={16}
+                  width={18}
+                  height={18}
                   alt=""
-                  style={{ display: 'block', opacity: 0.65 }}
+                  style={{ display: 'block', opacity: 0.77, flexShrink: 0 }}
                 />
-                <span style={{ fontSize: 12, color: '#39342f' }}>{step.label}</span>
+                <span style={{ fontSize: 12, color: '#39342f', lineHeight: 1 }}>{step.label}</span>
               </div>
             </div>
           );
