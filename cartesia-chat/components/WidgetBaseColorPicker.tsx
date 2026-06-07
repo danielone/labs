@@ -153,7 +153,7 @@ export default function WidgetBaseColorPicker({ label = 'Widget Base', value, on
             background: 'none',
             border: 'none',
             padding: 0,
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: 500,
             color: '#9b9895',
             cursor: 'pointer',

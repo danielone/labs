@@ -442,7 +442,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
     <div>
       {/* Full-width header row — matches Configuration tab layout */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-        <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: 0 }}>Widget Design</h2>
+        <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: 0 }}>Widget</h2>
         <button
           style={{
             background: '#004e23', color: '#ffffff', border: 'none',
@@ -457,11 +457,13 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         </button>
       </div>
 
-      {/* Constrained content — accordions keep current width */}
-      <div style={{ maxWidth: 560 }}>
-      <p style={{ fontSize: 13, color: '#636260', lineHeight: 1.6, marginBottom: 20 }}>
+      {/* Instruction text — spans ~75% of the tab content area */}
+      <p style={{ fontSize: 13, color: '#636260', lineHeight: 1.6, marginBottom: 20, maxWidth: '75%' }}>
         Support users to interact with voice agent directly from a website. Here you can customize the widget for the agent as best for your users and the design of your site, and then deploy to your website.
       </p>
+
+      {/* Constrained content — accordions keep current width */}
+      <div style={{ maxWidth: 560 }}>
 
       {/* Avatar accordion */}
       <Accordion title="Avatar" headerRight={
@@ -789,7 +791,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
             onClick={() => { setWidgetBase('#fdfdfc'); setWidgetBorderColor('#dfdcd7'); setWidgetPromptTextColor('#39342f'); setAgentNameColor('#39342f'); setAgentTitleColor('#7c7770'); setStartBtnBg('#004e23'); setStartBtnText('#ffffff'); setStartBtnHoverBg('#003a1a'); setStartBtnHoverText('#ffffff'); setAvatarBorderColor('#dfdcd7'); setAvatarHaloColor('#abd49e'); }}
             style={{
               background: 'none', border: 'none', padding: '0 0 0 8px',
-              fontSize: 11, fontWeight: 500, color: '#9b9895',
+              fontSize: 12, fontWeight: 500, color: '#9b9895',
               cursor: 'pointer', flexShrink: 0,
               fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
             }}
