@@ -428,7 +428,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
 
   return (
     <div style={{ maxWidth: 560 }}>
-      <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: '0 0 4px' }}>Widget</h2>
+      <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: '0 0 4px' }}>Widget Design</h2>
       <p style={{ fontSize: 13, color: '#636260', lineHeight: 1.6, marginBottom: 20 }}>
         Changes appear in the widget instantly and reset when you leave the page.
       </p>
