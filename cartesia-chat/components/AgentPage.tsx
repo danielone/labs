@@ -108,6 +108,14 @@ export default function AgentPage() {
   const [startBtnHoverText, setStartBtnHoverText] = useState('#ffffff');
   const [avatarBorderColor, setAvatarBorderColor] = useState('#dfdcd7');
   const [avatarHaloColor,   setAvatarHaloColor]   = useState('#abd49e');
+  const [widgetExpanded,    setWidgetExpanded]    = useState(false);
+
+  // Auto-switch helpers: wrap a setter so it also flips the widget view when
+  // the changed setting is only visible in one state.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const toCollapsed = <T,>(setter: (v: T) => void) => (v: T): void => { setter(v); setWidgetExpanded(false); };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const toExpanded  = <T,>(setter: (v: T) => void) => (v: T): void => { setter(v); setWidgetExpanded(true);  };
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f9f9f8', fontFamily: 'var(--font-geist-sans), system-ui, sans-serif' }}>
@@ -273,26 +281,26 @@ export default function AgentPage() {
         <div style={{ flex: 1, overflowY: 'auto', padding: '28px 24px' }}>
           {activeTab === 'design' && (
             <DesignTab
-              widgetLabel={widgetLabel}     setWidgetLabel={setWidgetLabel}
-              agentName={agentName}         setAgentName={setAgentName}
-              subtitle={subtitle}           setSubtitle={setSubtitle}
-              startBtnLabel={startBtnLabel} setStartBtnLabel={setStartBtnLabel}
-              showScene={showScene}         setShowScene={setShowScene}
-              avatarSource={avatarSource}   setAvatarSource={setAvatarSource}
-              selectedAvatar={selectedAvatar} setSelectedAvatar={setSelectedAvatar}
-              selectedBg={selectedBg}         setSelectedBg={setSelectedBg}
-              bgSource={bgSource}             setBgSource={setBgSource}
-              widgetBase={widgetBase}         setWidgetBase={setWidgetBase}
-              widgetBorderColor={widgetBorderColor} setWidgetBorderColor={setWidgetBorderColor}
-              widgetPromptTextColor={widgetPromptTextColor} setWidgetPromptTextColor={setWidgetPromptTextColor}
-              agentNameColor={agentNameColor}   setAgentNameColor={setAgentNameColor}
-              agentTitleColor={agentTitleColor} setAgentTitleColor={setAgentTitleColor}
-              startBtnBg={startBtnBg}               setStartBtnBg={setStartBtnBg}
-              startBtnText={startBtnText}           setStartBtnText={setStartBtnText}
-              startBtnHoverBg={startBtnHoverBg}     setStartBtnHoverBg={setStartBtnHoverBg}
-              startBtnHoverText={startBtnHoverText} setStartBtnHoverText={setStartBtnHoverText}
-              avatarBorderColor={avatarBorderColor} setAvatarBorderColor={setAvatarBorderColor}
-              avatarHaloColor={avatarHaloColor}     setAvatarHaloColor={setAvatarHaloColor}
+              widgetLabel={widgetLabel}               setWidgetLabel={toCollapsed(setWidgetLabel)}
+              widgetPromptTextColor={widgetPromptTextColor} setWidgetPromptTextColor={toCollapsed(setWidgetPromptTextColor)}
+              agentName={agentName}                   setAgentName={toExpanded(setAgentName)}
+              subtitle={subtitle}                     setSubtitle={toExpanded(setSubtitle)}
+              agentNameColor={agentNameColor}         setAgentNameColor={toExpanded(setAgentNameColor)}
+              agentTitleColor={agentTitleColor}       setAgentTitleColor={toExpanded(setAgentTitleColor)}
+              avatarHaloColor={avatarHaloColor}       setAvatarHaloColor={toExpanded(setAvatarHaloColor)}
+              showScene={showScene}                   setShowScene={toExpanded(setShowScene)}
+              selectedAvatar={selectedAvatar}         setSelectedAvatar={toExpanded(setSelectedAvatar)}
+              selectedBg={selectedBg}                 setSelectedBg={toExpanded(setSelectedBg)}
+              startBtnLabel={startBtnLabel}           setStartBtnLabel={setStartBtnLabel}
+              avatarSource={avatarSource}             setAvatarSource={setAvatarSource}
+              bgSource={bgSource}                     setBgSource={setBgSource}
+              widgetBase={widgetBase}                 setWidgetBase={setWidgetBase}
+              widgetBorderColor={widgetBorderColor}   setWidgetBorderColor={setWidgetBorderColor}
+              startBtnBg={startBtnBg}                 setStartBtnBg={setStartBtnBg}
+              startBtnText={startBtnText}             setStartBtnText={setStartBtnText}
+              startBtnHoverBg={startBtnHoverBg}       setStartBtnHoverBg={setStartBtnHoverBg}
+              startBtnHoverText={startBtnHoverText}   setStartBtnHoverText={setStartBtnHoverText}
+              avatarBorderColor={avatarBorderColor}   setAvatarBorderColor={setAvatarBorderColor}
             />
           )}
           {activeTab === 'configuration' && <ConfigurationTab onPreview={() => setConfigPreview(p => !p)} previewActive={configPreview} />}
@@ -304,7 +312,7 @@ export default function AgentPage() {
 
       {/* Widget: hidden on Configuration tab unless Preview clicked */}
       {(activeTab !== 'configuration' || configPreview) && (
-        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} startBtnLabel={startBtnLabel} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} widgetBase={widgetBase} widgetBorderColor={widgetBorderColor} widgetPromptTextColor={widgetPromptTextColor} agentNameColor={agentNameColor} agentTitleColor={agentTitleColor} startBtnBg={startBtnBg} startBtnText={startBtnText} startBtnHoverBg={startBtnHoverBg} startBtnHoverText={startBtnHoverText} avatarBorderColor={avatarBorderColor} avatarHaloColor={avatarHaloColor} />
+        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} startBtnLabel={startBtnLabel} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} widgetBase={widgetBase} widgetBorderColor={widgetBorderColor} widgetPromptTextColor={widgetPromptTextColor} agentNameColor={agentNameColor} agentTitleColor={agentTitleColor} startBtnBg={startBtnBg} startBtnText={startBtnText} startBtnHoverBg={startBtnHoverBg} startBtnHoverText={startBtnHoverText} avatarBorderColor={avatarBorderColor} avatarHaloColor={avatarHaloColor} widgetExpanded={widgetExpanded} setWidgetExpanded={setWidgetExpanded} />
       )}
     </div>
   );

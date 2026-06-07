@@ -83,6 +83,8 @@ interface VoiceChatProps {
   startBtnHoverText?:      string;
   avatarBorderColor?:      string;
   avatarHaloColor?:        string;
+  widgetExpanded?:         boolean;
+  setWidgetExpanded?:      (v: boolean) => void;
 }
 
 export default function VoiceChat({
@@ -105,8 +107,12 @@ export default function VoiceChat({
   startBtnHoverText      = '#ffffff',
   avatarBorderColor      = '#dfdcd7',
   avatarHaloColor        = '#abd49e',
+  widgetExpanded:    widgetExpandedProp,
+  setWidgetExpanded: setWidgetExpandedProp,
 }: VoiceChatProps = {}) {
-  const [widgetExpanded, setWidgetExpanded] = useState(false);
+  const [widgetExpandedInternal, setWidgetExpandedInternal] = useState(false);
+  const widgetExpanded    = widgetExpandedProp    !== undefined ? widgetExpandedProp    : widgetExpandedInternal;
+  const setWidgetExpanded = setWidgetExpandedProp !== undefined ? setWidgetExpandedProp : setWidgetExpandedInternal;
   const [callState, setCallState] = useState<CallState>('idle');
   const [agentSpeaking, setAgentSpeaking] = useState(false);
   const [userSpeaking, setUserSpeaking] = useState(false);
