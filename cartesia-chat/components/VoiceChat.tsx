@@ -600,8 +600,9 @@ export default function VoiceChat({
                   disabled={callState === 'ending'}
                   className="w-full py-2.5 rounded-xl font-semibold text-sm transition-all duration-150 active:scale-95"
                   style={{
-                    background: callState === 'ending' ? '#c4c0bb' : '#004e23',
-                    color: '#ffffff', border: 'none',
+                    background: callState === 'ending' ? '#f1f0ec' : '#004e23',
+                    color: callState === 'ending' ? '#c4c0bb' : '#ffffff',
+                    border: callState === 'ending' ? '1px solid #dfdcd7' : 'none',
                     cursor: callState === 'ending' ? 'default' : 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
                   }}
