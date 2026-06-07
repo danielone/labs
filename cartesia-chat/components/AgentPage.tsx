@@ -439,8 +439,9 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
   ] as const;
 
   return (
-    <div style={{ maxWidth: 560 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+    <div>
+      {/* Full-width header row — matches Configuration tab layout */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: 0 }}>Widget Design</h2>
         <button
           style={{
@@ -462,6 +463,9 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           Deploy
         </button>
       </div>
+
+      {/* Constrained content — accordions keep current width */}
+      <div style={{ maxWidth: 560 }}>
       <p style={{ fontSize: 13, color: '#636260', lineHeight: 1.6, marginBottom: 20 }}>
         Support users to interact with voice agent directly from a website. Here you can customize the widget for the agent as best for your users and the design of your site, and then deploy to your website.
       </p>
@@ -881,6 +885,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
 
       {/* Close border at bottom */}
       <div style={{ borderTop: '1px solid #dfdcd7' }} />
+      </div>{/* end constrained content */}
     </div>
   );
 }
