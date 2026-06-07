@@ -442,7 +442,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
     <div style={{ maxWidth: 560 }}>
       <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: '0 0 4px' }}>Widget Design</h2>
       <p style={{ fontSize: 13, color: '#636260', lineHeight: 1.6, marginBottom: 20 }}>
-        Changes appear in the widget instantly and reset when you leave the page.
+        Support users to interact with voice agent directly from a website. Here you can customize the widget for the agent as best for your users and the design of your site, and then deploy to your website.
       </p>
 
       {/* Avatar accordion */}
