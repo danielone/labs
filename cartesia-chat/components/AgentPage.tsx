@@ -684,13 +684,13 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           onReset={widgetBase !== '#fdfdfc' ? () => setWidgetBase('#fdfdfc') : undefined}
         />
         <WidgetBaseColorPicker
-          label="Widget Border Color"
+          label="Widget Border"
           value={widgetBorderColor}
           onChange={setWidgetBorderColor}
           onReset={widgetBorderColor !== '#dfdcd7' ? () => setWidgetBorderColor('#dfdcd7') : undefined}
         />
         <WidgetBaseColorPicker
-          label="Widget Prompt Text Color"
+          label="Widget Prompt Text"
           value={widgetPromptTextColor}
           onChange={setWidgetPromptTextColor}
           onReset={widgetPromptTextColor !== '#39342f' ? () => setWidgetPromptTextColor('#39342f') : undefined}
@@ -708,13 +708,13 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           onReset={agentTitleColor !== '#7c7770' ? () => setAgentTitleColor('#7c7770') : undefined}
         />
         <WidgetBaseColorPicker
-          label="Avatar Border Color"
+          label="Avatar Border"
           value={avatarBorderColor}
           onChange={setAvatarBorderColor}
           onReset={avatarBorderColor !== '#dfdcd7' ? () => setAvatarBorderColor('#dfdcd7') : undefined}
         />
         <WidgetBaseColorPicker
-          label="Avatar Border Color - Speaking Halo"
+          label="Avatar Border - Speaking Halo"
           value={avatarHaloColor}
           onChange={setAvatarHaloColor}
           onReset={avatarHaloColor !== '#abd49e' ? () => setAvatarHaloColor('#abd49e') : undefined}
