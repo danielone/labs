@@ -73,6 +73,7 @@ interface VoiceChatProps {
   sceneBg?:     string;
   widgetBase?:        string;
   widgetBorderColor?: string;
+  avatarBorderColor?: string;
 }
 
 export default function VoiceChat({
@@ -85,6 +86,7 @@ export default function VoiceChat({
   sceneBg      = '/coworking-bg.jpg',
   widgetBase        = '#fdfdfc',
   widgetBorderColor = '#dfdcd7',
+  avatarBorderColor = '#dfdcd7',
 }: VoiceChatProps = {}) {
   const [widgetExpanded, setWidgetExpanded] = useState(false);
   const [callState, setCallState] = useState<CallState>('idle');
@@ -449,7 +451,7 @@ export default function VoiceChat({
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{
                 width: 43, height: 43, borderRadius: '50%', overflow: 'hidden',
-                border: `2px solid ${agentSpeaking ? '#abd49e' : '#dfdcd7'}`,
+                border: `2px solid ${agentSpeaking ? '#abd49e' : avatarBorderColor}`,
                 background: '#f1f0ec', flexShrink: 0,
                 transition: 'border-color 0.2s ease',
               }}>

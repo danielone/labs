@@ -98,6 +98,7 @@ export default function AgentPage() {
   const [bgSource, setBgSource] = useState<'favorites' | 'library' | 'custom'>('favorites');
   const [widgetBase, setWidgetBase] = useState('#fdfdfc');
   const [widgetBorderColor, setWidgetBorderColor] = useState('#dfdcd7');
+  const [avatarBorderColor, setAvatarBorderColor] = useState('#dfdcd7');
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f9f9f8', fontFamily: 'var(--font-geist-sans), system-ui, sans-serif' }}>
@@ -273,6 +274,7 @@ export default function AgentPage() {
               bgSource={bgSource}             setBgSource={setBgSource}
               widgetBase={widgetBase}         setWidgetBase={setWidgetBase}
               widgetBorderColor={widgetBorderColor} setWidgetBorderColor={setWidgetBorderColor}
+              avatarBorderColor={avatarBorderColor} setAvatarBorderColor={setAvatarBorderColor}
             />
           )}
           {activeTab === 'configuration' && <ConfigurationTab onPreview={() => setConfigPreview(p => !p)} previewActive={configPreview} />}
@@ -284,7 +286,7 @@ export default function AgentPage() {
 
       {/* Widget: hidden on Configuration tab unless Preview clicked */}
       {(activeTab !== 'configuration' || configPreview) && (
-        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} widgetBase={widgetBase} widgetBorderColor={widgetBorderColor} />
+        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} widgetBase={widgetBase} widgetBorderColor={widgetBorderColor} avatarBorderColor={avatarBorderColor} />
       )}
     </div>
   );
@@ -343,6 +345,8 @@ interface DesignTabProps {
   setWidgetBase:       (v: string) => void;
   widgetBorderColor:   string;
   setWidgetBorderColor:(v: string) => void;
+  avatarBorderColor:   string;
+  setAvatarBorderColor:(v: string) => void;
 }
 
 // ── Accordion primitive ────────────────────────────────────────────────────
@@ -372,7 +376,7 @@ function Accordion({ title, defaultOpen = true, headerRight, children }: { title
   );
 }
 
-function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource, widgetBase, setWidgetBase, widgetBorderColor, setWidgetBorderColor }: DesignTabProps) {
+function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource, widgetBase, setWidgetBase, widgetBorderColor, setWidgetBorderColor, avatarBorderColor, setAvatarBorderColor }: DesignTabProps) {
   const textFields = [
     { label: 'Widget Prompt', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
     { label: 'Agent Name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
@@ -643,7 +647,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         headerRight={
           <button
             type="button"
-            onClick={() => { setWidgetBase('#fdfdfc'); setWidgetBorderColor('#dfdcd7'); }}
+            onClick={() => { setWidgetBase('#fdfdfc'); setWidgetBorderColor('#dfdcd7'); setAvatarBorderColor('#dfdcd7'); }}
             style={{
               background: 'none', border: 'none', padding: '0 0 0 8px',
               fontSize: 11, fontWeight: 500, color: '#9b9895',
@@ -668,6 +672,12 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           value={widgetBorderColor}
           onChange={setWidgetBorderColor}
           onReset={widgetBorderColor !== '#dfdcd7' ? () => setWidgetBorderColor('#dfdcd7') : undefined}
+        />
+        <WidgetBaseColorPicker
+          label="Avatar Border Color"
+          value={avatarBorderColor}
+          onChange={setAvatarBorderColor}
+          onReset={avatarBorderColor !== '#dfdcd7' ? () => setAvatarBorderColor('#dfdcd7') : undefined}
         />
       </Accordion>
 
