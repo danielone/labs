@@ -604,6 +604,7 @@ export default function VoiceChat({
                     color: callState === 'ending' ? '#c4c0bb' : '#ffffff',
                     border: callState === 'ending' ? '1px solid #dfdcd7' : 'none',
                     cursor: callState === 'ending' ? 'default' : 'pointer',
+                    pointerEvents: callState === 'ending' ? 'none' : 'auto',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
                   }}
                   onMouseEnter={e => { if (callState !== 'ending') e.currentTarget.style.background = 'rgba(0,78,35,0.82)'; }}
