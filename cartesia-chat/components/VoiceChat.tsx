@@ -76,6 +76,10 @@ interface VoiceChatProps {
   widgetPromptTextColor?:  string;
   agentNameColor?:         string;
   agentTitleColor?:        string;
+  startBtnBg?:             string;
+  startBtnText?:           string;
+  startBtnHoverBg?:        string;
+  startBtnHoverText?:      string;
   avatarBorderColor?:      string;
   avatarHaloColor?:        string;
 }
@@ -93,6 +97,10 @@ export default function VoiceChat({
   widgetPromptTextColor  = '#39342f',
   agentNameColor         = '#39342f',
   agentTitleColor        = '#7c7770',
+  startBtnBg             = '#004e23',
+  startBtnText           = '#ffffff',
+  startBtnHoverBg        = '#003a1a',
+  startBtnHoverText      = '#ffffff',
   avatarBorderColor      = '#dfdcd7',
   avatarHaloColor        = '#abd49e',
 }: VoiceChatProps = {}) {
@@ -492,8 +500,8 @@ export default function VoiceChat({
             <button
               onClick={() => { setWidgetExpanded(true); startCall(); }}
               style={{
-                background: '#004e23',
-                color: '#ffffff',
+                background: startBtnBg,
+                color: startBtnText,
                 border: 'none',
                 borderRadius: 12,
                 padding: '9px 15px',
@@ -504,10 +512,10 @@ export default function VoiceChat({
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 7,
-                transition: 'background 0.15s ease',
+                transition: 'background 0.15s ease, color 0.15s ease',
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,78,35,0.82)'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#004e23'; }}
+              onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.background = startBtnHoverBg; b.style.color = startBtnHoverText; }}
+              onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.background = startBtnBg; b.style.color = startBtnText; }}
             >
               <PhoneIcon size={12} />
               Start Conversation

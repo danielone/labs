@@ -101,6 +101,10 @@ export default function AgentPage() {
   const [widgetPromptTextColor, setWidgetPromptTextColor] = useState('#39342f');
   const [agentNameColor,  setAgentNameColor]  = useState('#39342f');
   const [agentTitleColor, setAgentTitleColor] = useState('#7c7770');
+  const [startBtnBg,        setStartBtnBg]        = useState('#004e23');
+  const [startBtnText,      setStartBtnText]      = useState('#ffffff');
+  const [startBtnHoverBg,   setStartBtnHoverBg]   = useState('#003a1a');
+  const [startBtnHoverText, setStartBtnHoverText] = useState('#ffffff');
   const [avatarBorderColor, setAvatarBorderColor] = useState('#dfdcd7');
   const [avatarHaloColor,   setAvatarHaloColor]   = useState('#abd49e');
 
@@ -281,6 +285,10 @@ export default function AgentPage() {
               widgetPromptTextColor={widgetPromptTextColor} setWidgetPromptTextColor={setWidgetPromptTextColor}
               agentNameColor={agentNameColor}   setAgentNameColor={setAgentNameColor}
               agentTitleColor={agentTitleColor} setAgentTitleColor={setAgentTitleColor}
+              startBtnBg={startBtnBg}               setStartBtnBg={setStartBtnBg}
+              startBtnText={startBtnText}           setStartBtnText={setStartBtnText}
+              startBtnHoverBg={startBtnHoverBg}     setStartBtnHoverBg={setStartBtnHoverBg}
+              startBtnHoverText={startBtnHoverText} setStartBtnHoverText={setStartBtnHoverText}
               avatarBorderColor={avatarBorderColor} setAvatarBorderColor={setAvatarBorderColor}
               avatarHaloColor={avatarHaloColor}     setAvatarHaloColor={setAvatarHaloColor}
             />
@@ -294,7 +302,7 @@ export default function AgentPage() {
 
       {/* Widget: hidden on Configuration tab unless Preview clicked */}
       {(activeTab !== 'configuration' || configPreview) && (
-        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} widgetBase={widgetBase} widgetBorderColor={widgetBorderColor} widgetPromptTextColor={widgetPromptTextColor} agentNameColor={agentNameColor} agentTitleColor={agentTitleColor} avatarBorderColor={avatarBorderColor} avatarHaloColor={avatarHaloColor} />
+        <VoiceChat widgetLabel={widgetLabel} agentName={agentName} subtitle={subtitle} showScene={showScene} setShowScene={setShowScene} avatarSrc={selectedAvatar} sceneBg={selectedBg} widgetBase={widgetBase} widgetBorderColor={widgetBorderColor} widgetPromptTextColor={widgetPromptTextColor} agentNameColor={agentNameColor} agentTitleColor={agentTitleColor} startBtnBg={startBtnBg} startBtnText={startBtnText} startBtnHoverBg={startBtnHoverBg} startBtnHoverText={startBtnHoverText} avatarBorderColor={avatarBorderColor} avatarHaloColor={avatarHaloColor} />
       )}
     </div>
   );
@@ -359,6 +367,14 @@ interface DesignTabProps {
   setAgentNameColor:       (v: string) => void;
   agentTitleColor:         string;
   setAgentTitleColor:      (v: string) => void;
+  startBtnBg:              string;
+  setStartBtnBg:           (v: string) => void;
+  startBtnText:            string;
+  setStartBtnText:         (v: string) => void;
+  startBtnHoverBg:         string;
+  setStartBtnHoverBg:      (v: string) => void;
+  startBtnHoverText:       string;
+  setStartBtnHoverText:    (v: string) => void;
   avatarBorderColor:       string;
   setAvatarBorderColor:    (v: string) => void;
   avatarHaloColor:         string;
@@ -392,7 +408,7 @@ function Accordion({ title, defaultOpen = true, headerRight, children }: { title
   );
 }
 
-function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource, widgetBase, setWidgetBase, widgetBorderColor, setWidgetBorderColor, widgetPromptTextColor, setWidgetPromptTextColor, agentNameColor, setAgentNameColor, agentTitleColor, setAgentTitleColor, avatarBorderColor, setAvatarBorderColor, avatarHaloColor, setAvatarHaloColor }: DesignTabProps) {
+function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource, widgetBase, setWidgetBase, widgetBorderColor, setWidgetBorderColor, widgetPromptTextColor, setWidgetPromptTextColor, agentNameColor, setAgentNameColor, agentTitleColor, setAgentTitleColor, startBtnBg, setStartBtnBg, startBtnText, setStartBtnText, startBtnHoverBg, setStartBtnHoverBg, startBtnHoverText, setStartBtnHoverText, avatarBorderColor, setAvatarBorderColor, avatarHaloColor, setAvatarHaloColor }: DesignTabProps) {
   const textFields = [
     { label: 'Widget Prompt', value: widgetLabel, set: setWidgetLabel, placeholder: 'e.g. Need help?' },
     { label: 'Agent Name',   value: agentName,   set: setAgentName,   placeholder: 'e.g. Daniel II' },
@@ -663,7 +679,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
         headerRight={
           <button
             type="button"
-            onClick={() => { setWidgetBase('#fdfdfc'); setWidgetBorderColor('#dfdcd7'); setWidgetPromptTextColor('#39342f'); setAgentNameColor('#39342f'); setAgentTitleColor('#7c7770'); setAvatarBorderColor('#dfdcd7'); setAvatarHaloColor('#abd49e'); }}
+            onClick={() => { setWidgetBase('#fdfdfc'); setWidgetBorderColor('#dfdcd7'); setWidgetPromptTextColor('#39342f'); setAgentNameColor('#39342f'); setAgentTitleColor('#7c7770'); setStartBtnBg('#004e23'); setStartBtnText('#ffffff'); setStartBtnHoverBg('#003a1a'); setStartBtnHoverText('#ffffff'); setAvatarBorderColor('#dfdcd7'); setAvatarHaloColor('#abd49e'); }}
             style={{
               background: 'none', border: 'none', padding: '0 0 0 8px',
               fontSize: 11, fontWeight: 500, color: '#9b9895',
@@ -706,6 +722,30 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           value={agentTitleColor}
           onChange={setAgentTitleColor}
           onReset={agentTitleColor !== '#7c7770' ? () => setAgentTitleColor('#7c7770') : undefined}
+        />
+        <WidgetBaseColorPicker
+          label="Start Button"
+          value={startBtnBg}
+          onChange={setStartBtnBg}
+          onReset={startBtnBg !== '#004e23' ? () => setStartBtnBg('#004e23') : undefined}
+        />
+        <WidgetBaseColorPicker
+          label="Start Button - Text"
+          value={startBtnText}
+          onChange={setStartBtnText}
+          onReset={startBtnText !== '#ffffff' ? () => setStartBtnText('#ffffff') : undefined}
+        />
+        <WidgetBaseColorPicker
+          label="Start Button - Hover"
+          value={startBtnHoverBg}
+          onChange={setStartBtnHoverBg}
+          onReset={startBtnHoverBg !== '#003a1a' ? () => setStartBtnHoverBg('#003a1a') : undefined}
+        />
+        <WidgetBaseColorPicker
+          label="Start Button - Hover State Text"
+          value={startBtnHoverText}
+          onChange={setStartBtnHoverText}
+          onReset={startBtnHoverText !== '#ffffff' ? () => setStartBtnHoverText('#ffffff') : undefined}
         />
         <WidgetBaseColorPicker
           label="Avatar Border"
