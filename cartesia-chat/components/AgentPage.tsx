@@ -586,8 +586,8 @@ function DeployPanel({
       ref={panelRef}
       style={{
         position: 'fixed', top: position.top, right: position.right,
-        /* Never wider than the space between the sidebar (208px + 1px border) and the right anchor */
-        width: 817, maxWidth: `calc(100vw - ${position.right}px - 212px)`,
+        /* Never wider than the space between the sidebar edge + 20px content padding and the right anchor */
+        width: 817, maxWidth: `calc(100vw - ${position.right}px - 229px)`,
         zIndex: 200,
         fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
       }}
