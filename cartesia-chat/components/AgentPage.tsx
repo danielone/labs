@@ -686,7 +686,7 @@ function DeployPanel({
               fontFamily: 'inherit',
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.borderColor = '#b0d4bb';
+              e.currentTarget.style.borderColor = '#dfdcd7';
               e.currentTarget.style.background = '#f1f0ec';
             }}
             onMouseLeave={e => {
