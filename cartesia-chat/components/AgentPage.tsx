@@ -604,7 +604,7 @@ function DeployPanel({
         background: '#ffffff', border: '1px solid #dfdcd7', borderRadius: 12,
         boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)',
         overflowX: 'hidden', overflowY: 'auto',
-        maxHeight: 400,
+        maxHeight: 440,
       }}>
       {/* ── Title row ── */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 20px 0' }}>
