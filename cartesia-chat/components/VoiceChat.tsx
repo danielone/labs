@@ -490,12 +490,12 @@ export default function VoiceChat({
                 title="Expand"
                 style={{
                   width: 26, height: 26, borderRadius: 7, border: '1px solid #dfdcd7',
-                  background: '#f1f0ec', cursor: 'pointer', display: 'flex',
+                  background: '#ffffff', cursor: 'pointer', display: 'flex',
                   alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                   transition: 'background 0.15s',
                 }}
-                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#dfdcd7'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#f1f0ec'; }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#f1f0ec'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#ffffff'; }}
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c7770"
                   strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -570,12 +570,12 @@ export default function VoiceChat({
                   title="Minimize"
                   style={{
                     width: 28, height: 28, borderRadius: 8, border: '1px solid #dfdcd7',
-                    background: '#f1f0ec', cursor: 'pointer', display: 'flex',
+                    background: '#ffffff', cursor: 'pointer', display: 'flex',
                     alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                     transition: 'background 0.15s',
                   }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#dfdcd7'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#f1f0ec'; }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#f1f0ec'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#ffffff'; }}
                 >
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c7770"
                     strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
