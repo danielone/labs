@@ -895,7 +895,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
                     style={{
                       width: 80, height: 80, flexShrink: 0,
                       borderRadius: 8,
-                      border: `2px solid ${isSelected ? '#004e23' : '#dfdcd7'}`,
+                      border: isSelected ? '2px solid #004e23' : '1px solid #dfdcd7',
                       background: '#ffffff',
                       cursor: 'pointer',
                       overflow: 'hidden',
@@ -964,7 +964,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
                       style={{
                         width: 160, height: 128, flexShrink: 0,
                         borderRadius: 8,
-                        border: `2px solid ${isSelected ? '#004e23' : '#dfdcd7'}`,
+                        border: isSelected ? '2px solid #004e23' : '1px solid #dfdcd7',
                         background: '#ffffff',
                         cursor: 'pointer',
                         overflow: 'hidden',
