@@ -948,7 +948,7 @@ Anything the caller wants: their day, current events, science, culture, philosop
 
 // Shared field styles
 const fieldLabel: React.CSSProperties = { display: 'block', fontSize: 13, fontWeight: 500, color: '#39342f', marginBottom: 8 };
-const readonlyInput: React.CSSProperties = { width: '100%', padding: '8px 12px', fontSize: 13, color: '#636260', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, outline: 'none', cursor: 'not-allowed', boxSizing: 'border-box', fontFamily: 'inherit' };
+const readonlyInput: React.CSSProperties = { width: '100%', padding: '8px 12px', fontSize: 13, color: '#39342f', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, outline: 'none', cursor: 'not-allowed', boxSizing: 'border-box', fontFamily: 'inherit' };
 const sectionHead: React.CSSProperties = { fontSize: 14, fontWeight: 600, color: '#39342f', margin: '0 0 14px' };
 
 // ── Configuration tab (read-only replica) ─────────────────────────────────
