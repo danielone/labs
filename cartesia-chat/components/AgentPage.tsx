@@ -566,10 +566,9 @@ function DeployPanel({
   position: { top: number; right: number };
   excludeRef: React.RefObject<HTMLButtonElement | null>;
 }) {
-  const [mode, setMode] = useState<'embed' | 'sdk'>('embed');
+  const [mode, setMode] = useState<'sdk' | 'embed'>('embed');
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Close on click outside (excluding the Deploy button that opened it)
   useEffect(() => {
     const handle = (e: MouseEvent) => {
       if (
@@ -586,141 +585,133 @@ function DeployPanel({
       ref={panelRef}
       style={{
         position: 'fixed', top: position.top, right: position.right,
-        width: 660, background: '#fdfdfc',
+        width: 680, background: '#ffffff',
         border: '1px solid #dfdcd7', borderRadius: 12,
         boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)',
         zIndex: 200, overflow: 'hidden',
         fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
       }}
     >
-      {/* Header: mode toggle + close */}
-      <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '12px 16px', borderBottom: '1px solid #dfdcd7',
-      }}>
-        {/* Embed Code / SDK toggle */}
-        <div style={{
-          display: 'inline-flex', border: '1px solid #dfdcd7',
-          borderRadius: 8, overflow: 'hidden', background: '#f1f0ec',
-        }}>
-          {(['embed', 'sdk'] as const).map((m, i, arr) => (
-            <button
-              key={m}
-              onClick={() => setMode(m)}
-              style={{
-                padding: '6px 18px', border: 'none',
-                borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
-                borderRadius: i === 0 ? '7px 0 0 7px' : '0 7px 7px 0',
-                background: mode === m ? '#39342f' : 'transparent',
-                color: mode === m ? '#ffffff' : '#636260',
-                fontSize: 12, fontWeight: 500, cursor: 'pointer',
-                transition: 'background 0.15s, color 0.15s',
-                fontFamily: 'inherit',
-              }}
-              onMouseEnter={e => { if (mode !== m) e.currentTarget.style.background = '#e8e7e1'; }}
-              onMouseLeave={e => { if (mode !== m) e.currentTarget.style.background = 'transparent'; }}
-            >
-              {m === 'embed' ? 'Embed Code' : 'SDK'}
-            </button>
-          ))}
-        </div>
-        {/* Close button — consistent X icon */}
+      {/* ── Title row ── */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 20px 0' }}>
+        <h2 style={{ fontSize: 17, fontWeight: 700, color: '#1a1a18', margin: 0, lineHeight: 1.2 }}>
+          Deploy to Your Website
+        </h2>
+        {/* Close — plain X matching app icon style */}
         <button
           onClick={onClose}
           aria-label="Close"
           style={{
-            width: 28, height: 28, borderRadius: 7, border: '1px solid #dfdcd7',
-            background: '#f1f0ec', cursor: 'pointer', display: 'flex',
-            alignItems: 'center', justifyContent: 'center', transition: 'background 0.15s', flexShrink: 0,
+            background: 'none', border: 'none', cursor: 'pointer', padding: '2px 4px',
+            fontSize: 15, color: '#7c7770', lineHeight: 1, marginTop: -1,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            borderRadius: 4, transition: 'color 0.15s',
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#dfdcd7'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = '#f1f0ec'; }}
+          onMouseEnter={e => { e.currentTarget.style.color = '#39342f'; }}
+          onMouseLeave={e => { e.currentTarget.style.color = '#7c7770'; }}
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c7770"
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
         </button>
       </div>
 
-      {/* Body: two columns */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.25fr' }}>
+      {/* ── Mode toggle ── */}
+      <div style={{ display: 'flex', gap: 6, padding: '14px 20px 0' }}>
+        {(['sdk', 'embed'] as const).map(m => (
+          <button
+            key={m}
+            onClick={() => setMode(m)}
+            style={{
+              padding: '5px 14px', borderRadius: 7, cursor: 'pointer',
+              fontSize: 12.5, fontWeight: mode === m ? 600 : 400,
+              color: mode === m ? '#39342f' : '#7c7770',
+              background: '#ffffff',
+              border: `1px solid ${mode === m ? '#39342f' : '#dfdcd7'}`,
+              transition: 'border-color 0.15s, color 0.15s, font-weight 0.15s',
+              fontFamily: 'inherit',
+            }}
+            onMouseEnter={e => { if (mode !== m) e.currentTarget.style.borderColor = '#a0a09a'; }}
+            onMouseLeave={e => { if (mode !== m) e.currentTarget.style.borderColor = '#dfdcd7'; }}
+          >
+            {m === 'embed' ? 'Embed Code' : 'SDK'}
+          </button>
+        ))}
+      </div>
+
+      {/* Divider */}
+      <div style={{ borderTop: '1px solid #dfdcd7', margin: '16px 0 0' }} />
+
+      {/* ── Body: two columns ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr' }}>
 
         {/* Left — Setup */}
-        <div style={{ padding: 20, borderRight: '1px solid #dfdcd7' }}>
-          <h3 style={{ fontSize: 13, fontWeight: 600, color: '#39342f', margin: '0 0 3px' }}>Setup</h3>
-          <p style={{ fontSize: 12, color: '#7c7770', margin: '0 0 16px', lineHeight: 1.5 }}>
-            Attach the widget on your website.
-          </p>
+        <div style={{ padding: '20px 20px 24px', borderRight: '1px solid #dfdcd7' }}>
+          <h3 style={{ fontSize: 14, fontWeight: 700, color: '#1a1a18', margin: '0 0 12px' }}>Setup</h3>
+
           {/* Quickstart card */}
           <div style={{
-            border: '1px solid #dfdcd7', borderRadius: 10, padding: '10px 12px',
-            display: 'flex', alignItems: 'center', gap: 12, background: '#f9f9f8',
+            border: '1px solid #dfdcd7', borderRadius: 8,
+            display: 'flex', overflow: 'hidden', background: '#ffffff',
           }}>
-            {/* Thumbnail */}
-            <div style={{
-              width: 64, height: 54, borderRadius: 6, overflow: 'hidden',
-              flexShrink: 0, border: '1px solid #e0ded9', display: 'flex', flexDirection: 'column',
-            }}>
-              <div style={{ background: '#e8e7e1', padding: '2px 5px', fontSize: 6.5, color: '#7c7770', lineHeight: 1.4 }}>
-                Agents
+            {/* Brand green square */}
+            <div style={{ width: 80, flexShrink: 0, background: '#004e23', minHeight: 80 }} />
+            {/* Content */}
+            <div style={{ padding: '12px 14px' }}>
+              <div style={{
+                fontSize: 10, fontWeight: 600, color: '#9b9895',
+                letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 5,
+              }}>
+                Quickstart
               </div>
-              <div style={{ flex: 1, display: 'flex' }}>
-                {/* Brand green area with play icon */}
-                <div style={{
-                  width: 24, background: '#004e23', display: 'flex',
-                  alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                }}>
-                  <svg width="8" height="8" viewBox="0 0 24 24" fill="white" stroke="none">
-                    <path d="M6 3l15 9-15 9V3z"/>
-                  </svg>
-                </div>
-                {/* Mini avatar preview */}
-                <div style={{ flex: 1, background: '#f5f5f3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ width: 22, height: 22, borderRadius: '50%', overflow: 'hidden', border: '1px solid #dfdcd7' }}>
-                    <Image src="/avatar.png" alt="" width={22} height={22} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
-                  </div>
-                </div>
-              </div>
-              <div style={{ background: '#e8e7e1', padding: '1px 5px', fontSize: 6, color: '#7c7770', lineHeight: 1.4 }}>
-                Website Widget
-              </div>
+              <p style={{ fontSize: 12.5, color: '#39342f', margin: 0, lineHeight: 1.5 }}>
+                Learn how to embed the AI Agent on your website.
+              </p>
             </div>
-            <span style={{ fontSize: 12.5, color: '#39342f', lineHeight: 1.45 }}>
-              Learn how to embed your voice agent anywhere
-            </span>
+          </div>
+
+          {/* Additional Resources */}
+          <div style={{ marginTop: 20 }}>
+            <h3 style={{ fontSize: 14, fontWeight: 700, color: '#1a1a18', margin: '0 0 10px' }}>
+              Additional Resources
+            </h3>
+            {[
+              'Deploying AI Agents Guide',
+              'Deployed Agents Showcase Examples',
+            ].map(label => (
+              <div key={label} style={{ marginBottom: 6 }}>
+                <a
+                  href="#"
+                  onClick={e => e.preventDefault()}
+                  style={{ fontSize: 13, color: '#39342f', textDecoration: 'none', cursor: 'not-allowed' }}
+                  onMouseEnter={e => { e.currentTarget.style.textDecoration = 'underline'; }}
+                  onMouseLeave={e => { e.currentTarget.style.textDecoration = 'none'; }}
+                >
+                  {label}
+                </a>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Right — Embed Code or SDK */}
-        <div style={{ padding: 20 }}>
+        <div style={{ padding: '20px 20px 24px' }}>
           {mode === 'embed' ? (
             <>
-              <h3 style={{ fontSize: 13, fontWeight: 600, color: '#39342f', margin: '0 0 3px' }}>Embed code</h3>
-              <p style={{ fontSize: 12, color: '#7c7770', margin: '0 0 12px', lineHeight: 1.5 }}>
-                Add the following snippet to the pages where you want the conversation widget to be.
+              <h3 style={{ fontSize: 14, fontWeight: 700, color: '#1a1a18', margin: '0 0 8px' }}>Embed code</h3>
+              <p style={{ fontSize: 12.5, color: '#636260', margin: '0 0 12px', lineHeight: 1.55 }}>
+                Add the following code snippet to pages where you want to display this AI Agent&apos;s widget:
               </p>
               <CodeBlock code={EMBED_CODE_DISPLAY} copyText={EMBED_CODE_COPY} />
-              {/* Feedback collection */}
-              <div style={{ marginTop: 16, display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                <div style={{ width: 32, height: 18, borderRadius: 99, background: '#004e23', position: 'relative', flexShrink: 0, marginTop: 1 }}>
-                  <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#fff', position: 'absolute', top: 2, right: 2 }} />
-                </div>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 500, color: '#39342f', marginBottom: 2 }}>Feedback collection</div>
-                  <p style={{ fontSize: 12, color: '#7c7770', margin: 0, lineHeight: 1.5 }}>
-                    Callers can rate their satisfaction from 1 to 5 and optionally leave a comment after the conversation.
-                  </p>
-                </div>
-              </div>
             </>
           ) : (
             <>
-              <h3 style={{ fontSize: 13, fontWeight: 600, color: '#39342f', margin: '0 0 3px' }}>SDK</h3>
-              <p style={{ fontSize: 12, color: '#7c7770', margin: '0 0 12px', lineHeight: 1.5 }}>
+              <h3 style={{ fontSize: 14, fontWeight: 700, color: '#1a1a18', margin: '0 0 8px' }}>SDK</h3>
+              <p style={{ fontSize: 12.5, color: '#636260', margin: '0 0 12px', lineHeight: 1.55 }}>
                 Use the Cartesia SDK to integrate a voice agent into your application programmatically.
               </p>
-              <p style={{ fontSize: 12, color: '#c4c0bb', margin: 0 }}>SDK documentation coming soon.</p>
+              <p style={{ fontSize: 12.5, color: '#c4c0bb', margin: 0 }}>SDK documentation coming soon.</p>
             </>
           )}
         </div>
