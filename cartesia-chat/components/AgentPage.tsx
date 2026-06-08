@@ -668,7 +668,7 @@ function DeployPanel({
       <div style={{ borderTop: '1px solid #dfdcd7', margin: '16px 0 0' }} />
 
       {/* ── Body: two columns ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) 1fr' }}>
 
         {/* Left — Setup */}
         <div style={{ padding: '20px 20px 24px', borderRight: '1px solid #dfdcd7' }}>
