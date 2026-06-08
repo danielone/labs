@@ -588,13 +588,13 @@ function DeployPanel({
         position: 'fixed', top: position.top, right: position.right,
         /* Never wider than the space between the sidebar edge + 20px content padding and the right anchor */
         width: 817, maxWidth: `calc(100vw - ${position.right}px - 229px)`,
-        zIndex: 200,
+        zIndex: 1100,
         fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
       }}
     >
       {/* Upward caret — points to the Deploy button above */}
       <div style={{
-        position: 'absolute', top: -7, right: 40,
+        position: 'absolute', top: -5, right: 40,
         width: 13, height: 13, background: '#ffffff',
         borderLeft: '1px solid #dfdcd7', borderTop: '1px solid #dfdcd7',
         transform: 'rotate(45deg)',
