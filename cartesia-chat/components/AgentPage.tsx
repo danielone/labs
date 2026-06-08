@@ -647,8 +647,7 @@ function DeployPanel({
                   background: mode === m ? '#f1f0ec' : '#ffffff',
                   color: '#39342f',
                   fontSize: 12, fontWeight: mode === m ? 500 : 400,
-                  cursor: isDisabled ? 'not-allowed' : 'pointer',
-                  opacity: isDisabled ? 0.45 : 1,
+                  cursor: isDisabled ? 'default' : 'pointer',
                   transition: 'background 0.15s',
                   fontFamily: 'inherit',
                 }}
