@@ -483,7 +483,7 @@ function CodeBlock({ code, copyText }: { code: string; copyText: string }) {
   const [copied, setCopied] = useState(false);
   const lines = code.split('\n');
   const LINE_H = 22;
-  const MAX_LINES = 4;
+  const MAX_LINES = 3;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(copyText).then(() => {
@@ -585,13 +585,23 @@ function DeployPanel({
       ref={panelRef}
       style={{
         position: 'fixed', top: position.top, right: position.right,
-        width: 680, background: '#ffffff',
-        border: '1px solid #dfdcd7', borderRadius: 12,
-        boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)',
-        zIndex: 200, overflow: 'hidden',
+        width: 817, zIndex: 200,
         fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
       }}
     >
+      {/* Upward caret — points to the Deploy button above */}
+      <div style={{
+        position: 'absolute', top: -7, right: 40,
+        width: 13, height: 13, background: '#ffffff',
+        borderLeft: '1px solid #dfdcd7', borderTop: '1px solid #dfdcd7',
+        transform: 'rotate(45deg)',
+      }} />
+      {/* Panel */}
+      <div style={{
+        background: '#ffffff', border: '1px solid #dfdcd7', borderRadius: 12,
+        boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)',
+        overflow: 'hidden',
+      }}>
       {/* ── Title row ── */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 20px 0' }}>
         <h2 style={{ fontSize: 17, fontWeight: 700, color: '#1a1a18', margin: 0, lineHeight: 1.2 }}>
@@ -661,8 +671,16 @@ function DeployPanel({
             border: '1px solid #dfdcd7', borderRadius: 8,
             display: 'flex', overflow: 'hidden', background: '#ffffff',
           }}>
-            {/* Brand green square */}
-            <div style={{ width: 80, flexShrink: 0, background: '#004e23', minHeight: 80 }} />
+            {/* Brand green square with play icon */}
+            <div style={{
+              width: 80, flexShrink: 0, background: '#004e23', minHeight: 80,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white"
+                strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+            </div>
             {/* Content */}
             <div style={{ padding: '12px 14px' }}>
               <div style={{
@@ -721,6 +739,7 @@ function DeployPanel({
             </>
           )}
         </div>
+      </div>
       </div>
     </div>
   );
