@@ -594,7 +594,7 @@ function DeployPanel({
     >
       {/* Upward caret — points to the Deploy button above */}
       <div style={{
-        position: 'absolute', top: -5, right: 40,
+        position: 'absolute', top: -6, right: 40,
         width: 13, height: 13, background: '#ffffff',
         borderLeft: '1px solid #dfdcd7', borderTop: '1px solid #dfdcd7',
         transform: 'rotate(45deg)',
