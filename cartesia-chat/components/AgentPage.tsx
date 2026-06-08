@@ -811,13 +811,16 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           ref={deployBtnRef}
           onClick={handleDeploy}
           style={{
-            height: 32, background: '#004e23', color: '#ffffff', border: 'none',
+            height: 32,
+            background: deployOpen ? '#eff7f0' : '#004e23',
+            color: deployOpen ? '#004e23' : '#ffffff',
+            border: deployOpen ? '1px solid #a8d5b5' : '1px solid transparent',
             borderRadius: 8, padding: '0 14px',
             fontSize: 14, fontWeight: 600, cursor: 'pointer',
-            transition: 'background 0.15s ease',
+            transition: 'background 0.15s ease, color 0.15s ease, border-color 0.15s ease',
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#003a1a'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = '#004e23'; }}
+          onMouseEnter={e => { if (!deployOpen) e.currentTarget.style.background = '#003a1a'; }}
+          onMouseLeave={e => { if (!deployOpen) e.currentTarget.style.background = '#004e23'; }}
         >
           Deploy
         </button>
