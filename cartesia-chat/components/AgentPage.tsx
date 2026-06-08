@@ -783,7 +783,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
   const handleDeploy = () => {
     if (deployBtnRef.current) {
       const rect = deployBtnRef.current.getBoundingClientRect();
-      setPanelPos({ top: rect.bottom + 8, right: window.innerWidth - rect.right });
+      setPanelPos({ top: rect.bottom + 16, right: window.innerWidth - rect.right });
     }
     setDeployOpen(o => !o);
   };
