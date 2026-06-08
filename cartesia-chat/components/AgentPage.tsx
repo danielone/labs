@@ -566,7 +566,7 @@ function DeployPanel({
   position: { top: number; right: number };
   excludeRef: React.RefObject<HTMLButtonElement | null>;
 }) {
-  const [mode, setMode] = useState<'sdk' | 'embed'>('embed');
+  const [mode, setMode] = useState<'embed' | 'sdk'>('embed');
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -618,26 +618,32 @@ function DeployPanel({
       </div>
 
       {/* ── Mode toggle ── */}
-      <div style={{ display: 'flex', gap: 6, padding: '14px 20px 0' }}>
-        {(['sdk', 'embed'] as const).map(m => (
-          <button
-            key={m}
-            onClick={() => setMode(m)}
-            style={{
-              padding: '5px 14px', borderRadius: 7, cursor: 'pointer',
-              fontSize: 12.5, fontWeight: mode === m ? 600 : 400,
-              color: mode === m ? '#39342f' : '#7c7770',
-              background: '#ffffff',
-              border: `1px solid ${mode === m ? '#39342f' : '#dfdcd7'}`,
-              transition: 'border-color 0.15s, color 0.15s, font-weight 0.15s',
-              fontFamily: 'inherit',
-            }}
-            onMouseEnter={e => { if (mode !== m) e.currentTarget.style.borderColor = '#a0a09a'; }}
-            onMouseLeave={e => { if (mode !== m) e.currentTarget.style.borderColor = '#dfdcd7'; }}
-          >
-            {m === 'embed' ? 'Embed Code' : 'SDK'}
-          </button>
-        ))}
+      <div style={{ padding: '14px 20px 0' }}>
+        <div style={{
+          display: 'inline-flex', border: '1px solid #dfdcd7',
+          borderRadius: 8, overflow: 'hidden', background: '#f9f9f8',
+        }}>
+          {(['embed', 'sdk'] as const).map((m, i, arr) => (
+            <button
+              key={m}
+              onClick={() => setMode(m)}
+              style={{
+                padding: '7px 18px', border: 'none',
+                borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
+                borderRadius: i === 0 ? '7px 0 0 7px' : '0 7px 7px 0',
+                background: mode === m ? '#f1f0ec' : 'transparent',
+                color: '#39342f',
+                fontSize: 12, fontWeight: mode === m ? 500 : 400, cursor: 'pointer',
+                transition: 'background 0.15s',
+                fontFamily: 'inherit',
+              }}
+              onMouseEnter={e => { if (mode !== m) e.currentTarget.style.background = '#f1f0ec'; }}
+              onMouseLeave={e => { if (mode !== m) e.currentTarget.style.background = 'transparent'; }}
+            >
+              {m === 'embed' ? 'Embed Code' : 'SDK'}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Divider */}
