@@ -671,11 +671,26 @@ function DeployPanel({
         <div style={{ padding: '20px 20px 24px', borderRight: '1px solid #dfdcd7' }}>
           <h3 style={{ fontSize: 14, fontWeight: 700, color: '#1a1a18', margin: '0 0 12px' }}>Setup</h3>
 
-          {/* Quickstart card */}
-          <div style={{
-            border: '1px solid #dfdcd7', borderRadius: 8,
-            display: 'flex', overflow: 'hidden', background: '#ffffff',
-          }}>
+          {/* Quickstart button */}
+          <button
+            type="button"
+            onClick={() => {}}
+            style={{
+              width: '100%', display: 'flex', overflow: 'hidden',
+              border: '1px solid #dfdcd7', borderRadius: 8, background: '#ffffff',
+              padding: 0, cursor: 'pointer', textAlign: 'left',
+              transition: 'border-color 0.15s, background 0.15s',
+              fontFamily: 'inherit',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = '#9b9895';
+              e.currentTarget.style.background = '#f9f9f8';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = '#dfdcd7';
+              e.currentTarget.style.background = '#ffffff';
+            }}
+          >
             {/* Brand green square with play icon */}
             <div style={{
               width: 60, flexShrink: 0, background: '#004e23', minHeight: 60,
@@ -698,7 +713,7 @@ function DeployPanel({
                 Learn how to embed the AI Agent on your website.
               </p>
             </div>
-          </div>
+          </button>
 
           {/* Additional Resources */}
           <div style={{ marginTop: 20 }}>
