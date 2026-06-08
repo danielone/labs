@@ -633,26 +633,31 @@ function DeployPanel({
           display: 'inline-flex', border: '1px solid #dfdcd7',
           borderRadius: 8, overflow: 'hidden', background: '#f9f9f8',
         }}>
-          {(['embed', 'sdk'] as const).map((m, i, arr) => (
-            <button
-              key={m}
-              onClick={() => setMode(m)}
-              style={{
-                padding: '7px 18px', border: 'none',
-                borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
-                borderRadius: i === 0 ? '7px 0 0 7px' : '0 7px 7px 0',
-                background: mode === m ? '#f1f0ec' : 'transparent',
-                color: '#39342f',
-                fontSize: 12, fontWeight: mode === m ? 500 : 400, cursor: 'pointer',
-                transition: 'background 0.15s',
-                fontFamily: 'inherit',
-              }}
-              onMouseEnter={e => { if (mode !== m) e.currentTarget.style.background = '#f1f0ec'; }}
-              onMouseLeave={e => { if (mode !== m) e.currentTarget.style.background = 'transparent'; }}
-            >
-              {m === 'embed' ? 'Embed Code' : 'SDK'}
-            </button>
-          ))}
+          {(['embed', 'sdk'] as const).map((m, i, arr) => {
+            const isDisabled = m === 'sdk';
+            return (
+              <button
+                key={m}
+                onClick={isDisabled ? undefined : () => setMode(m)}
+                style={{
+                  padding: '7px 18px', border: 'none',
+                  borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
+                  borderRadius: i === 0 ? '7px 0 0 7px' : '0 7px 7px 0',
+                  background: mode === m ? '#f1f0ec' : '#ffffff',
+                  color: '#39342f',
+                  fontSize: 12, fontWeight: mode === m ? 500 : 400,
+                  cursor: isDisabled ? 'not-allowed' : 'pointer',
+                  opacity: isDisabled ? 0.45 : 1,
+                  transition: 'background 0.15s',
+                  fontFamily: 'inherit',
+                }}
+                onMouseEnter={isDisabled ? undefined : (e => { if (mode !== m) e.currentTarget.style.background = '#f1f0ec'; })}
+                onMouseLeave={isDisabled ? undefined : (e => { if (mode !== m) e.currentTarget.style.background = '#ffffff'; })}
+              >
+                {m === 'embed' ? 'Embed Code' : 'SDK'}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -708,11 +713,17 @@ function DeployPanel({
                 <a
                   href="#"
                   onClick={e => e.preventDefault()}
-                  style={{ fontSize: 13, color: '#39342f', textDecoration: 'none', cursor: 'not-allowed' }}
+                  style={{ fontSize: 13, color: '#39342f', textDecoration: 'none', cursor: 'not-allowed', display: 'inline-flex', alignItems: 'center', gap: 4 }}
                   onMouseEnter={e => { e.currentTarget.style.textDecoration = 'underline'; }}
                   onMouseLeave={e => { e.currentTarget.style.textDecoration = 'none'; }}
                 >
                   {label}
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    <polyline points="15 3 21 3 21 9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
+                  </svg>
                 </a>
               </div>
             ))}
