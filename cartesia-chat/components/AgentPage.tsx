@@ -503,8 +503,8 @@ function CodeBlock({ code, copyText }: { code: string; copyText: string }) {
         onClick={handleCopy}
         style={{
           position: 'absolute', top: 8, right: 8, zIndex: 2,
-          padding: '3px 8px', background: copied ? '#1a4731' : '#21262d',
-          color: copied ? '#a8dabc' : '#8b949e', border: '1px solid #30363d',
+          padding: '3px 8px', background: '#21262d',
+          color: '#8b949e', border: '1px solid #30363d',
           borderRadius: 6, cursor: 'pointer', fontSize: 11, fontWeight: 500,
           display: 'flex', alignItems: 'center', gap: 4, transition: 'all 0.15s',
           fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
