@@ -526,17 +526,18 @@ function CodeBlock({ code, copyText }: { code: string; copyText: string }) {
       {/* Lines */}
       <div style={{
         overflowY: lines.length > MAX_LINES ? 'auto' : 'hidden',
+        overflowX: 'auto',
         maxHeight: MAX_LINES * LINE_H + 24, padding: '12px 0',
       }}>
         {lines.map((line, li) => (
-          <div key={li} style={{ display: 'flex', lineHeight: `${LINE_H}px` }}>
+          <div key={li} style={{ display: 'flex', lineHeight: `${LINE_H}px`, minWidth: 'max-content' }}>
             <div style={{
               width: 36, flexShrink: 0, textAlign: 'right', paddingRight: 14,
               color: '#4a525a', userSelect: 'none', fontSize: 11,
             }}>
               {li + 1}
             </div>
-            <div style={{ flex: 1, paddingRight: 56, whiteSpace: 'pre', overflow: 'hidden' }}>
+            <div style={{ flex: 1, paddingRight: 56, whiteSpace: 'pre' }}>
               {tokenizeHTML(line).map((tok, ti) => (
                 <span key={ti} style={{ color: TOK_COLOR[tok.type] }}>{tok.value}</span>
               ))}
@@ -665,7 +666,7 @@ function DeployPanel({
       <div style={{ borderTop: '1px solid #dfdcd7', margin: '16px 0 0' }} />
 
       {/* ── Body: two columns ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
 
         {/* Left — Setup */}
         <div style={{ padding: '20px 20px 24px', borderRight: '1px solid #dfdcd7' }}>
@@ -678,16 +679,16 @@ function DeployPanel({
           }}>
             {/* Brand green square with play icon */}
             <div style={{
-              width: 80, flexShrink: 0, background: '#004e23', minHeight: 80,
+              width: 60, flexShrink: 0, background: '#004e23', minHeight: 60,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white"
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white" stroke="white"
                 strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="5 3 19 12 5 21 5 3"/>
               </svg>
             </div>
             {/* Content */}
-            <div style={{ padding: '12px 14px' }}>
+            <div style={{ padding: '10px 12px' }}>
               <div style={{
                 fontSize: 10, fontWeight: 600, color: '#9b9895',
                 letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 5,
