@@ -467,7 +467,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
 
       {/* Instruction text — spans ~75% of the tab content area */}
       <p style={{ fontSize: 13, color: '#636260', lineHeight: 1.6, marginBottom: 20, maxWidth: '75%' }}>
-        Support users to interact with voice agent directly from a website. Here you can customize the widget for the agent as best for your users and the design of your site, and then deploy to your website.
+        Support users to interact with this voice agent directly from a website. Here you can customize the widget for the agent as best for your users and the design of your site, and then deploy to your website.
       </p>
 
       {/* Constrained content — accordions keep current width */}
