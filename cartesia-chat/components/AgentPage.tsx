@@ -586,7 +586,9 @@ function DeployPanel({
       ref={panelRef}
       style={{
         position: 'fixed', top: position.top, right: position.right,
-        width: 817, zIndex: 200,
+        /* Never wider than the space between the sidebar (208px + 1px border) and the right anchor */
+        width: 817, maxWidth: `calc(100vw - ${position.right}px - 212px)`,
+        zIndex: 200,
         fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
       }}
     >
@@ -597,11 +599,12 @@ function DeployPanel({
         borderLeft: '1px solid #dfdcd7', borderTop: '1px solid #dfdcd7',
         transform: 'rotate(45deg)',
       }} />
-      {/* Panel */}
+      {/* Panel — scrolls vertically if viewport is short */}
       <div style={{
         background: '#ffffff', border: '1px solid #dfdcd7', borderRadius: 12,
         boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)',
-        overflow: 'hidden',
+        overflowX: 'hidden', overflowY: 'auto',
+        maxHeight: `calc(100vh - ${position.top}px - 16px)`,
       }}>
       {/* ── Title row ── */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 20px 0' }}>
