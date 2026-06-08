@@ -671,7 +671,7 @@ function DeployPanel({
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) 1fr' }}>
 
         {/* Left — Setup */}
-        <div style={{ padding: '20px 20px 24px', borderRight: '1px solid #dfdcd7' }}>
+        <div style={{ padding: '20px 20px 24px', borderRight: '1px solid #dfdcd7', minWidth: 0 }}>
           <h3 style={{ fontSize: 14, fontWeight: 700, color: '#1a1a18', margin: '0 0 12px' }}>Setup</h3>
 
           {/* Quickstart button */}
@@ -749,7 +749,7 @@ function DeployPanel({
         </div>
 
         {/* Right — Embed Code or SDK */}
-        <div style={{ padding: '20px 20px 24px' }}>
+        <div style={{ padding: '20px 20px 24px', minWidth: 0, overflow: 'hidden' }}>
           {mode === 'embed' ? (
             <>
               <h3 style={{ fontSize: 14, fontWeight: 700, color: '#1a1a18', margin: '0 0 8px' }}>Embed code</h3>
