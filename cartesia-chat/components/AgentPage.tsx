@@ -289,7 +289,7 @@ export default function AgentPage() {
               agentTitleColor={agentTitleColor}       setAgentTitleColor={toExpanded(setAgentTitleColor)}
               avatarHaloColor={avatarHaloColor}       setAvatarHaloColor={toExpanded(setAvatarHaloColor)}
               showScene={showScene}                   setShowScene={toExpanded(setShowScene)}
-              selectedAvatar={selectedAvatar}         setSelectedAvatar={toExpanded(setSelectedAvatar)}
+              selectedAvatar={selectedAvatar}         setSelectedAvatar={setSelectedAvatar}
               selectedBg={selectedBg}                 setSelectedBg={toExpanded(setSelectedBg)}
               startBtnLabel={startBtnLabel}           setStartBtnLabel={setStartBtnLabel}
               avatarSource={avatarSource}             setAvatarSource={setAvatarSource}
