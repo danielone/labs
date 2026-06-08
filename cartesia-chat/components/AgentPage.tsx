@@ -725,7 +725,7 @@ function DeployPanel({
             </h3>
             {[
               'Deploying AI Agents Guide',
-              'Deployed Agents Showcase Examples',
+              'Agents Showcase Examples',
             ].map(label => (
               <div key={label} style={{ marginBottom: 6 }}>
                 <a
