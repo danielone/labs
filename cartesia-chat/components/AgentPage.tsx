@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import VoiceChat from './VoiceChat';
 import WidgetBaseColorPicker from './WidgetBaseColorPicker';
@@ -429,8 +429,319 @@ const EXPRESSIVENESS_STEPS = [
   { label: 'Highly Emotional', file: 'highly-emotional.svg'},
 ] as const;
 
+// ── HTML syntax highlighting ───────────────────────────────────────────────
+type HtmlTokType = 'punct' | 'tagname' | 'attrname' | 'attrval' | 'text';
+interface HtmlTok { type: HtmlTokType; value: string }
+
+function tokenizeHTML(src: string): HtmlTok[] {
+  const out: HtmlTok[] = [];
+  let i = 0;
+  while (i < src.length) {
+    if (src[i] === '<') {
+      out.push({ type: 'punct', value: '<' }); i++;
+      if (i < src.length && src[i] === '/') { out.push({ type: 'punct', value: '/' }); i++; }
+      const s = i;
+      while (i < src.length && /[\w-]/.test(src[i])) i++;
+      if (i > s) out.push({ type: 'tagname', value: src.slice(s, i) });
+    } else if (src[i] === '/' && i + 1 < src.length && src[i + 1] === '>') {
+      out.push({ type: 'punct', value: '/>' }); i += 2;
+    } else if (src[i] === '>') {
+      out.push({ type: 'punct', value: '>' }); i++;
+    } else if (src[i] === '=') {
+      out.push({ type: 'punct', value: '=' }); i++;
+    } else if (src[i] === '"' || src[i] === "'") {
+      const q = src[i]; let v = q; i++;
+      while (i < src.length && src[i] !== q) { v += src[i]; i++; }
+      v += q; if (i < src.length) i++;
+      out.push({ type: 'attrval', value: v });
+    } else if (/\s/.test(src[i])) {
+      let v = '';
+      while (i < src.length && /\s/.test(src[i])) { v += src[i]; i++; }
+      out.push({ type: 'text', value: v });
+    } else {
+      const s = i;
+      while (i < src.length && !/[\s<>='"\/]/.test(src[i])) i++;
+      const v = src.slice(s, i);
+      const before = src.slice(0, s);
+      const inTag = before.lastIndexOf('<') > before.lastIndexOf('>');
+      out.push({ type: inTag ? 'attrname' : 'text', value: v });
+    }
+  }
+  return out;
+}
+
+const TOK_COLOR: Record<HtmlTokType, string> = {
+  punct:   '#6e7781',
+  tagname: '#79c0ff',
+  attrname:'#e3b341',
+  attrval: '#a8dabc',
+  text:    '#c9d1d9',
+};
+
+// ── Code block ────────────────────────────────────────────────────────────
+function CodeBlock({ code, copyText }: { code: string; copyText: string }) {
+  const [copied, setCopied] = useState(false);
+  const lines = code.split('\n');
+  const LINE_H = 22;
+  const MAX_LINES = 4;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(copyText).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {});
+  };
+
+  return (
+    <div style={{
+      background: '#161b22', borderRadius: 8, border: '1px solid #30363d',
+      overflow: 'hidden', position: 'relative',
+      fontFamily: '"SF Mono","Fira Code","Geist Mono",monospace', fontSize: 11.5,
+    }}>
+      {/* Copy button */}
+      <button
+        onClick={handleCopy}
+        style={{
+          position: 'absolute', top: 8, right: 8, zIndex: 2,
+          padding: '3px 8px', background: copied ? '#1a4731' : '#21262d',
+          color: copied ? '#a8dabc' : '#8b949e', border: '1px solid #30363d',
+          borderRadius: 6, cursor: 'pointer', fontSize: 11, fontWeight: 500,
+          display: 'flex', alignItems: 'center', gap: 4, transition: 'all 0.15s',
+          fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
+        }}
+        onMouseEnter={e => { if (!copied) { e.currentTarget.style.background = '#30363d'; e.currentTarget.style.color = '#c9d1d9'; } }}
+        onMouseLeave={e => { if (!copied) { e.currentTarget.style.background = '#21262d'; e.currentTarget.style.color = '#8b949e'; } }}
+      >
+        {copied ? (
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        ) : (
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+          </svg>
+        )}
+        {copied ? 'Copied!' : 'Copy'}
+      </button>
+      {/* Lines */}
+      <div style={{
+        overflowY: lines.length > MAX_LINES ? 'auto' : 'hidden',
+        maxHeight: MAX_LINES * LINE_H + 24, padding: '12px 0',
+      }}>
+        {lines.map((line, li) => (
+          <div key={li} style={{ display: 'flex', lineHeight: `${LINE_H}px` }}>
+            <div style={{
+              width: 36, flexShrink: 0, textAlign: 'right', paddingRight: 14,
+              color: '#4a525a', userSelect: 'none', fontSize: 11,
+            }}>
+              {li + 1}
+            </div>
+            <div style={{ flex: 1, paddingRight: 56, whiteSpace: 'pre', overflow: 'hidden' }}>
+              {tokenizeHTML(line).map((tok, ti) => (
+                <span key={ti} style={{ color: TOK_COLOR[tok.type] }}>{tok.value}</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Embed snippet — formatted for display (4 lines) and raw for copy
+const EMBED_CODE_DISPLAY = [
+  '<cartesia-aiagent agent-id="agent_kQE7BPvD2NN1NYeT68VjAN">',
+  '</cartesia-aiagent>',
+  '<script src="https://unpkg.com/@cartesia/cartesia-widget-embed"',
+  '  async type="text/javascript"></script>',
+].join('\n');
+
+const EMBED_CODE_COPY = '<cartesia-aiagent agent-id="agent_kQE7BPvD2NN1NYeT68VjAN"></cartesia-aiagent><script src="https://unpkg.com/@cartesia/cartesia-widget-embed" async type="text/javascript"></script>';
+
+// ── Deploy panel (non-modal dialog) ───────────────────────────────────────
+function DeployPanel({
+  onClose, position, excludeRef,
+}: {
+  onClose: () => void;
+  position: { top: number; right: number };
+  excludeRef: React.RefObject<HTMLButtonElement | null>;
+}) {
+  const [mode, setMode] = useState<'embed' | 'sdk'>('embed');
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // Close on click outside (excluding the Deploy button that opened it)
+  useEffect(() => {
+    const handle = (e: MouseEvent) => {
+      if (
+        panelRef.current && !panelRef.current.contains(e.target as Node) &&
+        (!excludeRef.current || !excludeRef.current.contains(e.target as Node))
+      ) onClose();
+    };
+    const tid = setTimeout(() => document.addEventListener('mousedown', handle), 0);
+    return () => { clearTimeout(tid); document.removeEventListener('mousedown', handle); };
+  }, [onClose, excludeRef]);
+
+  return (
+    <div
+      ref={panelRef}
+      style={{
+        position: 'fixed', top: position.top, right: position.right,
+        width: 660, background: '#fdfdfc',
+        border: '1px solid #dfdcd7', borderRadius: 12,
+        boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)',
+        zIndex: 200, overflow: 'hidden',
+        fontFamily: 'var(--font-geist-sans), system-ui, sans-serif',
+      }}
+    >
+      {/* Header: mode toggle + close */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '12px 16px', borderBottom: '1px solid #dfdcd7',
+      }}>
+        {/* Embed Code / SDK toggle */}
+        <div style={{
+          display: 'inline-flex', border: '1px solid #dfdcd7',
+          borderRadius: 8, overflow: 'hidden', background: '#f1f0ec',
+        }}>
+          {(['embed', 'sdk'] as const).map((m, i, arr) => (
+            <button
+              key={m}
+              onClick={() => setMode(m)}
+              style={{
+                padding: '6px 18px', border: 'none',
+                borderRight: i < arr.length - 1 ? '1px solid #dfdcd7' : 'none',
+                borderRadius: i === 0 ? '7px 0 0 7px' : '0 7px 7px 0',
+                background: mode === m ? '#39342f' : 'transparent',
+                color: mode === m ? '#ffffff' : '#636260',
+                fontSize: 12, fontWeight: 500, cursor: 'pointer',
+                transition: 'background 0.15s, color 0.15s',
+                fontFamily: 'inherit',
+              }}
+              onMouseEnter={e => { if (mode !== m) e.currentTarget.style.background = '#e8e7e1'; }}
+              onMouseLeave={e => { if (mode !== m) e.currentTarget.style.background = 'transparent'; }}
+            >
+              {m === 'embed' ? 'Embed Code' : 'SDK'}
+            </button>
+          ))}
+        </div>
+        {/* Close button — consistent X icon */}
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          style={{
+            width: 28, height: 28, borderRadius: 7, border: '1px solid #dfdcd7',
+            background: '#f1f0ec', cursor: 'pointer', display: 'flex',
+            alignItems: 'center', justifyContent: 'center', transition: 'background 0.15s', flexShrink: 0,
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#dfdcd7'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = '#f1f0ec'; }}
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c7770"
+            strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      {/* Body: two columns */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.25fr' }}>
+
+        {/* Left — Setup */}
+        <div style={{ padding: 20, borderRight: '1px solid #dfdcd7' }}>
+          <h3 style={{ fontSize: 13, fontWeight: 600, color: '#39342f', margin: '0 0 3px' }}>Setup</h3>
+          <p style={{ fontSize: 12, color: '#7c7770', margin: '0 0 16px', lineHeight: 1.5 }}>
+            Attach the widget on your website.
+          </p>
+          {/* Quickstart card */}
+          <div style={{
+            border: '1px solid #dfdcd7', borderRadius: 10, padding: '10px 12px',
+            display: 'flex', alignItems: 'center', gap: 12, background: '#f9f9f8',
+          }}>
+            {/* Thumbnail */}
+            <div style={{
+              width: 64, height: 54, borderRadius: 6, overflow: 'hidden',
+              flexShrink: 0, border: '1px solid #e0ded9', display: 'flex', flexDirection: 'column',
+            }}>
+              <div style={{ background: '#e8e7e1', padding: '2px 5px', fontSize: 6.5, color: '#7c7770', lineHeight: 1.4 }}>
+                Agents
+              </div>
+              <div style={{ flex: 1, display: 'flex' }}>
+                {/* Brand green area with play icon */}
+                <div style={{
+                  width: 24, background: '#004e23', display: 'flex',
+                  alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                }}>
+                  <svg width="8" height="8" viewBox="0 0 24 24" fill="white" stroke="none">
+                    <path d="M6 3l15 9-15 9V3z"/>
+                  </svg>
+                </div>
+                {/* Mini avatar preview */}
+                <div style={{ flex: 1, background: '#f5f5f3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: 22, height: 22, borderRadius: '50%', overflow: 'hidden', border: '1px solid #dfdcd7' }}>
+                    <Image src="/avatar.png" alt="" width={22} height={22} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+                  </div>
+                </div>
+              </div>
+              <div style={{ background: '#e8e7e1', padding: '1px 5px', fontSize: 6, color: '#7c7770', lineHeight: 1.4 }}>
+                Website Widget
+              </div>
+            </div>
+            <span style={{ fontSize: 12.5, color: '#39342f', lineHeight: 1.45 }}>
+              Learn how to embed your voice agent anywhere
+            </span>
+          </div>
+        </div>
+
+        {/* Right — Embed Code or SDK */}
+        <div style={{ padding: 20 }}>
+          {mode === 'embed' ? (
+            <>
+              <h3 style={{ fontSize: 13, fontWeight: 600, color: '#39342f', margin: '0 0 3px' }}>Embed code</h3>
+              <p style={{ fontSize: 12, color: '#7c7770', margin: '0 0 12px', lineHeight: 1.5 }}>
+                Add the following snippet to the pages where you want the conversation widget to be.
+              </p>
+              <CodeBlock code={EMBED_CODE_DISPLAY} copyText={EMBED_CODE_COPY} />
+              {/* Feedback collection */}
+              <div style={{ marginTop: 16, display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                <div style={{ width: 32, height: 18, borderRadius: 99, background: '#004e23', position: 'relative', flexShrink: 0, marginTop: 1 }}>
+                  <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#fff', position: 'absolute', top: 2, right: 2 }} />
+                </div>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 500, color: '#39342f', marginBottom: 2 }}>Feedback collection</div>
+                  <p style={{ fontSize: 12, color: '#7c7770', margin: 0, lineHeight: 1.5 }}>
+                    Callers can rate their satisfaction from 1 to 5 and optionally leave a comment after the conversation.
+                  </p>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <h3 style={{ fontSize: 13, fontWeight: 600, color: '#39342f', margin: '0 0 3px' }}>SDK</h3>
+              <p style={{ fontSize: 12, color: '#7c7770', margin: '0 0 12px', lineHeight: 1.5 }}>
+                Use the Cartesia SDK to integrate a voice agent into your application programmatically.
+              </p>
+              <p style={{ fontSize: 12, color: '#c4c0bb', margin: 0 }}>SDK documentation coming soon.</p>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subtitle, setSubtitle, startBtnLabel, setStartBtnLabel, showScene, setShowScene, avatarSource, setAvatarSource, selectedAvatar, setSelectedAvatar, selectedBg, setSelectedBg, bgSource, setBgSource, widgetBase, setWidgetBase, widgetBorderColor, setWidgetBorderColor, widgetPromptTextColor, setWidgetPromptTextColor, agentNameColor, setAgentNameColor, agentTitleColor, setAgentTitleColor, startBtnBg, setStartBtnBg, startBtnText, setStartBtnText, startBtnHoverBg, setStartBtnHoverBg, startBtnHoverText, setStartBtnHoverText, avatarBorderColor, setAvatarBorderColor, avatarHaloColor, setAvatarHaloColor }: DesignTabProps) {
   const [expressivenessStep, setExpressivenessStep] = useState(3); // default: Expressive
+  const [deployOpen, setDeployOpen] = useState(false);
+  const [panelPos, setPanelPos] = useState({ top: 0, right: 0 });
+  const deployBtnRef = useRef<HTMLButtonElement>(null);
+
+  const handleDeploy = () => {
+    if (deployBtnRef.current) {
+      const rect = deployBtnRef.current.getBoundingClientRect();
+      setPanelPos({ top: rect.bottom + 8, right: window.innerWidth - rect.right });
+    }
+    setDeployOpen(o => !o);
+  };
 
   const textFields = [
     { label: 'Widget Prompt', value: widgetLabel,   set: setWidgetLabel,   placeholder: 'e.g. Need help?' },
@@ -452,6 +763,8 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <h2 style={{ fontSize: 16, fontWeight: 600, color: '#39342f', margin: 0 }}>Widget</h2>
         <button
+          ref={deployBtnRef}
+          onClick={handleDeploy}
           style={{
             height: 32, background: '#004e23', color: '#ffffff', border: 'none',
             borderRadius: 8, padding: '0 14px',
@@ -889,6 +1202,15 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
       {/* Close border at bottom */}
       <div style={{ borderTop: '1px solid #dfdcd7' }} />
       </div>{/* end constrained content */}
+
+      {/* Deploy panel — position: fixed, floats above page content */}
+      {deployOpen && (
+        <DeployPanel
+          onClose={() => setDeployOpen(false)}
+          position={panelPos}
+          excludeRef={deployBtnRef}
+        />
+      )}
     </div>
   );
 }
