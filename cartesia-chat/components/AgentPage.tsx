@@ -687,7 +687,7 @@ function DeployPanel({
             }}
             onMouseEnter={e => {
               e.currentTarget.style.borderColor = '#dfdcd7';
-              e.currentTarget.style.background = '#f1f0ec';
+              e.currentTarget.style.background = '#fbfaf9';
             }}
             onMouseLeave={e => {
               e.currentTarget.style.borderColor = '#dfdcd7';
