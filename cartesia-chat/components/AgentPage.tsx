@@ -220,17 +220,7 @@ export default function AgentPage() {
 
             <div style={{ flex: 1 }} />
 
-            {/* Get Phone Number — h-7 (28px), text-[0.8rem], outline style */}
-            <button style={{
-              height: 28, display: 'flex', alignItems: 'center', gap: 4,
-              padding: '0 10px', fontSize: '0.8rem', fontWeight: 500,
-              color: '#39342f', background: '#f9f9f8',
-              border: '1px solid #dfdcd7', borderRadius: 8, cursor: 'not-allowed',
-            }}>
-              Get Phone Number
-            </button>
-
-            {/* Call — split green button: [📞 Call][▼] */}
+{/* Call — split green button: [📞 Call][▼] */}
             <div style={{ position: 'relative', display: 'flex' }}>
               {/* Main Call button */}
               <button style={{
