@@ -129,8 +129,8 @@ export default function AgentPage() {
       <aside style={{ width: 208, flexShrink: 0, background: '#f0efe9', borderRight: '1px solid #dfdcd7', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
         {/* Logo area */}
-        <div style={{ padding: '0 20px', height: 56, display: 'flex', alignItems: 'center' }}>
-          <svg height="20" width="auto" viewBox="0 0 579 83" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Cartesia" style={{ display: 'block' }}>
+        <div style={{ padding: '0 16px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+          <svg height="20" viewBox="0 0 579 83" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Cartesia" style={{ display: 'block', width: 'auto' }}>
             <path d="M533.321 73.5189H512.402V69.1647H517.986L540.42 8.11005H550.927L573.172 69.1647H578.946V73.5189H552.253V69.1647H561.34L554.619 50.3277H530.765L524.139 69.1647H533.321V73.5189ZM532.185 46.068H553.199C545.343 23.634 543.828 19.0904 542.787 15.7774C541.746 18.9958 540.136 23.634 532.185 46.068Z" fill="#004e23"/>
             <path d="M509.259 73.5189H483.512V69.1647H490.896V12.4643H483.512V8.11005H509.259V12.4643H501.876V69.1647H509.259V73.5189Z" fill="#004e23"/>
             <path d="M425.863 53.6412H435.708V54.8717C435.708 65.0001 441.292 70.301 451.894 70.301C463.159 70.301 467.797 65.4734 467.797 58.2794C467.797 51.8426 465.241 48.4349 454.071 46.2578L444.511 44.3646C432.963 42.1875 428.04 36.9813 428.04 25.9063C428.04 15.6832 434.761 6.97461 453.125 6.97461C469.69 6.97461 476.695 13.2221 476.695 25.433V26.2849H467.418V25.433C467.418 16.8191 464.2 11.2342 452.935 11.2342C441.198 11.2342 437.79 17.103 437.79 23.3505C437.79 29.4086 440.63 33.2896 450.285 35.1828L460.129 37.0759C473.003 39.5371 477.925 44.1753 477.925 55.4397C477.925 68.6918 467.986 74.6553 451.705 74.6553C433.53 74.6553 425.863 67.1773 425.863 54.5877V53.6412Z" fill="#004e23"/>
