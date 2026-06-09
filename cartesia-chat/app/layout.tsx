@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Cartesia Chat — Skylar',
-  description: 'Voice conversation with Skylar, your AI companion powered by Cartesia',
+  title: 'Cartesia Voice Chat Widget Designer',
+  description: "Concept car to customize the design of a voice chat widget with an Avatar based on Cartesia.ai's platform.",
 };
 
 export default function RootLayout({
