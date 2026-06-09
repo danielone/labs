@@ -177,11 +177,11 @@ export default function AgentPage() {
         </nav>
 
         {/* User area */}
-        <div style={{ borderTop: '1px solid #dfdcd7', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ borderTop: '1px solid #dfdcd7', padding: '12px 12px 16px', display: 'flex', alignItems: 'center', gap: 6 }}>
           <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#dfdcd7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 600, color: '#525150', flexShrink: 0 }}>
             DS
           </div>
-          <span style={{ fontSize: 13, color: '#39342f', fontWeight: 500 }}>Daniel Schwartz</span>
+          <span style={{ fontSize: 13, color: 'rgba(57, 52, 47, 0.62)', fontWeight: 500 }}>Daniel Schwartz</span>
         </div>
       </aside>
 
@@ -190,9 +190,9 @@ export default function AgentPage() {
 
         {/* Breadcrumb header */}
         <div style={{ height: 60, flexShrink: 0, display: 'flex', alignItems: 'center', padding: '0 20px', borderBottom: '1px solid #dfdcd7', background: '#f9f9f8', gap: 6 }}>
-          <span style={{ fontSize: 13, color: '#9b9895', cursor: 'not-allowed' }}>All Agents</span>
+          <span style={{ fontSize: 14, color: '#636058', fontWeight: 400, cursor: 'default' }}>All Agents</span>
           <Icon size={14}>{icons.chevronRight}</Icon>
-          <span style={{ fontSize: 13, color: '#39342f', fontWeight: 500 }}>voice-companion</span>
+          <span style={{ fontSize: 14, color: '#39342f', fontWeight: 500 }}>voice-companion</span>
         </div>
 
         {/* Agent action header */}
