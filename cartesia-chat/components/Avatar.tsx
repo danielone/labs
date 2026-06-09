@@ -46,8 +46,8 @@ function useAvatarCanvas(
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    // Monster has its own art — skip all overlays
-    if (avatarSrc === '/monster.svg') return;
+    // Skip all canvas overlays (eye blink + mouth animation disabled)
+    return;
 
     // Blink state machine
     let phase: 'open' | 'closing' | 'holding' | 'opening' = 'open';
