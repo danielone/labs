@@ -7,16 +7,8 @@ import WidgetBaseColorPicker from './WidgetBaseColorPicker';
 
 type MainTab = 'configuration' | 'design' | 'metrics' | 'calls' | 'settings';
 
-// ── Sidebar icons (minimal SVG approximations) ─────────────────────────────
-// Exact Streamline phone icon copied from play.cartesia.ai
-const PhoneStreamlineIcon = ({ size = 13 }: { size?: number }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="-2.4 -2.4 28.8 28.8"
-    width={size} height={size} aria-hidden="true">
-    <path fill="currentColor" fillRule="evenodd" clipRule="evenodd"
-      d="m12.59 16.587 1.5-2.513.395-.66.739.21 6.441 1.84.82.235-.102.846-.626 5.227-.111.932-.937-.052a20.5 20.5 0 0 1-8.978-2.631c-1.572-.893-3.051-2.009-4.39-3.348s-2.455-2.817-3.347-4.39a20.5 20.5 0 0 1-2.632-8.978l-.051-.936.931-.112 5.227-.626.846-.101.234.82 1.84 6.44.212.74-.66.394-2.513 1.5a18.6 18.6 0 0 0 2.327 2.835c.884.884 1.835 1.66 2.836 2.328"/>
-  </svg>
-);
-
+// ── Icon components ──────────────────────────────────────────────────────────
+// Stroke-based icon (Lucide-style) — used in UI chrome (breadcrumbs, buttons, etc.)
 const Icon = ({ children, size = 16 }: { children: React.ReactNode; size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor"
     strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
@@ -24,30 +16,43 @@ const Icon = ({ children, size = 16 }: { children: React.ReactNode; size?: numbe
   </svg>
 );
 
+// Fill-based Streamline icon — used in sidebar nav (exact paths from play.cartesia.ai)
+const NavIcon = ({ children, size = 16 }: { children: React.ReactNode; size?: number }) => (
+  <svg width={size} height={size} viewBox="-2.4 -2.4 28.8 28.8"
+    xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }} aria-hidden="true">
+    {children}
+  </svg>
+);
+
+// Stroke icons — used in UI chrome (breadcrumbs, code block, deploy panel, etc.)
 const icons = {
-  tts:         <><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></>,
-  stt:         <><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="23"/><line x1="8" x2="16" y1="23" y2="23"/></>,
-  agents:      <><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="7" r="4"/><path d="M7 11v-1a5 5 0 0 1 10 0v1"/></>,
-  metrics:     <><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></>,
-  brain:       <><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></>,
-  phone:       <><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.07 9.8 19.79 19.79 0 0 1 .18 1.2 2 2 0 0 1 2.18 0h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L6.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 14.92v2Z"/></>,
-  voiceLib:    <><path d="M2 10v3"/><path d="M6 6v11"/><path d="M10 3v18"/><path d="M14 8v7"/><path d="M18 5v13"/><path d="M22 10v3"/></>,
-  personAdd:   <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></>,
-  star:        <><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></>,
-  translate:   <><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></>,
-  spark:       <><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></>,
-  book:        <><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>,
   heart:       <><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></>,
-  key:         <><circle cx="11" cy="11" r="5"/><path d="m21 21-4.3-4.3"/><path d="M8 11h6"/></>,
-  card:        <><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></>,
-  signal:      <><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></>,
-  docs:        <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></>,
   externalLink:<><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></>,
   github:      <><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></>,
   chevronRight:<><polyline points="9 18 15 12 9 6"/></>,
   copy:        <><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></>,
   deployed:    <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
   image:       <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 15 5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="8.5" r="1.5"/></>,
+};
+
+// Streamline fill icons — exact paths copied from play.cartesia.ai sidebar
+const navIcons = {
+  tts:       <path fill="currentColor" fillRule="evenodd" d="M1 1h22v19H11.384l-4.608 2.85-1.526.944V20H1zm10 4v11h2V5zM7 7v7h2V7zm8 7V7h2v7z" clipRule="evenodd"/>,
+  stt:       <path fill="currentColor" fillRule="evenodd" d="M3.5 0h7.937v7.031a3.969 3.969 0 0 1-7.937 0zm3 14.434C2.848 13.945 0 10.823 0 7.03h2C2 10.045 4.473 12.5 7.5 12.5a5.5 5.5 0 0 0 2.962-.865l1.076 1.686c-.9.575-1.933.965-3.038 1.113V16.5h-2zm10-5.955h-1.044l-.363.98-5 13.5L12.907 24l1.563-4.222h5.06l1.563 4.222 2.814-1.042-5-13.5-.363-.98zm1.919 8.3L17 12.95l-1.419 3.83zM20.5 2.5h-4v-2h6v4H24v1L21.5 8 19 5.5v-1h1.5z" clipRule="evenodd"/>,
+  agents:    <path fill="currentColor" fillRule="evenodd" d="M23 2.5h-3.724V1h-2v1.5h-3.77v8H23zm-7.477 3.082v2h2v-2zm3.5 2v-2h2v2zM9.602 23V5.796h2V23zM5.3 20.61V8.187h2V20.61zM1 10.576v7.646h2v-7.646zM18.204 12.5v5.721h2V12.5zm-4.301 0v8.11h2V12.5z" clipRule="evenodd"/>,
+  metrics:   <path fill="currentColor" fillRule="evenodd" d="M3.223 3.223a10.999 10.999 0 0 1 16.839 14.01l3.935 3.935-2.829 2.829-3.934-3.935A11 11 0 0 1 3.222 3.222M11 3a7.999 7.999 0 1 0 0 15.998A7.999 7.999 0 0 0 11 3m3.882 5.013L11.8 11.096l-1.601-1.604-.707-.708-.708.708-3.08 3.08 1.414 1.414 2.373-2.372 1.6 1.603.708.708.708-.707 3.79-3.79z" clipRule="evenodd"/>,
+  brain:     <path fill="currentColor" fillRule="evenodd" d="M4.88 5.023a3.049 3.049 0 0 1 6.097 0v5.885a3.04 3.04 0 0 1-3.039 3.039v2c1.142 0 2.195-.38 3.04-1.02v4.05a3.049 3.049 0 1 1-6.098 0v-.197a3.02 3.02 0 0 1 .822-1.88l-1.454-1.373q-.366.388-.646.848A4.98 4.98 0 0 1 1.01 12a4.98 4.98 0 0 1 2.576-4.365 5.04 5.04 0 0 0 4.333 2.464v-2A3.04 3.04 0 0 1 4.88 5.16v-.138m14.197 0a3.049 3.049 0 1 0-6.097 0v5.885a3.04 3.04 0 0 0 3.04 3.039v2a5 5 0 0 1-3.04-1.02v4.05a3.049 3.049 0 0 0 6.097 0v-.197a3.02 3.02 0 0 0-.822-1.88l1.455-1.373q.366.388.645.848A4.98 4.98 0 0 0 22.948 12a4.98 4.98 0 0 0-2.576-4.365 5.04 5.04 0 0 1-4.332 2.464v-2a3.04 3.04 0 0 0 3.037-2.938v-.138" clipRule="evenodd"/>,
+  phone:     <path fill="currentColor" fillRule="evenodd" d="m12.59 16.587 1.5-2.513.395-.66.739.21 6.441 1.84.82.235-.102.846-.626 5.227-.111.932-.937-.052a20.5 20.5 0 0 1-8.978-2.631c-1.572-.893-3.051-2.009-4.39-3.348s-2.455-2.817-3.347-4.39a20.5 20.5 0 0 1-2.632-8.978l-.051-.936.931-.112 5.227-.626.846-.101.234.82 1.84 6.44.212.74-.66.394-2.513 1.5a18.6 18.6 0 0 0 2.327 2.835c.884.884 1.835 1.66 2.836 2.328" clipRule="evenodd"/>,
+  voiceLib:  <path fill="currentColor" fillRule="evenodd" d="M1 1v22h5.5v-3h4v-4h2.956l-3.369-8.759A9.74 9.74 0 0 0 1 1m20 14.5c0-2.262-.907-4.533-2.74-6.275l1.377-1.45C21.873 9.899 23 12.695 23 15.5s-1.127 5.601-3.363 7.725l-1.378-1.45C20.093 20.033 21 17.762 21 15.5m-4.168 0c0-1.25-.5-2.506-1.52-3.475l1.377-1.45c1.422 1.35 2.143 3.134 2.143 4.925s-.721 3.574-2.143 4.925l-1.377-1.45c1.02-.97 1.52-2.226 1.52-3.475" clipRule="evenodd"/>,
+  personAdd: <path fill="currentColor" fillRule="evenodd" d="M9 0a5 5 0 1 0 0 9.998A5 5 0 0 0 9 0m2 15v4.998H0v-5.672l.35-.3.65.76-.65-.76.003-.002.004-.004.012-.01a3 3 0 0 1 .156-.122c.102-.077.246-.18.434-.3a11 11 0 0 1 1.647-.864C4.053 12.104 6.186 11.5 9 11.5c2.568 0 4.57.503 6 1.062V15zm9-2h-3v4h-4v3h4v4h3v-4h4v-3h-4z" clipRule="evenodd"/>,
+  star:      <path fill="currentColor" d="m18.364 12.496 1.377 2.362 2.553.786 1.588.489-1.175 1.174-1.646 1.645.57 2.852.38 1.908-1.772-.8-2.739-1.237-2.74 1.236-1.772.8.381-1.907.57-2.852-1.646-1.645-1.175-1.174 1.588-.488 2.552-.787 1.378-2.362.864-1.48zM9 11.5c2.231 0 4.035.38 5.407.847l-.483.83-6.569 2.021 4.414 4.413-.078.387H0v-5.672l.35-.3.65.76c-.65-.758-.65-.76-.65-.76l.003-.003.004-.004.012-.01a3 3 0 0 1 .156-.121c.102-.077.246-.18.434-.301.376-.242.925-.554 1.647-.863C4.053 12.104 6.186 11.5 9 11.5M9 0a5 5 0 1 1 0 9.998A5 5 0 0 1 9 0"/>,
+  translate: <path fill="currentColor" fillRule="evenodd" d="M6 .5V2H0v3h1.427a9.2 9.2 0 0 0 .946 3.074c.616 1.187 1.484 2.204 2.556 3.121q-.305.183-.608.347c-1.186.644-2.151.958-2.821.958v3c1.433 0 2.938-.607 4.253-1.321A22 22 0 0 0 7.5 13.115c.936.626 1.924 1.204 2.898 1.63l1.204-2.747a14 14 0 0 1-1.531-.803c1.072-.917 1.94-1.934 2.556-3.121.493-.951.803-1.97.946-3.074H15V2H9V.5zm-.964 6.192A6 6 0 0 1 4.462 5h6.076a6 6 0 0 1-.574 1.692c-.46.887-1.176 1.71-2.23 2.54l-.234.183q-.118-.09-.235-.183c-1.053-.83-1.769-1.653-2.229-2.54M15.6 8.5h-1.048l-.36.984-4.401 12-.516 1.408 2.816 1.033.517-1.408 1.005-2.742h5.974l1.006 2.742.516 1.408 2.817-1.033-.517-1.408-4.4-12-.361-.984zm2.887 8.275h-3.774L16.6 11.63z" clipRule="evenodd"/>,
+  spark:     <path fill="currentColor" d="M12.134 22.95h-2.5V5.744h2.5zm-4.3-2.39h-2.5V8.135h2.5zm8.6 0h-2.5V9.09h2.5zM3.533 18.17h-2.5v-7.646h2.5zm17.205 0h-2.5v-6.69h2.5zM19.257.22a4.225 4.225 0 0 0 4.023 4.024l.22.006v1.5A4.23 4.23 0 0 0 19.25 10h-1.5l-.006-.22A4.23 4.23 0 0 0 13.5 5.75v-1.5l.22-.006A4.23 4.23 0 0 0 17.75 0h1.5z"/>,
+  book:      <path fill="currentColor" fillRule="evenodd" d="M2.125 5a4 4 0 0 1 4-4h16v17.494h-2V21h1.75v2H5.378a3.253 3.253 0 0 1-3.243-3h-.01zm16 13.494H5.378a1.253 1.253 0 1 0 0 2.506h12.747zM6.89 3.744h2.445l.226.689 1.99 6.081-1.9.622-.42-1.28H6.995l-.42 1.28-1.9-.622 1.99-6.081zm.76 4.111h.927l-.464-1.417zm10.229.174h1v2.016l-.274.289-2.49 2.637h2.81v2h-5.547v-2.016l.273-.289 2.49-2.637h-2.763v-2z" clipRule="evenodd"/>,
+  key:       <path fill="currentColor" fillRule="evenodd" d="M17.789.492h5.656V6.73l-.995.005-1.142.006-.005 1.142-.005.99-.99.005-1.142.005-.006 1.142-.002.412-.291.29-3.247 3.248.31 3.422.043.467-.33.331-4.95 4.95-.708.707-.707-.707-8.485-8.486-.707-.707.707-.707 4.95-4.95.33-.33.467.042 3.423.31L17.496.786zM9.468 13.928l-.708-.707-.707.707-.542.542-.708.707.708.708.542.542.707.708.708-.708.542-.542.707-.707-.707-.708z" clipRule="evenodd"/>,
+  card:      <path fill="currentColor" fillRule="evenodd" d="M1 2.5H0V7h24V2.5zm-1 18V11h24v10.5H0zM15 18h4v-2h-4z" clipRule="evenodd"/>,
+  signal:    <path fill="currentColor" fillRule="evenodd" d="M16.75 1v18h5.5V1zm-7.5 18V9h5.5v10zm-7.5 0v-4h5.5v4zM1 23h22v-2H1z" clipRule="evenodd"/>,
+  docs:      <path fill="currentColor" fillRule="evenodd" d="M1 2H0v18h9a2 2 0 0 1 2 2V3a4.98 4.98 0 0 0-3-1zm12 1v19a2 2 0 0 1 2-2h9V2h-8a4.98 4.98 0 0 0-3 1" clipRule="evenodd"/>,
 };
 
 const NAV: { group: string; items: { label: string; icon: string; active?: boolean; external?: boolean }[] }[] = [
@@ -124,15 +129,25 @@ export default function AgentPage() {
       <aside style={{ width: 208, flexShrink: 0, background: '#f0efe9', borderRight: '1px solid #dfdcd7', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
         {/* Logo area */}
-        <div style={{ padding: '0 12px', height: 56, display: 'flex', alignItems: 'center' }}>
-          <span style={{ fontWeight: 700, fontSize: 15, color: '#39342f', letterSpacing: '-0.01em' }}>Cartesia</span>
+        <div style={{ padding: '0 16px', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+          <svg height="20" viewBox="0 0 579 83" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Cartesia" style={{ display: 'block', width: 'auto' }}>
+            <path d="M533.321 73.5189H512.402V69.1647H517.986L540.42 8.11005H550.927L573.172 69.1647H578.946V73.5189H552.253V69.1647H561.34L554.619 50.3277H530.765L524.139 69.1647H533.321V73.5189ZM532.185 46.068H553.199C545.343 23.634 543.828 19.0904 542.787 15.7774C541.746 18.9958 540.136 23.634 532.185 46.068Z" fill="#004e23"/>
+            <path d="M509.259 73.5189H483.512V69.1647H490.896V12.4643H483.512V8.11005H509.259V12.4643H501.876V69.1647H509.259V73.5189Z" fill="#004e23"/>
+            <path d="M425.863 53.6412H435.708V54.8717C435.708 65.0001 441.292 70.301 451.894 70.301C463.159 70.301 467.797 65.4734 467.797 58.2794C467.797 51.8426 465.241 48.4349 454.071 46.2578L444.511 44.3646C432.963 42.1875 428.04 36.9813 428.04 25.9063C428.04 15.6832 434.761 6.97461 453.125 6.97461C469.69 6.97461 476.695 13.2221 476.695 25.433V26.2849H467.418V25.433C467.418 16.8191 464.2 11.2342 452.935 11.2342C441.198 11.2342 437.79 17.103 437.79 23.3505C437.79 29.4086 440.63 33.2896 450.285 35.1828L460.129 37.0759C473.003 39.5371 477.925 44.1753 477.925 55.4397C477.925 68.6918 467.986 74.6553 451.705 74.6553C433.53 74.6553 425.863 67.1773 425.863 54.5877V53.6412Z" fill="#004e23"/>
+            <path d="M345.828 73.5189H320.081V69.1647H327.464V12.4643H311.514L309.811 23.8233H302.333L304.462 8.11005H361.541L363.67 23.8233H356.287L354.584 12.4643H338.444V69.1647H345.828V73.5189Z" fill="#004e23"/>
+            <path d="M193.568 73.5189H172.649V69.1647H178.234L200.668 8.11005H211.175L233.42 69.1647H239.194V73.5189H212.5V69.1647H221.587L214.867 50.3277H191.013L184.387 69.1647H193.568V73.5189ZM192.433 46.068H213.447C205.59 23.634 204.075 19.0904 203.034 15.7774C201.993 18.9958 200.384 23.634 192.433 46.068Z" fill="#004e23"/>
+            <path d="M172.479 51.464V51.9373C172.479 65.0001 164.433 74.6553 145.88 74.6553C125.623 74.6553 115.968 64.0536 115.968 40.673C115.968 17.5763 127.516 6.97461 146.448 6.97461C164.244 6.97461 172.479 15.7778 172.479 30.5445V31.1125H162.066V30.5445C162.066 20.2268 159.132 11.3289 146.448 11.3289C134.426 11.3289 127.421 19.4695 127.421 40.5783C127.421 65.7574 136.225 70.2064 146.258 70.2064C157.333 70.2064 162.256 63.4856 162.256 52.032V51.464H172.479Z" fill="#004e23"/>
+            <path d="M418.784 23.8233H411.401L409.271 12.4643H386.459V37.3596H400.171V30.072H405.765V49.2489H400.171V41.7138H386.459V69.1646H412.158L413.862 56.7645H421.15L419.021 73.5188H368.095V69.1646H375.478V12.4643H368.095V8.11005H416.654L418.784 23.8233Z" fill="#004e23"/>
+            <path fillRule="evenodd" clipRule="evenodd" d="M266.645 8.11005C271.946 8.11005 277.815 8.39407 281.791 9.05667C291.162 10.5712 295.422 16.5348 295.422 26.0006C295.422 34.8037 291.825 40.0099 283.022 43.0389L297.409 69.1646H302.258V54.3422H307.852V73.5192L287.281 73.5188L272.609 45.027C270.527 45.2163 268.35 45.3106 266.362 45.3106H260.777V69.1646H268.823V73.5188H242.413V69.1646H249.796V12.4643H242.413V8.11005H266.645ZM260.777 40.862H267.781C272.23 40.862 276.017 40.1994 278.383 38.7796C282.17 36.6971 284.063 32.6265 284.063 26.3791C284.063 19.0904 281.601 15.3988 276.585 13.6949C274.691 13.0324 270.621 12.4643 267.498 12.4643H260.777V40.862Z" fill="#004e23"/>
+            <path d="M90.2305 28.6346V51.252H78.884L77.3952 49.2162L73.8254 44.3359L71.3948 41.0131L67.2397 35.3331L68.4962 41.0131L70.3121 49.2162L70.7621 51.252L72.128 57.4193L73.8254 65.0923L73.9427 65.6224L75.7575 73.8243L77.5734 82.0274H51.9513L50.1354 73.8243L49.2162 69.6692L48.3207 65.6224L46.5048 57.4193L45.14 51.252L43.7753 57.4193L41.9594 65.6224L41.0143 69.8936L40.1447 73.8243L38.3288 82.0274H12.6571L14.473 73.8243L16.2381 65.8446V65.8434L16.405 65.7216L16.5415 65.6224L24.6081 59.7213L27.756 57.4193L32.8112 53.721L36.1869 51.252H0V28.6346H24.4728L24.6081 28.0256L25.3649 24.6081L27.1797 16.405L28.9956 8.20195L30.8103 0H59.4201L61.2349 8.20195L61.615 9.91858L57.4193 12.9875L52.7465 16.405L49.2162 18.9879L41.5331 24.6081L41.0143 24.9871L36.0279 28.6346H90.2305Z" fill="#004e23"/>
+          </svg>
         </div>
 
         {/* Nav */}
-        <nav style={{ flex: 1, overflowY: 'auto', padding: '8px 0' }}>
+        <nav style={{ flex: 1, overflowY: 'auto', padding: '16px 8px', display: 'flex', flexDirection: 'column', gap: 24 }}>
           {NAV.map(section => (
-            <div key={section.group} style={{ marginBottom: 4 }}>
-              <p style={{ fontSize: 11, fontWeight: 500, color: '#9b9895', padding: '6px 16px 2px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            <div key={section.group}>
+              <p style={{ fontSize: 12, fontWeight: 500, color: '#525150', paddingLeft: 12, marginTop: 0, marginBottom: 8 }}>
                 {section.group}
               </p>
               {section.items.map(item => (
@@ -141,17 +156,18 @@ export default function AgentPage() {
                   href="#"
                   onClick={e => e.preventDefault()}
                   style={{
-                    display: 'flex', alignItems: 'center', gap: 8,
-                    padding: '5px 12px', margin: '1px 4px',
-                    borderRadius: 6, textDecoration: 'none', fontSize: 13,
+                    display: 'flex', alignItems: 'center', gap: 12,
+                    padding: '4px 8px 4px 12px',
+                    borderRadius: 6, textDecoration: 'none', fontSize: 14,
                     color: item.active ? '#39342f' : '#525150',
                     background: item.active ? '#e3e2d9' : 'transparent',
                     fontWeight: item.active ? 500 : 400,
-                    cursor: item.active ? 'default' : 'not-allowed',
-                    opacity: item.active ? 1 : 0.75,
+                    cursor: 'default',
                   }}
+                  onMouseEnter={e => { if (!item.active) { e.currentTarget.style.background = '#e3e2d9'; e.currentTarget.style.color = '#39342f'; } }}
+                  onMouseLeave={e => { if (!item.active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#525150'; } }}
                 >
-                  <Icon>{icons[item.icon as keyof typeof icons]}</Icon>
+                  <NavIcon>{navIcons[item.icon as keyof typeof navIcons]}</NavIcon>
                   <span style={{ flex: 1 }}>{item.label}</span>
                   {item.external && <Icon size={12}>{icons.externalLink}</Icon>}
                 </a>
@@ -161,11 +177,11 @@ export default function AgentPage() {
         </nav>
 
         {/* User area */}
-        <div style={{ borderTop: '1px solid #dfdcd7', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ borderTop: '1px solid #dfdcd7', padding: '12px 12px 16px', display: 'flex', alignItems: 'center', gap: 6 }}>
           <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#dfdcd7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 600, color: '#525150', flexShrink: 0 }}>
             DS
           </div>
-          <span style={{ fontSize: 13, color: '#39342f', fontWeight: 500 }}>Daniel Schwartz</span>
+          <span style={{ fontSize: 13, color: 'rgba(57, 52, 47, 0.62)', fontWeight: 500 }}>Daniel Schwartz</span>
         </div>
       </aside>
 
@@ -174,9 +190,9 @@ export default function AgentPage() {
 
         {/* Breadcrumb header */}
         <div style={{ height: 60, flexShrink: 0, display: 'flex', alignItems: 'center', padding: '0 20px', borderBottom: '1px solid #dfdcd7', background: '#f9f9f8', gap: 6 }}>
-          <span style={{ fontSize: 13, color: '#9b9895', cursor: 'not-allowed' }}>All Agents</span>
+          <span style={{ fontSize: 14, color: '#636058', fontWeight: 400, cursor: 'default' }}>All Agents</span>
           <Icon size={14}>{icons.chevronRight}</Icon>
-          <span style={{ fontSize: 13, color: '#39342f', fontWeight: 500 }}>voice-companion</span>
+          <span style={{ fontSize: 14, color: '#39342f', fontWeight: 500 }}>voice-companion</span>
         </div>
 
         {/* Agent action header */}
@@ -223,7 +239,7 @@ export default function AgentPage() {
                 border: '1px solid transparent', borderRadius: '8px 0 0 8px',
                 cursor: 'not-allowed',
               }}>
-                <PhoneStreamlineIcon />
+                <NavIcon size={13}>{navIcons.phone}</NavIcon>
                 Call
               </button>
               {/* Chevron — disabled like the live console */}
@@ -842,7 +858,7 @@ function DesignTab({ widgetLabel, setWidgetLabel, agentName, setAgentName, subti
           fontSize: 12, fontWeight: 500, color: '#39342f',
           display: 'flex', alignItems: 'center', gap: 5,
         }}>
-          <Icon size={12}>{icons.book}</Icon>
+          <NavIcon size={12}>{navIcons.book}</NavIcon>
           Library
         </button>
       }>
@@ -1372,7 +1388,7 @@ function ConfigurationTab({ onPreview, previewActive }: { onPreview: () => void;
           <div>
             <h3 style={sectionHead}>Voice &amp; Language</h3>
             <div style={{ padding: '10px 12px', background: '#fdfdfc', border: '1px solid #dfdcd7', borderRadius: 8, fontSize: 13, color: '#39342f', cursor: 'not-allowed', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Icon size={14}>{icons.voiceLib}</Icon>
+              <NavIcon size={14}>{navIcons.voiceLib}</NavIcon>
               <span>Daniel - Modern Assistant</span>
             </div>
             <p style={{ fontSize: 12, color: '#9b9895', margin: '6px 0 0' }}>Language: English</p>
