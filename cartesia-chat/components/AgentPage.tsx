@@ -161,7 +161,7 @@ export default function AgentPage() {
                     borderRadius: 6, textDecoration: 'none', fontSize: 14,
                     color: item.active ? '#39342f' : '#525150',
                     background: item.active ? '#e3e2d9' : 'transparent',
-                    fontWeight: item.active ? 500 : 400,
+                    fontWeight: 500,
                     cursor: 'default',
                   }}
                   onMouseEnter={e => { if (!item.active) { e.currentTarget.style.background = '#e3e2d9'; e.currentTarget.style.color = '#39342f'; } }}
