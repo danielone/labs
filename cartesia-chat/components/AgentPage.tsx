@@ -53,6 +53,7 @@ const navIcons = {
   card:      <path fill="currentColor" fillRule="evenodd" d="M1 2.5H0V7h24V2.5zm-1 18V11h24v10.5H0zM15 18h4v-2h-4z" clipRule="evenodd"/>,
   signal:    <path fill="currentColor" fillRule="evenodd" d="M16.75 1v18h5.5V1zm-7.5 18V9h5.5v10zm-7.5 0v-4h5.5v4zM1 23h22v-2H1z" clipRule="evenodd"/>,
   docs:      <path fill="currentColor" fillRule="evenodd" d="M1 2H0v18h9a2 2 0 0 1 2 2V3a4.98 4.98 0 0 0-3-1zm12 1v19a2 2 0 0 1 2-2h9V2h-8a4.98 4.98 0 0 0-3 1" clipRule="evenodd"/>,
+  extLink:   <path fill="currentColor" fillRule="evenodd" d="m21.75 10-2.814-2.814-7.875 7.875-2.122-2.121 7.876-7.876L14 2.25l1-1h7.75V9zM10.5 4H1v19h19v-9.5h-3V20H4V7h6.5z" clipRule="evenodd"/>,
 };
 
 const NAV: { group: string; items: { label: string; icon: string; active?: boolean; external?: boolean }[] }[] = [
@@ -169,7 +170,7 @@ export default function AgentPage() {
                 >
                   <NavIcon>{navIcons[item.icon as keyof typeof navIcons]}</NavIcon>
                   <span style={{ flex: 1 }}>{item.label}</span>
-                  {item.external && <Icon size={12}>{icons.externalLink}</Icon>}
+                  {item.external && <NavIcon size={12}>{navIcons.extLink}</NavIcon>}
                 </a>
               ))}
             </div>
