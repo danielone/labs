@@ -124,7 +124,7 @@ export default function AgentPage() {
       <aside style={{ width: 208, flexShrink: 0, background: '#f0efe9', borderRight: '1px solid #dfdcd7', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
         {/* Logo area */}
-        <div style={{ padding: '0 12px', height: 56, display: 'flex', alignItems: 'center', borderBottom: '1px solid #dfdcd7' }}>
+        <div style={{ padding: '0 12px', height: 56, display: 'flex', alignItems: 'center' }}>
           <span style={{ fontWeight: 700, fontSize: 15, color: '#39342f', letterSpacing: '-0.01em' }}>Cartesia</span>
         </div>
 
