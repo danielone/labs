@@ -177,7 +177,7 @@ export default function AgentPage() {
         </nav>
 
         {/* User area */}
-        <div style={{ borderTop: '1px solid #dfdcd7', padding: '12px 12px 16px', display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div style={{ borderTop: '1px solid #dfdcd7', padding: '12px 8px 20px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#dfdcd7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 600, color: '#525150', flexShrink: 0 }}>
             DS
           </div>
