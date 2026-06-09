@@ -124,7 +124,7 @@ export default function AgentPage() {
       <aside style={{ width: 208, flexShrink: 0, background: '#f0efe9', borderRight: '1px solid #dfdcd7', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
         {/* Logo area */}
-        <div style={{ padding: '0 16px', height: 56, display: 'flex', alignItems: 'center', borderBottom: '1px solid #dfdcd7' }}>
+        <div style={{ padding: '0 20px', height: 56, display: 'flex', alignItems: 'center' }}>
           <svg height="20" width="auto" viewBox="0 0 579 83" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Cartesia" style={{ display: 'block' }}>
             <path d="M533.321 73.5189H512.402V69.1647H517.986L540.42 8.11005H550.927L573.172 69.1647H578.946V73.5189H552.253V69.1647H561.34L554.619 50.3277H530.765L524.139 69.1647H533.321V73.5189ZM532.185 46.068H553.199C545.343 23.634 543.828 19.0904 542.787 15.7774C541.746 18.9958 540.136 23.634 532.185 46.068Z" fill="#004e23"/>
             <path d="M509.259 73.5189H483.512V69.1647H490.896V12.4643H483.512V8.11005H509.259V12.4643H501.876V69.1647H509.259V73.5189Z" fill="#004e23"/>
