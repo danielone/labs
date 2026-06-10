@@ -1,5 +1,8 @@
 'use client';
 
+// Set to true to show the "Preview animations" button in the widget preview.
+const PREVIEW_ANIMATIONS_ENABLED = false;
+
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 
@@ -537,7 +540,7 @@ export default function VoiceChat({
 
             {/* Card — wrapped so Preview button can anchor to its top-right */}
             <div style={{ position: 'relative', width: 360 }}>
-              {callState === 'idle' && (
+              {PREVIEW_ANIMATIONS_ENABLED && callState === 'idle' && (
                 <button
                   onClick={startTestMode}
                   className="text-xs underline underline-offset-2 transition-colors duration-150"
