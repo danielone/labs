@@ -205,7 +205,7 @@
         state.targetKey = btn.dataset.key;
         state.view = "detail";
         lastVoiceMin = null;
-        history.pushState({ nt: "detail" }, "");
+        pushLevel();
         render();
       });
     });
@@ -286,8 +286,11 @@
     wireBack();
     el.querySelectorAll(".next-row").forEach((btn) => {
       btn.addEventListener("click", () => {
+        // Each drill-down to a later train is its own history level, so
+        // Back retraces earlier departures before reaching the board.
         state.targetKey = btn.dataset.key;
         lastVoiceMin = null;
+        pushLevel();
         render();
       });
     });
@@ -301,18 +304,24 @@
   }
 
   // The visible Back control and the browser/phone back gesture are the
-  // same thing: Back pops one history level, and popstate does the exit.
+  // same thing: Back pops one history level, and popstate restores it.
   function wireBack() {
     const back = $("#board-back");
     if (back) back.addEventListener("click", () => history.back());
   }
 
-  function exitDetail() {
-    state.view = "list";
-    state.sel = null;
-    state.targetKey = null;
-    lastVoiceMin = null;
-    render();
+  // Every navigation level (train detail, each drill-down, the picker)
+  // pushes an entry whose state can rebuild the view on popstate.
+  let stackDepth = 0;
+
+  function pushLevel() {
+    history.pushState({
+      nt: "detail",
+      station: state.station,
+      sel: state.sel,
+      targetKey: state.targetKey
+    }, "");
+    stackDepth++;
   }
 
   function render() {
@@ -395,6 +404,7 @@
     renderStationList("");
     $("#picker-search").focus();
     history.pushState({ nt: "picker" }, "");
+    stackDepth++;
   }
 
   function closePicker() {
@@ -429,10 +439,9 @@
   }
 
   function pickStation(id) {
-    // Consume the picker's history entry — plus the detail entry when the
-    // picker was opened from a train's detail view, since a new station
-    // lands on its station board.
-    const depth = state.view === "detail" ? 2 : 1;
+    // A new station starts fresh on its board: unwind the whole stack
+    // (picker + any drill-down levels) in one suppressed jump.
+    const depth = stackDepth;
     state.station = id;
     state.view = "list";
     state.sel = null;
@@ -440,8 +449,11 @@
     localStorage.setItem("nt-station", id);
     closePicker();
     refresh();
-    suppressPop = true;
-    history.go(-depth);
+    if (depth > 0) {
+      suppressPop = true;
+      stackDepth = 0;
+      history.go(-depth);
+    }
   }
 
   /* ---------- wiring ---------- */
@@ -453,12 +465,24 @@
 
   let suppressPop = false;
 
-  function onPopState() {
+  function onPopState(e) {
     if (suppressPop) { suppressPop = false; return; }
-    if (state.picking) { closePicker(); return; }
-    if (state.view === "detail") exitDetail();
-    // Already on the station board: nothing to pop; the browser handles
-    // any further back navigation normally.
+    stackDepth = Math.max(0, stackDepth - 1);
+    if (state.picking) closePicker();
+    const s = e.state;
+    if (s && s.nt === "detail" && s.sel && s.station === state.station) {
+      // Restore the departure level we navigated back (or forward) to.
+      state.view = "detail";
+      state.sel = s.sel;
+      state.targetKey = s.targetKey || null;
+    } else {
+      // Base of the stack (or an entry from another station): the board.
+      state.view = "list";
+      state.sel = null;
+      state.targetKey = null;
+    }
+    lastVoiceMin = null;
+    render();
   }
 
   function init() {

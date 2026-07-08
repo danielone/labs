@@ -5,7 +5,9 @@ there across every line, in both directions, each row signed with its
 terminal and platform direction (Uptown/Downtown/Queens…). Tap a train and
 you get its **countdown card** — line, direction, platform, departure time,
 live countdown — with the following trains for that same line + direction,
-tappable to target a later one; **Back** returns to the station board. All
+tappable to drill down to a later one. Every level is a real history entry:
+**Back** (the button or the browser/phone gesture) retraces each departure
+you viewed, then lands on the station board. All
 in the visual language of the NYC subway: Helvetica, black signage panels,
 official route-bullet colors, and countdown-clock departure boards.
 
