@@ -180,14 +180,18 @@ for route, terms in best_by_terminal.items():
 stations_out = {}
 for cid, rows in complex_rows.items():
     names = []
+    gtfs_ids = []
     for r in rows:
         if r["Stop Name"] not in names:
             names.append(r["Stop Name"])
+        if r["GTFS Stop ID"] not in gtfs_ids:
+            gtfs_ids.append(r["GTFS Stop ID"])
     stations_out[cid] = {
         "name": " / ".join(names[:2]),
         "borough": BOROUGH.get(rows[0]["Borough"], rows[0]["Borough"]),
         "lat": round(float(rows[0]["GTFS Latitude"]), 5),
         "lng": round(float(rows[0]["GTFS Longitude"]), 5),
+        "gtfs": gtfs_ids,   # platform stop ids — used for real-time lookups
     }
 
 # ---- report -------------------------------------------------------------

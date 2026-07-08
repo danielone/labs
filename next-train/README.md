@@ -14,9 +14,13 @@ official route-bullet colors, and countdown-clock departure boards.
 > The previous design (origin → destination trip planner with transfer
 > routing) is archived on the `archive/v1-destination-planner` git branch.
 
-Web app (installable PWA, works fully offline) + Capacitor wrapper for
-iOS App Store / Google Play submission. Vanilla HTML/CSS/JS — no build step,
-no dependencies, no network calls, no data collection.
+Web app (installable PWA) + Capacitor wrapper for iOS App Store /
+Google Play submission. Vanilla HTML/CSS/JS front end — no build step.
+Departure times are **live MTA data** (see below), with an offline
+schedule-based fallback. The only network calls are to the app's own
+departures endpoint; no analytics, no data collection.
+
+**Live: https://next-train-zeta.vercel.app**
 
 ## Run locally
 
@@ -51,25 +55,33 @@ so subway↔SIR trips report no route). To refresh after an MTA schedule
 change, re-download the two sources (commands in the script docstring) and
 run `python3 tools/generate_stations.py`.
 
-## How departures work (important)
+## Real-time departures
 
-Departure times are **deterministic schedule-based estimates**, not live
-data: each line/direction/station is assigned a fixed offset on a realistic
-headway grid (tighter at rush hour, sparser late nights; B/W weekday-only,
-Z rush-hours-only). The UI discloses this. The board merges every
-line/direction serving the chosen complex, soonest first. Departure keys are
-deterministic, so a targeted train keeps its identity while the board ticks.
+**Live:** https://next-train-zeta.vercel.app (Vercel project
+`danielones-projects/next-train`)
 
-### Wiring real-time data
+Departure times come from the **MTA's real-time GTFS-RT feeds**, refreshed
+every 30 seconds:
 
-The MTA publishes free real-time GTFS-RT feeds (protobuf, no API key needed):
-https://api.mta.info/. Browsers can't read them directly (CORS + protobuf),
-so add a small server endpoint that fetches the feed for a line group,
-decodes it with `gtfs-realtime-bindings`, and returns
-`{ stopId, direction, departureEpochs[] }` as JSON. Then replace
-`nextDepartures()` in `www/js/app.js` with a fetch to that endpoint —
-everything else (routing, rendering, countdown) stays as is. You'd also map
-the curated station ids to GTFS stop ids.
+- `api/departures.js` — Vercel serverless function. The MTA feeds are
+  protobuf and CORS-blocked for browsers, so this endpoint fetches the
+  feeds for the requested routes (feeds are split by line group), decodes
+  them with `gtfs-realtime-bindings`, and returns the departures at the
+  requested platform stops as JSON. Edge-cached 15s so concurrent users
+  share MTA fetches. No API key required.
+- The client asks for its station's platform stop ids (in the generated
+  station data) + routes, and keys each departure by the **real GTFS trip
+  id** — so a targeted train keeps its identity as predictions shift, and
+  the countdown tracks the actual train.
+- Express variants (6X/7X/FX) are folded into their base route bullets.
+
+**Fallback:** if live data is unreachable (offline, API down, or running
+the static files without the function), boards fall back to deterministic
+schedule-based estimates on realistic headways, and the footer says so.
+Local dev servers (`localhost`) call the deployed API directly (CORS `*`).
+
+To deploy your own: `npx vercel deploy --prod` from the project root
+(`vercel.json` serves `www/` statically + `api/` as functions).
 
 ## Ship it as a mobile app (Capacitor)
 
@@ -85,13 +97,13 @@ npm run android    # same for Android
 In Xcode: set your signing team, use `www/icons/icon-1024.png` for the App
 Store icon, archive, and upload via App Store Connect. App Review checklist:
 
-- **Privacy:** the app makes zero network requests and collects nothing —
-  declare "Data Not Collected" in App Store Connect. You still need a
-  privacy-policy URL (a one-liner page works).
-- **Guideline 4.2 (minimum functionality):** wrapped websites get rejected;
-  this app is fully offline/self-contained, which passes, but expect
-  scrutiny of the simulated data — consider wiring real-time data (above)
-  before submitting.
+- **Privacy:** the app collects nothing; its only network calls are
+  anonymous GETs to the departures endpoint — declare "Data Not Collected"
+  in App Store Connect. You still need a privacy-policy URL (a one-liner
+  page works).
+- **Guideline 4.2 (minimum functionality):** wrapped websites get
+  rejected; live real-time departures + offline behavior give this app
+  standalone utility, but review is still at Apple's discretion.
 - **Screenshots:** 6.7" and 6.5" iPhone sizes minimum.
 
 ## ⚠️ Trademark note before you publish
@@ -107,15 +119,19 @@ and makes no MTA affiliation claims.
 ## Structure
 
 ```
-www/                   the entire app (this folder deploys anywhere static)
+www/                   the app (static files; also works offline)
   index.html           single page: stop picker + departure board
   css/style.css        design tokens (MTA palette) + components
-  js/stations.js       GENERATED full network: 444 complexes, 26 routes
-  js/app.js            station board, schedule model, countdown, targeting
-tools/generate_stations.py  regenerates stations.js from official MTA data
-  sw.js                offline cache
+  js/stations.js       GENERATED full network: 444 complexes, 26 routes,
+                       platform stop ids for real-time lookups
+  js/app.js            station board, live data + schedule fallback,
+                       countdown, drill-down history
+  sw.js                offline cache (static assets only, never /api)
   manifest.webmanifest PWA manifest
   icons/               generated icons incl. 1024px App Store icon
+api/departures.js      Vercel function: MTA GTFS-RT protobuf → JSON
+vercel.json            serves www/ statically + api/ as functions
+tools/generate_stations.py  regenerates stations.js from official MTA data
 capacitor.config.json  native wrapper config (appId com.danielschwartz.nexttrain)
 ```
 

@@ -21,6 +21,13 @@
   const DEFAULT_STATION = "611"; // Times Sq-42 St / Port Authority complex
   const LIST_ROWS = 6;
 
+  // Real-time data: /api/departures (Vercel function decoding MTA GTFS-RT).
+  // Same-origin in production; local dev servers use the deployed API.
+  const RT_BASE = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+    ? "https://next-train-zeta.vercel.app" : "";
+  const RT_REFRESH_MS = 30000;   // fetch cadence
+  const RT_STALE_MS = 90000;     // older than this → fall back to schedule
+
   // Solid left arrow in the spirit of MTA wayfinding signage.
   const BACK_ARROW = `<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="currentColor"><path d="M8.6 1.6 2.2 8l6.4 6.4 1.4-1.4L5.9 8.9H14V7.1H5.9L10 3z"/></svg>`;
 
@@ -36,6 +43,8 @@
     view: "list",        // "list" = station board, "detail" = one train
     sel: null,           // {line, dir} in detail view
     targetKey: null,     // departure the user is targeting in detail view
+    rt: null,            // { station, at, deps[] } — latest real-time fetch
+    live: false,         // whether the current board is real-time data
     lastFocus: null,
     lastSig: ""
   };
@@ -93,8 +102,57 @@
     return out;
   }
 
+  /* ---------- real-time data ---------- */
+
+  // GTFS-RT uses express variants (6X, FX...) — map to the app's routes.
+  function normalizeRoute(r) {
+    if (LINES[r]) return r;
+    const base = r.replace(/X$/, "");
+    return LINES[base] ? base : null;
+  }
+
+  async function fetchRT() {
+    const st = state.station;
+    const s = STATIONS[st];
+    if (!s || !s.gtfs || !navigator.onLine) return;
+    try {
+      const url = RT_BASE + "/api/departures?stops=" + s.gtfs.join(",") + "&routes=" + s.lines.join(",");
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      if (state.station !== st) return;   // user moved on mid-flight
+      const deps = [];
+      for (const d of data.departures || []) {
+        const line = normalizeRoute(d.route);
+        if (!line) continue;
+        deps.push({
+          line,
+          dir: d.dir === "N" ? 0 : 1,
+          time: new Date(d.t * 1000),
+          key: "rt:" + d.tripId + ":" + d.stop   // real train identity
+        });
+      }
+      deps.sort((a, b) => a.time - b.time);
+      state.rt = { station: st, at: Date.now(), deps };
+    } catch (e) {
+      // Keep the last fetch; once it ages past RT_STALE_MS the boards
+      // fall back to the schedule model and the footer says so.
+    }
+  }
+
+  function rtFresh() {
+    return !!(state.rt && state.rt.station === state.station
+      && Date.now() - state.rt.at < RT_STALE_MS);
+  }
+
   // Upcoming departures at a stop across every line/direction serving it.
   function stationBoard(stationId, after, count) {
+    if (rtFresh()) {
+      state.live = true;
+      const cutoff = after.getTime() - 15000;
+      return state.rt.deps.filter((d) => d.time.getTime() > cutoff).slice(0, count);
+    }
+    state.live = false;
     const out = [];
     for (const lineId of STATIONS[stationId].lines) {
       if (!isRunning(lineId, after)) continue;
@@ -113,7 +171,16 @@
 
   // Departures for the selected line + direction only (detail view).
   function detailBoard(after) {
-    if (!state.sel || !isRunning(state.sel.line, after)) return [];
+    if (!state.sel) return [];
+    if (rtFresh()) {
+      state.live = true;
+      const cutoff = after.getTime() - 15000;
+      return state.rt.deps.filter((d) =>
+        d.line === state.sel.line && d.dir === state.sel.dir && d.time.getTime() > cutoff
+      ).slice(0, 6);
+    }
+    state.live = false;
+    if (!isRunning(state.sel.line, after)) return [];
     return nextDepartures(state.sel.line, state.sel.dir, state.station, after, 6);
   }
 
@@ -333,10 +400,20 @@
 
   let lastVoiceMin = null;
 
+  function updateStatus() {
+    const el = $("#data-status");
+    if (!el) return;
+    const text = state.live
+      ? "Live MTA data · updates every 30 seconds. Check station signage before boarding."
+      : "Live data unavailable — showing schedule-based estimates. Check station signage before boarding.";
+    if (el.textContent.trim() !== text) el.textContent = text;
+  }
+
   function tick() {
     const nowEl = $("#now-clock");
     if (nowEl) nowEl.textContent = fmtClock(new Date());
     if (!state.station) return;
+    updateStatus();
     const now = Date.now();
 
     if (state.view === "list") {
@@ -449,6 +526,7 @@
     localStorage.setItem("nt-station", id);
     closePicker();
     refresh();
+    fetchRT();
     if (depth > 0) {
       suppressPop = true;
       stackDepth = 0;
@@ -508,6 +586,12 @@
 
     refresh();
     setInterval(tick, 1000);
+
+    fetchRT();
+    setInterval(fetchRT, RT_REFRESH_MS);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") fetchRT();
+    });
 
     if ("serviceWorker" in navigator && location.protocol !== "file:") {
       navigator.serviceWorker.register("sw.js").catch(() => {});
