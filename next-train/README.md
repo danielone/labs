@@ -1,4 +1,4 @@
-# Next Train NYC
+# NYC Next Train
 
 Pick your stop and you get the **station board**: the next trains arriving
 there across every line, in both directions, each row signed with its

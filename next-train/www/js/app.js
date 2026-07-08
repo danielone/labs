@@ -410,8 +410,6 @@
   }
 
   function tick() {
-    const nowEl = $("#now-clock");
-    if (nowEl) nowEl.textContent = fmtClock(new Date());
     if (!state.station) return;
     updateStatus();
     const now = Date.now();

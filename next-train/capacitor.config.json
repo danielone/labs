@@ -1,6 +1,6 @@
 {
   "appId": "com.danielschwartz.nexttrain",
-  "appName": "Next Train NYC",
+  "appName": "NYC Next Train",
   "webDir": "www",
   "ios": {
     "contentInset": "always",

@@ -98,16 +98,28 @@ body {
   gap: 10px;
 }
 
+/* brand mark: the countdown-clock bullet — white circle, black "2 min" */
 .brand-mark {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 30px; height: 30px;
+  width: 34px; height: 34px;
   border-radius: 50%;
-  background: var(--mta-green);
-  color: var(--mta-white);
-  font-size: 14px;
+  background: var(--mta-white);
+  color: var(--mta-black);
+  font-size: 16px;
+  font-weight: 700;
   line-height: 1;
+}
+
+.brand-mark small {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
+  margin-top: 1px;
 }
 
 .brand-name {
@@ -115,13 +127,6 @@ body {
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.01em;
-}
-
-.now-clock {
-  font-size: 16px;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  color: var(--color-sign-muted);
 }
 
 /* ---------- planner ---------- */

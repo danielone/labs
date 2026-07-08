@@ -1,7 +1,7 @@
 {
-  "name": "Next Train NYC",
-  "short_name": "Next Train",
-  "description": "Pick a destination. See the train to catch, where to board, and a countdown to departure.",
+  "name": "NYC Next Train",
+  "short_name": "NYC Next Train",
+  "description": "Pick your stop. See the next trains, live from the MTA, with a countdown to departure.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
