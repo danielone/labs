@@ -404,7 +404,7 @@
     const el = $("#data-status");
     if (!el) return;
     const text = state.live
-      ? "Live MTA data · updates every 30 seconds. Check station signage before boarding."
+      ? "Live MTA data: updates every 30 seconds. Check station signage before boarding."
       : "Live data unavailable — showing schedule-based estimates. Check station signage before boarding.";
     if (el.textContent.trim() !== text) el.textContent = text;
   }
