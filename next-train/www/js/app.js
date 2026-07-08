@@ -273,7 +273,7 @@
           <span>${esc(LINES[p.line].name)}</span>
         </div>
         <div class="board-nexts">
-          <div class="nexts-head"><span>Next ${esc(LINES[p.line].label)} trains ${esc(dirLabel(p))}</span><span class="nexts-hint">tap to target</span></div>
+          <div class="nexts-head"><span>Next trains ${esc(dirLabel(p))}</span><span class="nexts-hint">tap to target</span></div>
           ${rows}
         </div>
       </div>
