@@ -1,11 +1,13 @@
 # Next Train NYC
 
-Pick your stop. See **the next train arriving there — line, direction,
-platform, departure time, and a live countdown** — plus the two trains after
-it. Tap one of those to target it instead: the big card switches to that
-train and the list recomputes. All in the visual language of the NYC subway:
-Helvetica, black signage panels, official route-bullet colors, and
-countdown-clock departure boards.
+Pick your stop and you get the **station board**: the next trains arriving
+there across every line, in both directions, each row signed with its
+terminal and platform direction (Uptown/Downtown/Queens…). Tap a train and
+you get its **countdown card** — line, direction, platform, departure time,
+live countdown — with the following trains for that same line + direction,
+tappable to target a later one; **Back** returns to the station board. All
+in the visual language of the NYC subway: Helvetica, black signage panels,
+official route-bullet colors, and countdown-clock departure boards.
 
 > The previous design (origin → destination trip planner with transfer
 > routing) is archived on the `archive/v1-destination-planner` git branch.
@@ -20,9 +22,9 @@ no dependencies, no network calls, no data collection.
 php -S localhost:8123 -t www        # or: python3 -m http.server 8123 -d www
 ```
 
-Visit http://localhost:8123. Choose "Your stop" — the departure board shows
-the next train there across every line and direction serving it, with a
-ticking countdown, and the two trains after it as tappable rows.
+Visit http://localhost:8123. Choose "Your stop" — the station board lists
+the next trains there (all lines, both directions). Tap one for its ticking
+countdown and the following trains on that line + direction.
 
 **Dev note:** the service worker caches assets cache-first. When you edit
 CSS/JS, bump the `CACHE` version at the top of `www/sw.js` (or unregister the

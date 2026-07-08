@@ -1,9 +1,11 @@
-/* Next Train NYC — app logic (v2: station departure board)
+/* Next Train NYC — app logic (v3: station board → train detail)
  *
- * Pick a stop; the board shows the next train there (any line, either
- * direction), with the two trains after it. Tapping a following train
- * targets it: the big card switches to that train and the following list
- * recomputes from there.
+ * Pick a stop and you get the station board: the next trains there across
+ * every line and direction (each row shows the terminal and the platform
+ * direction — Uptown/Downtown etc). No countdown yet. Tap a train and the
+ * detail view shows its countdown card, with the following trains for that
+ * same line + direction (tappable to target a later one). Back returns to
+ * the station board.
  *
  * Departure times are deterministic, schedule-based estimates: each
  * line/direction/station gets a fixed offset on a headway grid, so the
@@ -17,6 +19,7 @@
   const $ = (sel) => document.querySelector(sel);
 
   const DEFAULT_STATION = "611"; // Times Sq-42 St / Port Authority complex
+  const LIST_ROWS = 6;
 
   function validStation(id) {
     return id && STATIONS[id] ? id : null;
@@ -27,8 +30,9 @@
       || validStation(localStorage.getItem("nt-from"))   // v1 carry-over
       || DEFAULT_STATION,
     picking: false,
-    selectedKey: null,   // departure the user is targeting; null = earliest
-    board: [],           // upcoming departures at the stop, soonest first
+    view: "list",        // "list" = station board, "detail" = one train
+    sel: null,           // {line, dir} in detail view
+    targetKey: null,     // departure the user is targeting in detail view
     lastFocus: null,
     lastSig: ""
   };
@@ -67,7 +71,8 @@
     return true;
   }
 
-  // Next `n` departures (as Dates) for a line/direction at a station.
+  // Next `n` departures for a line/direction at a station, as stable-keyed
+  // objects (deterministic epochs, so identity survives each tick).
   function nextDepartures(lineId, dirIndex, stationId, after, n) {
     const hwSec = headwayFor(lineId, after) * 60;
     const offset = hashStr(lineId + ":" + dirIndex + ":" + stationId) % hwSec;
@@ -75,13 +80,17 @@
     let first = t + ((offset - t) % hwSec + hwSec) % hwSec;
     if (first === t) first += hwSec;
     const out = [];
-    for (let i = 0; i < n; i++) out.push(new Date((first + i * hwSec) * 1000));
+    for (let i = 0; i < n; i++) {
+      const epoch = first + i * hwSec;
+      out.push({
+        line: lineId, dir: dirIndex, time: new Date(epoch * 1000),
+        key: lineId + ":" + dirIndex + ":" + epoch
+      });
+    }
     return out;
   }
 
-  // All upcoming departures at a stop across every line/direction serving
-  // it, soonest first. Keys are stable (deterministic epochs), so a
-  // targeted train keeps its identity as the board recomputes each tick.
+  // Upcoming departures at a stop across every line/direction serving it.
   function stationBoard(stationId, after, count) {
     const out = [];
     for (const lineId of STATIONS[stationId].lines) {
@@ -92,16 +101,17 @@
         // No departures toward the terminal the train ends at.
         if (dir === 0 && i === 0) continue;
         if (dir === 1 && i === line.stops.length - 1) continue;
-        for (const time of nextDepartures(lineId, dir, stationId, after, 3)) {
-          out.push({
-            line: lineId, dir, time,
-            key: lineId + ":" + dir + ":" + Math.floor(time.getTime() / 1000)
-          });
-        }
+        out.push(...nextDepartures(lineId, dir, stationId, after, 3));
       }
     }
     out.sort((a, b) => a.time - b.time);
     return out.slice(0, count);
+  }
+
+  // Departures for the selected line + direction only (detail view).
+  function detailBoard(after) {
+    if (!state.sel || !isRunning(state.sel.line, after)) return [];
+    return nextDepartures(state.sel.line, state.sel.dir, state.station, after, 6);
   }
 
   /* ---------- rendering ---------- */
@@ -150,50 +160,103 @@
     $("#station-bullets").innerHTML = STATIONS[state.station].lines.map((l) => bulletHTML(l, "sm")).join("");
   }
 
-  function computeBoard() {
-    state.board = stationBoard(state.station, new Date(), 9);
-    if (state.selectedKey && !state.board.some((d) => d.key === state.selectedKey)) {
-      state.selectedKey = null;  // targeted train departed
-    }
+  /* --- station board (list view) --- */
+
+  function listSig(board) {
+    return "L|" + board.map((d) => d.key).join("|");
   }
 
-  function primaryIndex() {
-    if (!state.selectedKey) return 0;
-    const i = state.board.findIndex((d) => d.key === state.selectedKey);
+  function renderList() {
+    const el = $("#result");
+    const board = stationBoard(state.station, new Date(), LIST_ROWS);
+    const hadFocus = el.contains(document.activeElement);
+    if (!board.length) {
+      el.innerHTML = `<div class="notice">No trains scheduled at this stop right now.</div>`;
+      state.lastSig = "L|";
+      return;
+    }
+    const now = Date.now();
+    const rows = board.map((d) => {
+      const plat = platformLabel(d);
+      return `
+        <button type="button" class="next-row" data-key="${d.key}" data-line="${d.line}" data-dir="${d.dir}"
+          aria-label="${LINES[d.line].label} train ${esc(dirLabel(d))}${plat ? ", " + esc(plat) : ""}, ${fmtMin(d, now)}. Show countdown.">
+          ${bulletHTML(d.line, "md")}
+          <span class="next-dest">
+            <span class="next-term">${esc(dirLabel(d))}</span>
+            ${plat ? `<span class="next-dir">${esc(plat)}</span>` : ""}
+          </span>
+          <span class="next-min" data-key-min="${d.key}">${fmtMin(d, now)}</span>
+        </button>`;
+    }).join("");
+
+    el.innerHTML = `
+      <div class="board" role="group" aria-label="Next trains at this station">
+        <div class="nexts-head"><span>Next trains</span><span class="nexts-hint">tap for countdown</span></div>
+        ${rows}
+      </div>`;
+
+    el.querySelectorAll(".next-row").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.sel = { line: btn.dataset.line, dir: Number(btn.dataset.dir) };
+        state.targetKey = btn.dataset.key;
+        state.view = "detail";
+        lastVoiceMin = null;
+        render();
+      });
+    });
+
+    if (hadFocus) {
+      const row = el.querySelector(".next-row");
+      if (row) row.focus();
+    }
+    state.lastSig = listSig(board);
+  }
+
+  /* --- train detail view --- */
+
+  function primaryIndex(board) {
+    if (!state.targetKey) return 0;
+    const i = board.findIndex((d) => d.key === state.targetKey);
     return i < 0 ? 0 : i;
   }
 
-  function boardSig() {
-    const i = primaryIndex();
-    return state.board.slice(i, i + 3).map((d) => d.key).join("|");
+  function detailSig(board) {
+    const i = primaryIndex(board);
+    return "D|" + board.slice(i, i + 3).map((d) => d.key).join("|");
   }
 
-  function renderResult() {
+  function renderDetail() {
     const el = $("#result");
-    if (!state.board.length) {
-      el.innerHTML = `<div class="notice">No trains scheduled at this stop right now.</div>`;
-      state.lastSig = "";
+    const board = detailBoard(new Date());
+    const hadFocus = el.contains(document.activeElement);
+
+    if (!board.length) {
+      el.innerHTML = `
+        <button type="button" class="board-back" id="board-back">&#9666; Back</button>
+        <div class="notice">This train isn&rsquo;t running right now.</div>`;
+      wireBack();
+      state.lastSig = "D|";
       return;
     }
 
-    const i = primaryIndex();
-    const p = state.board[i];
-    const following = state.board.slice(i + 1, i + 3);
+    const i = primaryIndex(board);
+    const p = board[i];
+    const following = board.slice(i + 1, i + 3);
     const now = Date.now();
     const plat = platformLabel(p);
-
-    const hadRowFocus = el.contains(document.activeElement);
 
     const rows = following.map((d) => `
         <button type="button" class="next-row" data-key="${d.key}"
           aria-label="Target the ${fmtClock(d.time)} ${LINES[d.line].label} train ${esc(dirLabel(d))}, ${fmtMin(d, now)}">
           ${bulletHTML(d.line, "sm")}
-          <span class="next-dest">${esc(dirLabel(d))}</span>
+          <span class="next-dest"><span class="next-term">${esc(dirLabel(d))}</span></span>
           <span class="next-min" data-key-min="${d.key}">${fmtMin(d, now)}</span>
         </button>`).join("");
 
     el.innerHTML = `
-      <div class="board" role="group" aria-label="Departure board">
+      <button type="button" class="board-back" id="board-back" aria-label="Back to all trains at this station">&#9666; Back</button>
+      <div class="board" role="group" aria-label="Departure countdown">
         <div class="board-top">
           ${bulletHTML(p.line, "lg")}
           <div class="board-dest">
@@ -210,40 +273,48 @@
           <span>${esc(LINES[p.line].name)}</span>
         </div>
         <div class="board-nexts">
-          <div class="nexts-head"><span>Next trains</span><span class="nexts-hint">tap to target</span></div>
+          <div class="nexts-head"><span>Next ${esc(LINES[p.line].label)} trains ${esc(dirLabel(p))}</span><span class="nexts-hint">tap to target</span></div>
           ${rows}
-          ${i > 0 ? `<button type="button" class="board-reset" id="board-reset">&#9666; Back to next train</button>` : ""}
         </div>
       </div>
       <div class="sr-only" aria-live="polite" id="count-voice"></div>`;
 
+    wireBack();
     el.querySelectorAll(".next-row").forEach((btn) => {
       btn.addEventListener("click", () => {
-        state.selectedKey = btn.dataset.key;
+        state.targetKey = btn.dataset.key;
         lastVoiceMin = null;
-        renderResult();
-        tick();
+        render();
       });
     });
-    const reset = $("#board-reset");
-    if (reset) {
-      reset.addEventListener("click", () => {
-        state.selectedKey = null;
-        lastVoiceMin = null;
-        renderResult();
-        tick();
-      });
-    }
 
-    // Don't strand keyboard focus when a departure forces a re-render.
-    if (hadRowFocus) {
-      const row = el.querySelector(".next-row");
+    if (hadFocus) {
+      const row = el.querySelector(".next-row") || $("#board-back");
       if (row) row.focus();
     }
-
-    state.lastSig = boardSig();
+    state.lastSig = detailSig(board);
     tick();
   }
+
+  function wireBack() {
+    const back = $("#board-back");
+    if (back) {
+      back.addEventListener("click", () => {
+        state.view = "list";
+        state.sel = null;
+        state.targetKey = null;
+        lastVoiceMin = null;
+        render();
+      });
+    }
+  }
+
+  function render() {
+    if (state.view === "detail" && state.sel) renderDetail();
+    else renderList();
+  }
+
+  /* --- ticking --- */
 
   let lastVoiceMin = null;
 
@@ -251,22 +322,31 @@
     const nowEl = $("#now-clock");
     if (nowEl) nowEl.textContent = fmtClock(new Date());
     if (!state.station) return;
-
-    computeBoard();
-    if (!state.board.length) {
-      if (state.lastSig !== "") renderResult();
-      return;
-    }
-    // Re-render only when the visible trains change (a departure passed or
-    // the target changed); otherwise just update the ticking numbers, so
-    // focus on the tappable rows isn't destroyed every second.
-    if (boardSig() !== state.lastSig) {
-      renderResult();
-      return;
-    }
-
     const now = Date.now();
-    const p = state.board[primaryIndex()];
+
+    if (state.view === "list") {
+      const board = stationBoard(state.station, new Date(), LIST_ROWS);
+      if (listSig(board) !== state.lastSig) { renderList(); return; }
+      board.forEach((d) => {
+        const minEl = document.querySelector(`[data-key-min="${d.key}"]`);
+        if (minEl) {
+          const m = fmtMin(d, now);
+          if (minEl.textContent !== m) minEl.textContent = m;
+        }
+      });
+      return;
+    }
+
+    // detail view
+    const board = detailBoard(new Date());
+    if (state.targetKey && !board.some((d) => d.key === state.targetKey)) {
+      state.targetKey = null;  // targeted train departed → anchor to next
+    }
+    if (detailSig(board) !== state.lastSig) { renderDetail(); return; }
+    if (!board.length) return;
+
+    const i = primaryIndex(board);
+    const p = board[i];
 
     const countEl = $("#count-num");
     if (!countEl) return;
@@ -275,7 +355,7 @@
     if (countEl.textContent !== text) countEl.textContent = text;
     countEl.classList.toggle("due", text === "DUE");
 
-    state.board.slice(primaryIndex() + 1, primaryIndex() + 3).forEach((d) => {
+    board.slice(i + 1, i + 3).forEach((d) => {
       const minEl = document.querySelector(`[data-key-min="${d.key}"]`);
       if (minEl) {
         const m = fmtMin(d, now);
@@ -343,7 +423,9 @@
 
   function pickStation(id) {
     state.station = id;
-    state.selectedKey = null;
+    state.view = "list";
+    state.sel = null;
+    state.targetKey = null;
     localStorage.setItem("nt-station", id);
     closePicker();
     refresh();
@@ -353,8 +435,7 @@
 
   function refresh() {
     renderPlanner();
-    computeBoard();
-    renderResult();
+    render();
   }
 
   function init() {
