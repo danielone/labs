@@ -202,6 +202,7 @@
         state.targetKey = btn.dataset.key;
         state.view = "detail";
         lastVoiceMin = null;
+        history.pushState({ nt: "detail" }, "");
         render();
       });
     });
@@ -296,17 +297,19 @@
     tick();
   }
 
+  // The visible Back control and the browser/phone back gesture are the
+  // same thing: Back pops one history level, and popstate does the exit.
   function wireBack() {
     const back = $("#board-back");
-    if (back) {
-      back.addEventListener("click", () => {
-        state.view = "list";
-        state.sel = null;
-        state.targetKey = null;
-        lastVoiceMin = null;
-        render();
-      });
-    }
+    if (back) back.addEventListener("click", () => history.back());
+  }
+
+  function exitDetail() {
+    state.view = "list";
+    state.sel = null;
+    state.targetKey = null;
+    lastVoiceMin = null;
+    render();
   }
 
   function render() {
@@ -388,6 +391,7 @@
     $("#picker-search").value = "";
     renderStationList("");
     $("#picker-search").focus();
+    history.pushState({ nt: "picker" }, "");
   }
 
   function closePicker() {
@@ -422,6 +426,10 @@
   }
 
   function pickStation(id) {
+    // Consume the picker's history entry — plus the detail entry when the
+    // picker was opened from a train's detail view, since a new station
+    // lands on its station board.
+    const depth = state.view === "detail" ? 2 : 1;
     state.station = id;
     state.view = "list";
     state.sel = null;
@@ -429,6 +437,8 @@
     localStorage.setItem("nt-station", id);
     closePicker();
     refresh();
+    suppressPop = true;
+    history.go(-depth);
   }
 
   /* ---------- wiring ---------- */
@@ -438,16 +448,27 @@
     render();
   }
 
+  let suppressPop = false;
+
+  function onPopState() {
+    if (suppressPop) { suppressPop = false; return; }
+    if (state.picking) { closePicker(); return; }
+    if (state.view === "detail") exitDetail();
+    // Already on the station board: nothing to pop; the browser handles
+    // any further back navigation normally.
+  }
+
   function init() {
     $("#station-btn").addEventListener("click", openPicker);
-    $("#picker-close").addEventListener("click", closePicker);
+    $("#picker-close").addEventListener("click", () => history.back());
     $("#picker-search").addEventListener("input", (e) => renderStationList(e.target.value));
     $("#station-list").addEventListener("click", (e) => {
       const btn = e.target.closest(".station-row");
       if (btn) pickStation(btn.dataset.id);
     });
+    window.addEventListener("popstate", onPopState);
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && state.picking) closePicker();
+      if (e.key === "Escape" && state.picking) history.back();
     });
     // Basic focus trap for the sheet.
     $("#picker").addEventListener("keydown", (e) => {
