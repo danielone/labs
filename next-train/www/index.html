@@ -26,27 +26,15 @@
   </header>
 
   <main id="main" role="main">
-    <section class="planner" aria-label="Trip planner">
-      <button type="button" class="field" id="to-btn">
-        <span class="field-label">Where to?</span>
-        <span class="field-value" id="to-value">Select station</span>
-        <span class="field-bullets" id="to-bullets"></span>
-      </button>
-      <div class="planner-divider">
-        <button type="button" class="swap" id="swap-btn" aria-label="Swap origin and destination">
-          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="currentColor">
-            <path d="M4 1 1 4.5h2V11h2V4.5h2L4 1zm8 14 3-3.5h-2V5h-2v6.5H8L12 15z"/>
-          </svg>
-        </button>
-      </div>
-      <button type="button" class="field" id="from-btn">
-        <span class="field-label">From</span>
-        <span class="field-value" id="from-value">Select station</span>
-        <span class="field-bullets" id="from-bullets"></span>
+    <section class="planner" aria-label="Stop picker">
+      <button type="button" class="field" id="station-btn">
+        <span class="field-label">Your stop</span>
+        <span class="field-value" id="station-value">Select station</span>
+        <span class="field-bullets" id="station-bullets"></span>
       </button>
     </section>
 
-    <section id="result" class="result" aria-label="Next departure"></section>
+    <section id="result" class="result" aria-label="Next departures"></section>
 
     <p class="disclaimer">
       Departure times are schedule-based estimates, not live data.
@@ -56,7 +44,7 @@
 
   <div class="sheet" id="picker" role="dialog" aria-modal="true" aria-labelledby="picker-title" hidden>
     <div class="sheet-header">
-      <h2 id="picker-title">Where to?</h2>
+      <h2 id="picker-title">Your stop</h2>
       <button type="button" class="sheet-close" id="picker-close" aria-label="Close station picker">&times;</button>
     </div>
     <div class="sheet-search">

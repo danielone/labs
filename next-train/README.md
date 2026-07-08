@@ -1,9 +1,14 @@
 # Next Train NYC
 
-Pick a destination. See **which train to catch, where to board, what time it
-leaves, and a live countdown to departure** — in the visual language of the
-NYC subway: Helvetica, black signage panels, official route-bullet colors,
-and countdown-clock departure boards.
+Pick your stop. See **the next train arriving there — line, direction,
+platform, departure time, and a live countdown** — plus the two trains after
+it. Tap one of those to target it instead: the big card switches to that
+train and the list recomputes. All in the visual language of the NYC subway:
+Helvetica, black signage panels, official route-bullet colors, and
+countdown-clock departure boards.
+
+> The previous design (origin → destination trip planner with transfer
+> routing) is archived on the `archive/v1-destination-planner` git branch.
 
 Web app (installable PWA, works fully offline) + Capacitor wrapper for
 iOS App Store / Google Play submission. Vanilla HTML/CSS/JS — no build step,
@@ -15,9 +20,9 @@ no dependencies, no network calls, no data collection.
 php -S localhost:8123 -t www        # or: python3 -m http.server 8123 -d www
 ```
 
-Visit http://localhost:8123. Choose "Where to?" and "From" — the departure
-board appears with the route, boarding station, direction, departure time,
-and a ticking countdown. Transfers are shown as follow-on boards.
+Visit http://localhost:8123. Choose "Your stop" — the departure board shows
+the next train there across every line and direction serving it, with a
+ticking countdown, and the two trains after it as tappable rows.
 
 **Dev note:** the service worker caches assets cache-first. When you edit
 CSS/JS, bump the `CACHE` version at the top of `www/sw.js` (or unregister the
@@ -47,8 +52,9 @@ run `python3 tools/generate_stations.py`.
 Departure times are **deterministic schedule-based estimates**, not live
 data: each line/direction/station is assigned a fixed offset on a realistic
 headway grid (tighter at rush hour, sparser late nights; B/W weekday-only,
-Z rush-hours-only). The UI discloses this. Routing supports direct, one-,
-and two-transfer trips over station complexes.
+Z rush-hours-only). The UI discloses this. The board merges every
+line/direction serving the chosen complex, soonest first. Departure keys are
+deterministic, so a targeted train keeps its identity while the board ticks.
 
 ### Wiring real-time data
 
@@ -98,10 +104,10 @@ and makes no MTA affiliation claims.
 
 ```
 www/                   the entire app (this folder deploys anywhere static)
-  index.html           single page: planner + departure board + station picker
+  index.html           single page: stop picker + departure board
   css/style.css        design tokens (MTA palette) + components
   js/stations.js       GENERATED full network: 444 complexes, 26 routes
-  js/app.js            routing, schedule model, countdown, picker
+  js/app.js            station board, schedule model, countdown, targeting
 tools/generate_stations.py  regenerates stations.js from official MTA data
   sw.js                offline cache
   manifest.webmanifest PWA manifest
