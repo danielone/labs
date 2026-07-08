@@ -16,7 +16,7 @@
   --mta-red: #ee352e;
 
   /* semantic */
-  --color-bg: #f4f4f4;
+  --color-bg: #ffffff;
   --color-surface: #ffffff;
   --color-text: #0f0f0f;
   --color-text-muted: #5c5f62;
@@ -378,7 +378,7 @@ main {
   cursor: pointer;
 }
 .board-back svg { flex: none; }
-.board-back:hover { background: var(--color-bg); }
+.board-back:hover { background: rgba(128, 128, 128, 0.08); }
 .board-back:active { background: rgba(128, 128, 128, 0.12); }
 
 .notice {
