@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Next Train NYC</title>
+  <meta name="description" content="Pick a destination. See the train to catch, where to board, and a countdown to departure.">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Next Train">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="app-header" role="banner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">▲</span>
+      <h1 class="brand-name">Next Train</h1>
+    </div>
+    <span class="now-clock" id="now-clock" aria-hidden="true"></span>
+  </header>
+
+  <main id="main" role="main">
+    <section class="planner" aria-label="Trip planner">
+      <button type="button" class="field" id="to-btn">
+        <span class="field-label">Where to?</span>
+        <span class="field-value" id="to-value">Select station</span>
+        <span class="field-bullets" id="to-bullets"></span>
+      </button>
+      <div class="planner-divider">
+        <button type="button" class="swap" id="swap-btn" aria-label="Swap origin and destination">
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="currentColor">
+            <path d="M4 1 1 4.5h2V11h2V4.5h2L4 1zm8 14 3-3.5h-2V5h-2v6.5H8L12 15z"/>
+          </svg>
+        </button>
+      </div>
+      <button type="button" class="field" id="from-btn">
+        <span class="field-label">From</span>
+        <span class="field-value" id="from-value">Select station</span>
+        <span class="field-bullets" id="from-bullets"></span>
+      </button>
+    </section>
+
+    <section id="result" class="result" aria-label="Next departure"></section>
+
+    <p class="disclaimer">
+      Departure times are schedule-based estimates, not live data.
+      Check station signage before boarding.
+    </p>
+  </main>
+
+  <div class="sheet" id="picker" role="dialog" aria-modal="true" aria-labelledby="picker-title" hidden>
+    <div class="sheet-header">
+      <h2 id="picker-title">Where to?</h2>
+      <button type="button" class="sheet-close" id="picker-close" aria-label="Close station picker">&times;</button>
+    </div>
+    <div class="sheet-search">
+      <input type="search" id="picker-search" placeholder="Search stations" aria-label="Search stations" autocomplete="off">
+    </div>
+    <ul class="station-list" id="station-list" aria-label="Stations"></ul>
+  </div>
+
+  <script src="js/stations.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

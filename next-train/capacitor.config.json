@@ -1,0 +1,12 @@
+{
+  "appId": "com.danielschwartz.nexttrain",
+  "appName": "Next Train NYC",
+  "webDir": "www",
+  "ios": {
+    "contentInset": "always",
+    "backgroundColor": "#000000"
+  },
+  "android": {
+    "backgroundColor": "#000000"
+  }
+}

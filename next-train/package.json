@@ -1,0 +1,18 @@
+{
+  "name": "next-train-nyc",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NYC subway departure countdown — pick a destination, see the train to catch.",
+  "scripts": {
+    "start": "php -S localhost:8123 -t www",
+    "ios": "npx cap add ios && npx cap sync ios && npx cap open ios",
+    "android": "npx cap add android && npx cap sync android && npx cap open android",
+    "sync": "npx cap sync"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/ios": "^6.0.0",
+    "@capacitor/android": "^6.0.0"
+  }
+}
