@@ -360,19 +360,26 @@ main {
   color: var(--color-sign-muted);
 }
 
+/* Back — white signage-style button, Helvetica bold + wayfinding arrow */
 .board-back {
-  display: block;
-  margin-bottom: 10px;
-  padding: 8px 4px;
-  border: 0;
-  background: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px 16px 10px 12px;
+  min-height: 44px;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius);
+  background: var(--color-surface);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   cursor: pointer;
 }
-.board-back:hover { color: var(--color-text); }
+.board-back svg { flex: none; }
+.board-back:hover { background: var(--color-bg); }
+.board-back:active { background: rgba(128, 128, 128, 0.12); }
 
 .notice {
   background: var(--color-surface);

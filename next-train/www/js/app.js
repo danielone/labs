@@ -21,6 +21,9 @@
   const DEFAULT_STATION = "611"; // Times Sq-42 St / Port Authority complex
   const LIST_ROWS = 6;
 
+  // Solid left arrow in the spirit of MTA wayfinding signage.
+  const BACK_ARROW = `<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="currentColor"><path d="M8.6 1.6 2.2 8l6.4 6.4 1.4-1.4L5.9 8.9H14V7.1H5.9L10 3z"/></svg>`;
+
   function validStation(id) {
     return id && STATIONS[id] ? id : null;
   }
@@ -234,7 +237,7 @@
 
     if (!board.length) {
       el.innerHTML = `
-        <button type="button" class="board-back" id="board-back">&#9666; Back</button>
+        <button type="button" class="board-back" id="board-back">${BACK_ARROW} Back</button>
         <div class="notice">This train isn&rsquo;t running right now.</div>`;
       wireBack();
       state.lastSig = "D|";
@@ -256,7 +259,7 @@
         </button>`).join("");
 
     el.innerHTML = `
-      <button type="button" class="board-back" id="board-back" aria-label="Back to all trains at this station">&#9666; Back</button>
+      <button type="button" class="board-back" id="board-back" aria-label="Back to all trains at this station">${BACK_ARROW} Back</button>
       <div class="board" role="group" aria-label="Departure countdown">
         <div class="board-top">
           ${bulletHTML(p.line, "lg")}

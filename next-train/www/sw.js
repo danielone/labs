@@ -1,6 +1,6 @@
 /* Next Train NYC — service worker. Cache-first: the app is fully offline. */
 
-const CACHE = "next-train-v10";
+const CACHE = "next-train-v11";
 const ASSETS = [
   ".",
   "index.html",
