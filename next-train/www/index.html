@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>NYC Next Train</title>
+  <meta name="description" content="Pick your stop. See the next trains, live from the MTA, with a countdown to departure.">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="NYC Next Train">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="app-header" role="banner">
+    <h1 class="brand-heading">
+      <button type="button" tabindex="0" class="brand" id="brand-home" aria-label="NYC Next Train — go to Search">
+        <span class="brand-mark" aria-hidden="true">2<small>min</small></span>
+        <span class="brand-name">NYC Next Train</span>
+      </button>
+    </h1>
+    <button type="button" tabindex="0" class="info-btn" id="info-btn" aria-label="About this app">
+      <svg viewBox="0 0 20 20" width="24" height="24" aria-hidden="true">
+        <circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="10" cy="6" r="1.4" fill="currentColor"/>
+        <rect x="8.9" y="8.8" width="2.2" height="6" rx="1.1" fill="currentColor"/>
+      </svg>
+    </button>
+  </header>
+
+  <main id="main" role="main">
+    <section class="planner" id="planner" aria-label="Stop picker">
+      <button type="button" tabindex="0" class="field" id="station-btn">
+        <span class="field-label">Your stop</span>
+        <span class="field-value" id="station-value">Select station</span>
+        <span class="field-bullets" id="station-bullets"></span>
+      </button>
+    </section>
+
+    <section id="result" class="result" aria-label="Next departures"></section>
+
+    <p class="disclaimer" id="data-status">
+      Departure times are schedule-based estimates, not live data.
+      Check station signage before boarding.
+    </p>
+  </main>
+
+  <nav class="tabbar" aria-label="Primary">
+    <button type="button" tabindex="0" class="tab" id="tab-search" aria-current="page" aria-label="Search">
+      <svg viewBox="0 0 20 20" width="30" height="30" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4.5 4.5"/>
+      </svg>
+    </button>
+    <button type="button" tabindex="0" class="tab" id="tab-favorites" aria-label="Favorites">
+      <svg viewBox="0 0 20 20" width="30" height="30" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+        <path d="M10 17S2.5 12.5 2.5 7.5a4 4 0 0 1 7.5-2 4 4 0 0 1 7.5 2C17.5 12.5 10 17 10 17z"/>
+      </svg>
+    </button>
+  </nav>
+
+  <div class="sheet" id="picker" role="dialog" aria-modal="true" aria-labelledby="picker-title" hidden>
+    <div class="sheet-header">
+      <h2 id="picker-title">Your stop</h2>
+      <button type="button" tabindex="0" class="sheet-close" id="picker-close" aria-label="Close station picker">&times;</button>
+    </div>
+    <div class="sheet-search">
+      <input type="search" id="picker-search" placeholder="Enter or select a station..." aria-label="Enter or select a station" autocomplete="off">
+    </div>
+    <ul class="station-list" id="station-list" aria-label="Stations"></ul>
+  </div>
+
+  <script src="js/stations.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
