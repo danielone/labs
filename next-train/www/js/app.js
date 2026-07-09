@@ -24,7 +24,7 @@
   // Real-time data: /api/departures (Vercel function decoding MTA GTFS-RT).
   // Same-origin in production; local dev servers use the deployed API.
   const RT_BASE = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
-    ? "https://next-train-zeta.vercel.app" : "";
+    ? "https://nyc-next-train.vercel.app" : "";
   const RT_REFRESH_MS = 30000;   // fetch cadence for the current station
   const FAV_REFRESH_MS = 60000;  // favorites refresh at the minute interval
   const RT_STALE_MS = 90000;     // older than this → fall back to schedule

@@ -29,7 +29,7 @@ Departure times are **live MTA data** (see below), with an offline
 schedule-based fallback. The only network calls are to the app's own
 departures endpoint; no analytics, no data collection.
 
-**Live: https://next-train-zeta.vercel.app**
+**Live: https://nyc-next-train.vercel.app**
 
 ## Run locally
 
@@ -66,7 +66,7 @@ run `python3 tools/generate_stations.py`.
 
 ## Real-time departures
 
-**Live:** https://next-train-zeta.vercel.app (Vercel project
+**Live:** https://nyc-next-train.vercel.app (Vercel project
 `danielones-projects/next-train`)
 
 Departure times come from the **MTA's real-time GTFS-RT feeds**, refreshed
