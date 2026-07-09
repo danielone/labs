@@ -11,6 +11,15 @@ you viewed, then lands on the station board. All
 in the visual language of the NYC subway: Helvetica, black signage panels,
 official route-bullet colors, and countdown-clock departure boards.
 
+**Tabs & favorites (v2.5):** a bottom navigation bar has Search (the flow
+above) and Favorites. Tap the heart on any train's countdown card to save
+that station + line + direction. The Favorites tab lists each saved entry
+with its next train — departure time and minutes until — refreshed every
+minute; tapping an entry opens the same countdown detail as a search, and
+Back returns to the favorites list. Favorites persist in localStorage on
+the web and in Capacitor Preferences (iOS UserDefaults / Android
+SharedPreferences) in the native app.
+
 > The previous design (origin → destination trip planner with transfer
 > routing) is archived on the `archive/v1-destination-planner` git branch.
 
