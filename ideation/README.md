@@ -66,6 +66,34 @@ Useful follow-up prompts:
 - `Deploy recipe-box to Vercel` — the only way a deploy happens; Claude sets up the monorepo-aware Vercel project per CLAUDE.md §7
 - `Promote the <X> component to packages/ui` — when a second app needs a shared component
 
+### Prompt best practices for shadcn/ui work
+
+How you phrase UI requests shapes how well the result fits the design system. What works:
+
+**Name the registry components when you know them.** The [shadcn registry](https://ui.shadcn.com/docs/components) has 50+ components — referencing them by name gets you the accessible, themed primitive instead of a hand-rolled lookalike.
+
+> ✅ `Build the settings page with a card per section, a switch for each toggle, and a select for the timezone`
+> ❌ `Build a settings page with some toggle things and a dropdown`
+
+**Describe intent and behavior, not pixels.** Colors, spacing, and radii come from the theme tokens; prompting hex codes or exact pixels fights the system.
+
+> ✅ `Make the delete action clearly destructive` (maps to the `destructive` variant/token)
+> ❌ `Make the delete button #ff4444 with 12px rounded corners`
+
+**Ask for variants, not one-off styles.** When a component needs a new look, frame it as a reusable variant so it lands in `class-variance-authority` rather than inline classes: `Add a "success" variant to the badge`.
+
+**Mention states up front.** Empty, loading, error, and disabled states are cheap to include at build time and expensive to retrofit: `Include an empty state when there are no recipes, and a skeleton while loading`.
+
+**Think in composition.** Bigger UI = shadcn primitives composed in a feature component. Prompting `a dialog containing the add-recipe form` beats `a popup` — it tells Claude which primitive (Dialog) wraps which feature component (the form).
+
+**Both themes are non-negotiable, but you can steer them.** Dark mode ships by default per CLAUDE.md; if a screen looks off, prompt it directly: `The card contrast is too low in dark mode — fix it via the theme tokens, not per-component overrides`.
+
+**Reuse before rebuild.** For anything that exists in another app, ask to promote rather than recreate: `Promote hello-world's theme toggle to packages/ui and use it here`.
+
+**Good all-in-one example:**
+
+> `In recipe-box, build the recipe list as a responsive grid of cards — image, title, tag badges, and a dropdown menu (edit / delete, delete styled destructive). Include an empty state and loading skeletons. Verify it in both light and dark mode.`
+
 ### Doing it by hand
 
 ```bash
