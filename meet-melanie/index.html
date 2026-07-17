@@ -143,7 +143,7 @@
     50% { height: 12px; }
   }
 
-  /* Kusum tile */
+  /* Sarah tile */
   .tile.kusum { background: linear-gradient(160deg, #43586f 0%, #3d5068 100%); }
   .tile .letter-avatar {
     position: absolute; inset: 0;
@@ -155,7 +155,7 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 38px; color: #fff; font-weight: 400;
   }
-  /* Daniel tile */
+  /* David tile */
   .tile.daniel { background: linear-gradient(160deg, #4d5b70 0%, #45526a 100%); }
   .tile.daniel .photo {
     position: absolute; inset: 0;
@@ -700,7 +700,7 @@
     <div class="topbar-right">
       <div class="top-chip"><span class="material-symbols-outlined">tv_off</span></div>
       <div class="participants-chip">
-        <div class="avatars"><span>M</span><span>K</span></div>
+        <div class="avatars"><span>M</span><span>S</span></div>
         <span class="count">3</span>
       </div>
     </div>
@@ -727,18 +727,18 @@
           <div class="name">System downtime meeting</div>
         </div>
 
-        <!-- Kusum tile -->
+        <!-- Sarah tile -->
         <div class="tile kusum speaking" id="tile-kusum">
-          <div class="letter-avatar"><span>K</span></div>
+          <div class="letter-avatar"><span>S</span></div>
           <div class="mic-badge live"><div class="speak-bars"><i></i><i></i><i></i></div></div>
-          <div class="name">Kusum Ijari</div>
+          <div class="name">Sarah Jones</div>
         </div>
 
-        <!-- Daniel tile -->
+        <!-- David tile -->
         <div class="tile daniel speaking" id="tile-daniel">
           <div class="photo"><span>D</span></div>
           <div class="mic-badge live"><div class="speak-bars"><i></i><i></i><i></i></div></div>
-          <div class="name">Daniel Schwartz</div>
+          <div class="name">David Smith</div>
         </div>
 
       </div>
@@ -795,7 +795,7 @@
       </div>
 
       <div class="chat-inputbar">
-        <input id="chat-input" type="text" placeholder="Message Melanie" autocomplete="off" />
+        <input id="chat-input" type="text" placeholder="Chat with Melanie" autocomplete="off" />
         <button id="chat-send" title="Send"><span class="material-symbols-outlined">send</span></button>
       </div>
     </aside>
@@ -860,7 +860,7 @@
   // ---------- Simulated conversation → Melanie surfaces context ----------
   const script = [
     {
-      t: 1500, who: 'Kusum', speaker: 'kusum',
+      t: 1500, who: 'Sarah', speaker: 'kusum',
       text: 'The API gateway started throwing 502s around 8:45 this morning.',
       card: {
         icon: 'warning', color: '#f9ab00', bg: 'rgba(249,171,0,.15)',
@@ -870,7 +870,7 @@
       }
     },
     {
-      t: 8000, who: 'Daniel', speaker: 'daniel',
+      t: 8000, who: 'David', speaker: 'daniel',
       text: 'Is this related to the load balancer failover issue we had last month?',
       card: {
         icon: 'description', color: '#8ab4f8', bg: 'rgba(138,180,248,.15)',
@@ -880,7 +880,7 @@
       }
     },
     {
-      t: 15000, who: 'Kusum', speaker: 'kusum',
+      t: 15000, who: 'Sarah', speaker: 'kusum',
       text: 'Rollback of deploy 8812 is in progress — ETA about 20 minutes.',
       card: {
         icon: 'deployed_code_update', color: '#34a853', bg: 'rgba(52,168,83,.15)',
@@ -890,7 +890,7 @@
       }
     },
     {
-      t: 22000, who: 'Daniel', speaker: 'daniel',
+      t: 22000, who: 'David', speaker: 'daniel',
       text: "Let's get a status page update drafted for customers before 9:30.",
       card: {
         icon: 'campaign', color: '#f28b82', bg: 'rgba(242,139,130,.15)',
@@ -941,7 +941,7 @@
     setTimeout(() => { statusText.textContent = 'Listening to the conversation…'; }, 2500);
   }
 
-  // On load: both Daniel and Kusum marked speaking (bars animating on both tiles).
+  // On load: both David and Sarah marked speaking (bars animating on both tiles).
   // The scripted exchange alternates the active-speaker glow and drives live captions.
   // Panel content (context cards) is intentionally left empty for now.
   script.forEach(line => {
