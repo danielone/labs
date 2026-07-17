@@ -552,6 +552,50 @@
   .chat-inputbar button:hover { background: #1765cc; }
   .chat-inputbar button .material-symbols-outlined { font-size: 18px; }
 
+  /* ---------- Demo hint (initial state) ---------- */
+  .demo-hint {
+    display: flex; align-items: center; gap: 12px;
+    margin: 26px 4px 0;
+    opacity: 0;
+    animation: card-in .45s ease .5s forwards;
+  }
+  .demo-hint.hide { animation: hint-out .5s ease forwards; }
+  @keyframes hint-out {
+    from { opacity: 1; }
+    to { opacity: 0; transform: translateY(-4px); }
+  }
+  .demo-hint .hotspot {
+    position: relative;
+    width: 48px; height: 48px;
+    flex: 0 0 auto;
+  }
+  .demo-hint .hotspot::before {
+    content: '';
+    position: absolute; inset: 14px;
+    border-radius: 50%;
+    background: #fbbc04;
+    box-shadow: 0 0 12px rgba(251,188,4,.8);
+    animation: core-breathe 1.6s ease-in-out infinite;
+  }
+  .demo-hint .hotspot::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    border: 3px solid rgba(251,188,4,.7);
+    animation: ring-pulse 1.6s ease-out infinite;
+  }
+  .demo-hint .hint-bubble {
+    background: #fbbc04;
+    border: 1px solid #fdd663;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: #202124;
+    font-weight: 500;
+    line-height: 1.5;
+    box-shadow: 0 2px 12px rgba(251,188,4,.35);
+  }
+
   /* ---------- Insight toast ---------- */
   .insight-toast {
     position: fixed;
@@ -738,6 +782,13 @@
               content and ideas throughout the meeting to best support you!
               <br><br>
               You can pause me at anytime by just typing "Stop" or "Wait"
+            </div>
+          </div>
+          <div class="demo-hint" id="demo-hint">
+            <span class="hotspot"></span>
+            <div class="hint-bubble">
+              Click anywhere in this panel to show Melanie discovering and surfacing
+              relevant context mid-meeting...
             </div>
           </div>
         </div>
@@ -934,6 +985,8 @@
     tickClock();
     statusText.textContent = 'Related findings surfaced';
 
+    document.getElementById('demo-hint')?.remove();
+
     // Subtle transient note that Melanie has an insight
     const toast = document.createElement('div');
     toast.className = 'insight-toast';
@@ -983,7 +1036,7 @@
     actions.style.animationDelay = '0.7s';
     actions.innerHTML = `
       <button class="panel-btn primary" id="btn-link">Link all related issues to primary</button>
-      <button class="panel-btn ghost" id="btn-summarize">Summarize selected ticket(s) impact</button>
+      <button class="panel-btn ghost" id="btn-summarize">Summarize impact of selected issue(s)</button>
       <button class="panel-btn ghost" id="btn-later">Consider later (add to meeting summary)</button>`;
     actions.querySelectorAll('.panel-btn').forEach((b, i) => b.style.animationDelay = (0.7 + i * 0.1) + 's');
     feed.appendChild(actions);
@@ -1018,6 +1071,15 @@
     box.innerHTML = `<span class="material-symbols-outlined">${icon}</span>${text}`;
     statusText.textContent = 'Findings ready to review';
   }
+
+  // Demo hint: fade out and remove after 3 seconds
+  setTimeout(() => {
+    const hint = document.getElementById('demo-hint');
+    if (hint) {
+      hint.classList.add('hide');
+      setTimeout(() => hint.remove(), 600);
+    }
+  }, 3000);
 
   document.getElementById('melanie-panel').addEventListener('click', (e) => {
     // Any click in the panel triggers discovery — except the chat input bar and close button.
