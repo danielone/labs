@@ -1036,7 +1036,7 @@
     actions.style.animationDelay = '0.7s';
     actions.innerHTML = `
       <button class="panel-btn primary" id="btn-link">Link all related issues to primary</button>
-      <button class="panel-btn ghost" id="btn-summarize">Summarize selected ticket(s) impact</button>
+      <button class="panel-btn ghost" id="btn-summarize">Summarize impact of selected issue(s)</button>
       <button class="panel-btn ghost" id="btn-later">Consider later (add to meeting summary)</button>`;
     actions.querySelectorAll('.panel-btn').forEach((b, i) => b.style.animationDelay = (0.7 + i * 0.1) + 's');
     feed.appendChild(actions);
