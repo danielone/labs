@@ -26,15 +26,15 @@ The layout is built for a wide desktop viewport, matching Google Meet.
 
 ## The scenario
 
-The simulated call is a **system-downtime incident meeting** between two people — Kusum Ijari
-and Daniel Schwartz — plus Melanie, the AI notetaker, joined as a third tile. Over ~30 seconds
+The simulated call is a **system-downtime incident meeting** between two people — Sarah Jones
+and David Smith — plus Melanie, the AI notetaker, joined as a third tile. Over ~30 seconds
 a scripted exchange plays out about a Kubernetes / API-gateway outage, and Melanie reacts to it.
 
 ## What Melanie does
 
 - **Listening indicator** — Melanie's tile shows a pulsing orb with expanding rings and a
   "Listening" equalizer; the panel header echoes it with a live status dot.
-- **Speaking participants** — Kusum and Daniel load as active speakers, with animated mic-bar
+- **Speaking participants** — Sarah and David load as active speakers, with animated mic-bar
   badges and a blue tile glow that follows whoever is talking. Live captions play beneath the
   stage.
 - **Click to discover** — clicking anywhere in the Melanie panel triggers the core moment: the
