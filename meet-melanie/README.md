@@ -9,6 +9,7 @@ and Melanie's findings are canned. The point is to demonstrate the *experience* 
 proactively surfaces context mid-meeting with actions, and not to wire up a fully working app.
 
 **Live: https://danielone-labs.vercel.app/meet-melanie/**
+
 Click anywhere in Melanie's panel to mimic Melanie surfacing relevant context mid-meeting.
 
 ## Running it
